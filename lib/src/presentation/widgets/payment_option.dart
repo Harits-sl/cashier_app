@@ -1,3 +1,6 @@
+import '../cubit/menu_order/menu_order_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../config/route/go.dart';
 import '../pages/payment_amount_page.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +12,7 @@ class PaymentOption extends StatelessWidget {
     Key? key,
     required this.title,
     required this.imageUrl,
+    required this.total,
   }) : super(key: key);
 
   /// variabel judul text
@@ -17,13 +21,16 @@ class PaymentOption extends StatelessWidget {
   /// alamat / folder gambar
   final String imageUrl;
 
+  final int total;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context.read<MenuOrderCubit>().orderTypePaymentPressed(title);
         Go.to(
           context,
-          PaymentAmountPage(title: title, orderId: 'dadad', total: 18000),
+          PaymentAmountPage(title: title, orderId: 'dadad', total: total),
         );
       },
       child: Container(

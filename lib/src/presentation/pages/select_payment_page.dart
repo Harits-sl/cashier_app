@@ -1,7 +1,11 @@
+import '../cubit/menuQty/menu_qty_cubit.dart';
+import '../cubit/menu_order/menu_order_cubit.dart';
+
 import '../../core/shared/theme.dart';
 import '../widgets/payment_app_bar.dart';
 import '../widgets/payment_option.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectPaymentPage extends StatelessWidget {
   const SelectPaymentPage({Key? key}) : super(key: key);
@@ -27,7 +31,7 @@ class SelectPaymentPage extends StatelessWidget {
       }
     ];
 
-    Widget _buildPaymentOption() {
+    Widget _buildPaymentOption(int total) {
       return Column(
         children: listPaymentOption
             .map(
@@ -36,6 +40,7 @@ class SelectPaymentPage extends StatelessWidget {
                 child: PaymentOption(
                   title: paymentOption['title']!,
                   imageUrl: paymentOption['imageUrl']!,
+                  total: total,
                 ),
               ),
             )
@@ -46,26 +51,33 @@ class SelectPaymentPage extends StatelessWidget {
     Widget _buildBody() {
       return SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              defaultMargin,
-              45,
-              defaultMargin,
-              0,
-            ),
-            child: Column(
-              children: [
-                const PaymentAppBar(
-                  title: 'PAYMENT',
-                  orderId: 'OD535627903678238',
-                  total: 18000,
-                ),
-                const SizedBox(height: 30),
-                Divider(thickness: 2, height: 0, color: lightGrayColor),
-                const SizedBox(height: 22),
-                _buildPaymentOption(),
-              ],
-            ),
+          child: BlocBuilder<MenuOrderCubit, MenuOrderState>(
+            builder: (context, state) {
+              if (state is MenuOrderSuccess) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    defaultMargin,
+                    45,
+                    defaultMargin,
+                    0,
+                  ),
+                  child: Column(
+                    children: [
+                      PaymentAppBar(
+                        title: 'PAYMENT',
+                        orderId: state.menuOrder.id!,
+                        total: state.menuOrder.total,
+                      ),
+                      const SizedBox(height: 30),
+                      Divider(thickness: 2, height: 0, color: lightGrayColor),
+                      const SizedBox(height: 22),
+                      _buildPaymentOption(state.menuOrder.total),
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox();
+            },
           ),
         ),
       );

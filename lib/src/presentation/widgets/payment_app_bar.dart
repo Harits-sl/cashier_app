@@ -1,7 +1,7 @@
-import '../../core/utils/string_helper.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/shared/theme.dart';
+import '../../core/utils/string_helper.dart';
 
 class PaymentAppBar extends StatelessWidget {
   const PaymentAppBar({

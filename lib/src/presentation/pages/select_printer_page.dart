@@ -1,7 +1,9 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import '../../presentation/pages/home_page.dart';
+import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../presentation/pages/home_page.dart';
 
 class SelectPrinterPage extends StatefulWidget {
   const SelectPrinterPage({Key? key}) : super(key: key);
@@ -69,7 +71,10 @@ class _SelectPrinterPageState extends State<SelectPrinterPage> {
       return DropdownButton<BluetoothDevice>(
         hint: const Text('Select Thermal Printer'),
         items: _getDeviceItems(),
-        onChanged: (device) => setState(() => selectedDevice = device),
+        onChanged: (device) {
+          setState(() => selectedDevice = device);
+          context.read<ThermalPrinterCubit>().isConnected = true;
+        },
         value: selectedDevice,
       );
     }
@@ -103,13 +108,16 @@ class _SelectPrinterPageState extends State<SelectPrinterPage> {
           print('ini deives $devices');
 
           _connect();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => HomePage(
-                    // printer: printer
-                    )),
-          );
+
+          context.read<ThermalPrinterCubit>().printer = printer;
+          Navigator.pop(context);
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (BuildContext context) => HomePage(
+          //           // printer: printer
+          //           )),
+          // );
         },
         child: const Text('Pilih Printer'),
       );

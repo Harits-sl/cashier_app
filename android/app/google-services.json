@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "204664353036",
+    "project_id": "cashier-motamorph",
+    "storage_bucket": "cashier-motamorph.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204664353036:android:28ab547e7fbd6d6ffd5929",
+        "android_client_info": {
+          "package_name": "com.example.cashier_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204664353036-kdeojq61fm0ce2rim8kpkj5em325322j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWxkCVKgfXHpOOyTbW0eUz6OoSEJp3u_s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204664353036-kdeojq61fm0ce2rim8kpkj5em325322j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,12 @@
-import 'package:cashier_app/src/core/utils/string_helper.dart';
+import '../../config/route/go.dart';
+import '../../core/utils/string_helper.dart';
+import '../cubit/menuQty/menu_qty_cubit.dart';
+import '../cubit/menu_order/menu_order_cubit.dart';
+import 'receipt_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';
-import '../widgets/custom_radio_payment.dart';
+import '../widgets/custom_radio_payment_amount.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/payment_app_bar.dart';
@@ -29,32 +34,74 @@ class PaymentAmountPage extends StatefulWidget {
 }
 
 class _PaymentAmountPageState extends State<PaymentAmountPage> {
-  late TextEditingController payAmountController;
+  /// controller text field
+  late TextEditingController _payAmountController;
+
+  /// variabel untuk kembalian
+  late int _change;
+
+  /// variabel untuk radio button
+  late int _groupvalue;
 
   @override
   void initState() {
-    // isChecked = false;
-    // setState(() {
-    // valueController = TextEditingController(text: '0');
-
-    // });
-    payAmountController = TextEditingController(text: '0');
-
     super.initState();
+
+    initVariable();
   }
 
   @override
   void dispose() {
-    payAmountController.dispose();
+    _payAmountController.dispose();
     super.dispose();
+  }
+
+  /// fungsi untuk initial variabel
+  void initVariable() {
+    _groupvalue = widget.total;
+    _payAmountController = TextEditingController(text: _groupvalue.toString());
+    _change = 0;
   }
 
   @override
   Widget build(BuildContext context) {
     /// variabel berisi list banyaknya jumlah yang akan diberikan pelanggan
-    final List _mostListPaymentAmount = [18000, 20000, 30000, 50000];
+    final List<int> _mostListPaymentAmount = [
+      widget.total,
+      20000,
+      30000,
+      50000
+    ];
 
-    Widget _buildListRadioPayment() {
+    List<Map<String, dynamic>> _listPaymentAmount = [
+      {
+        'payment': 18000,
+        'isSelected': false,
+      },
+      {
+        'payment': 20000,
+        'isSelected': false,
+      },
+      {
+        'payment': 30000,
+        'isSelected': false,
+      },
+      {
+        'payment': 50000,
+        'isSelected': false,
+      },
+    ];
+
+    void onTap(int value) {
+      setState(() {
+        _payAmountController = TextEditingController(text: value.toString());
+
+        _change = value - widget.total;
+        print(_change);
+      });
+    }
+
+    Widget _buildListRadioPayment(int totalPayment) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: GridView.count(
@@ -66,14 +113,30 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
           mainAxisSpacing: 15,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          children: _mostListPaymentAmount
-              .map((value) => CustomRadioPayment(value: value))
-              .toList(),
+          children: _mostListPaymentAmount.map((value) {
+            // CustomRadioController controller = CustomRadioController(
+            //   isSelected: value['isSelected'],
+            //   payment: value['payment'],
+            // );
+
+            return CustomRadioPaymentAmount(
+              value: value,
+              groupValue: _groupvalue,
+              onChanged: (value) {
+                setState(() {
+                  _groupvalue = value;
+                  _payAmountController =
+                      TextEditingController(text: _groupvalue.toString());
+                  _change = _groupvalue - totalPayment;
+                });
+              },
+            );
+          }).toList(),
         ),
       );
     }
 
-    Widget _buildFieldPayAndChange() {
+    Widget _buildFieldPayAndChange(int totalPrice) {
       Widget title() => Text(
             'Enter The Pay Amount',
             style: grayTextStyle.copyWith(
@@ -83,14 +146,52 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
           );
 
       Widget textField() => TextField(
-            controller: payAmountController,
+            controller: _payAmountController,
             keyboardType: TextInputType.number,
             style: blackTextStyle.copyWith(
               fontWeight: regular,
               fontSize: 14,
             ),
-            onChanged: (_) {
-              setState(() => payAmountController);
+            onChanged: (value) {
+              /// jika value dari onChanged string kosong,
+              /// set [_payAmountController] jadi 0
+              if (value == '') {
+                setState(() {
+                  // set _payAmountController jadi 0
+                  _payAmountController = TextEditingController(text: '0');
+
+                  // set cursor textfield jadi paling ujung
+                  _payAmountController.selection = TextSelection.fromPosition(
+                    TextPosition(offset: _payAmountController.text.length),
+                  );
+
+                  _change = int.parse(_payAmountController.text) - totalPrice;
+                });
+              } else {
+                setState(() {
+                  _groupvalue = int.parse(value);
+                  _change = int.parse(value) - totalPrice;
+                });
+              }
+
+              /// jika karakter value onChanged lebih dari 1, lalu jika
+              /// karakter value pertama sama dengan 0 maka set nilai
+              /// _payAmountController menjadi karakter kedua dari value
+              /// e.g: _payAmountController.text = 01 diubah menjadi
+              /// _payAmountController.text = 1
+              if (value.length > 1) {
+                if (value[0] == '0') {
+                  setState(() {
+                    _payAmountController =
+                        TextEditingController(text: value.substring(1));
+
+                    // set cursor textfield jadi paling ujung
+                    _payAmountController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _payAmountController.text.length),
+                    );
+                  });
+                }
+              }
             },
             decoration: InputDecoration(
               isDense: true,
@@ -119,7 +220,7 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
             ),
           );
 
-      Widget change() => Row(
+      Widget changes() => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -130,7 +231,7 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
                 ),
               ),
               Text(
-                '${StringHelper.addComma(int.parse(payAmountController.text))}',
+                StringHelper.addComma(_change),
                 style: blackTextStyle.copyWith(
                   fontWeight: regular,
                   fontSize: 16,
@@ -147,37 +248,85 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
             const SizedBox(height: 12),
             textField(),
             const SizedBox(height: 12),
-            change(),
+            changes(),
           ],
+        ),
+      );
+    }
+
+    Widget _buttonPay() {
+      return Container(
+        width: double.infinity,
+        height: 50,
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          bottom: 24,
+          left: defaultMargin,
+          right: defaultMargin,
+        ),
+        decoration: BoxDecoration(
+          color: blueColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: TextButton(
+          onPressed: () {
+            context.read<MenuOrderCubit>().orderAddCashAndChangePayment(
+                cash: int.parse(_payAmountController.text), change: _change);
+            Go.to(context, ReceiptPage());
+          },
+          child: Text(
+            'Pay',
+            style: whiteTextStyle.copyWith(
+              fontWeight: medium,
+              fontSize: 16,
+            ),
+          ),
         ),
       );
     }
 
     Widget _buildBody() {
       return SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              defaultMargin,
-              45,
-              defaultMargin,
-              0,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: BlocBuilder<MenuOrderCubit, MenuOrderState>(
+                builder: (context, state) {
+                  if (state is MenuOrderSuccess) {
+                    return Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        defaultMargin,
+                        45,
+                        defaultMargin,
+                        0,
+                      ),
+                      child: Column(
+                        children: [
+                          PaymentAppBar(
+                            title: widget.title,
+                            orderId: state.menuOrder.id!,
+                            total: state.menuOrder.total,
+                          ),
+                          const SizedBox(height: 30),
+                          Divider(
+                              thickness: 2, height: 0, color: lightGrayColor),
+                          _buildListRadioPayment(state.menuOrder.total),
+                          Divider(
+                              thickness: 2, height: 0, color: lightGrayColor),
+                          _buildFieldPayAndChange(state.menuOrder.total),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
             ),
-            child: Column(
-              children: [
-                PaymentAppBar(
-                  title: widget.title,
-                  orderId: widget.orderId,
-                  total: widget.total,
-                ),
-                const SizedBox(height: 30),
-                Divider(thickness: 2, height: 0, color: lightGrayColor),
-                _buildListRadioPayment(),
-                Divider(thickness: 2, height: 0, color: lightGrayColor),
-                _buildFieldPayAndChange(),
-              ],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _buttonPay(),
             ),
-          ),
+          ],
         ),
       );
     }

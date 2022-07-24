@@ -1,13 +1,21 @@
-import 'src/config/theme/app_theme.dart';
-import 'src/core/shared/theme.dart';
+import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-import 'src/presentation/cubit/homeCubit/home_cubit.dart';
+import 'firebase_options.dart';
+import 'src/presentation/cubit/jsonMenu/json_menu_cubit.dart';
+import 'src/presentation/cubit/menu_order/menu_order_cubit.dart';
+
+import 'src/config/theme/app_theme.dart';
+
 import 'src/presentation/pages/home_page.dart';
-import 'src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -18,8 +26,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<HomeCubit>(
-          create: (BuildContext context) => HomeCubit(),
+        BlocProvider<MenuOrderCubit>(
+          create: (BuildContext context) => MenuOrderCubit(),
+        ),
+        BlocProvider<JsonMenuCubit>(
+          create: (BuildContext context) => JsonMenuCubit(),
+        ),
+        BlocProvider<ThermalPrinterCubit>(
+          create: (BuildContext context) => ThermalPrinterCubit(),
         ),
       ],
       child: MaterialApp(

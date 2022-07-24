@@ -1,91 +1,28 @@
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import '../../config/route/go.dart';
-import 'select_payment_page.dart';
-import '../cubit/homeCubit/home_cubit.dart';
-import '../../core/shared/theme.dart';
-import '../../presentation/widgets/menu.dart';
-import '../../core/utils/string_helper.dart';
+import '../../data/models/menu_order_model.dart';
+import '../cubit/jsonMenu/json_menu_cubit.dart';
+import '../cubit/menu_order/menu_order_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../config/route/go.dart';
+import '../../core/shared/theme.dart';
+import '../../core/utils/string_helper.dart';
+import '../widgets/menu_item.dart';
+import 'select_payment_page.dart';
 
 class HomePage extends StatelessWidget {
   // final BlueThermalPrinter printer;
 
-  const HomePage(
-      {
-      // required this.printer,
-      Key? key})
-      : super(key: key);
-
-  _tesPrint(datas) async {
-    //SIZE
-    // 0- normal size text
-    // 1- only bold text
-    // 2- bold with medium text
-    // 3- bold with large text
-    //ALIGN
-    // 0- ESC_ALIGN_LEFT
-    // 1- ESC_ALIGN_CENTER
-    // 2- ESC_ALIGN_RIGHT
-
-    // printer.isConnected.then((isConnected) async {
-    //   printer.printNewLine();
-    //   for (var data in datas['menus']) {
-    //     printer.printCustom('${data['namaMenu']}', 0, 1);
-    //     printer.printCustom('${data['price']}', 0, 1);
-    //     printer.printNewLine();
-    //   }
-    //   printer.printCustom('total: ${datas['totalPrice']}', 0, 1);
-    //   printer.printNewLine();
-    //   printer.printNewLine();
-    //   printer.paperCut();
-
-    // return BlocBuilder<HomeCubit, Map<String, dynamic>?>(
-    //   builder: (context, data) {
-    //     // _print(data);
-    //     return const SizedBox();
-    //   },
-    // );
-    // printer.printNewLine();
-    // printer.printCustom("HEADER", 3, 1);
-    // printer.printNewLine();
-    // printer.printNewLine();
-    // //printer.printImageBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-    // printer.printLeftRight("LEFT", "RIGHT", 0);
-    // printer.printLeftRight("LEFT", "RIGHT", 1);
-    // printer.printLeftRight("LEFT", "RIGHT", 1, format: "%-15s %15s %n");
-    // printer.printNewLine();
-    // printer.printLeftRight("LEFT", "RIGHT", 2);
-    // printer.printLeftRight("LEFT", "RIGHT", 3);
-    // printer.printLeftRight("LEFT", "RIGHT", 4);
-    // printer.printNewLine();
-    // printer.print3Column("Col1", "Col2", "Col3", 1);
-    // printer.print3Column("Col1", "Col2", "Col3", 1,
-    //     format: "%-10s %10s %10s %n");
-    // printer.printNewLine();
-    // printer.print4Column("Col1", "Col2", "Col3", "Col4", 1);
-    // printer.print4Column("Col1", "Col2", "Col3", "Col4", 1,
-    //     format: "%-8s %7s %7s %7s %n");
-    // printer.printNewLine();
-    // String testString = " čĆžŽšŠ-H-ščđ";
-    // printer.printCustom(testString, 1, 1, charset: "windows-1250");
-    // printer.printLeftRight("Številka:", "18000001", 1,
-    //     charset: "windows-1250");
-    // printer.printCustom("Body left", 1, 0);
-    // printer.printCustom("Body right", 0, 2);
-    // printer.printNewLine();
-    // printer.printCustom("Thank You", 2, 1);
-    // printer.printNewLine();
-    // printer.printQRcode("Insert Your Own Text to Generate", 200, 200, 1);
-    // printer.printNewLine();
-    // printer.printNewLine();
-    // printer.paperCut();
-    // });
-  }
+  const HomePage({
+    // required this.printer,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // menjalankan fungsi cubit json menu
+    context.read<JsonMenuCubit>().getAllMenu();
+
     Widget _buildSearch() {
       return Container(
         margin: EdgeInsets.all(defaultMargin),
@@ -118,13 +55,15 @@ class HomePage extends StatelessWidget {
     }
 
     Widget _buildMenu(String title) {
-      Widget textTitle() => Text(
-            title,
-            style: blackTextStyle.copyWith(
-              fontWeight: semiBold,
-              fontSize: 18,
-            ),
-          );
+      Widget textTitle() {
+        return Text(
+          title,
+          style: blackTextStyle.copyWith(
+            fontWeight: semiBold,
+            fontSize: 18,
+          ),
+        );
+      }
 
       return Container(
         margin: EdgeInsets.only(
@@ -137,38 +76,61 @@ class HomePage extends StatelessWidget {
             textTitle(),
             const SizedBox(height: 12),
             Divider(thickness: 1, height: 0, color: lightGrayColor),
-            const Menu(id: 1, title: 'Kopi Sembunyi', price: 18000),
-            Divider(thickness: 1, height: 0, color: lightGrayColor),
-            const Menu(id: 2, title: 'Cappucino', price: 20000),
-            Divider(thickness: 1, height: 0, color: lightGrayColor),
-            const Menu(id: 3, title: 'Americano', price: 23000),
-            Divider(thickness: 1, height: 0, color: lightGrayColor),
+            BlocBuilder<JsonMenuCubit, JsonMenuState>(
+              builder: (context, state) {
+                if (state is JsonMenuLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (state is JsonMenuSuccess) {
+                  return Column(
+                    children: state.menu
+                        .map(
+                          (item) => Column(
+                            children: [
+                              MenuItem(
+                                menu: item,
+                              ),
+                              Divider(
+                                thickness: 1,
+                                height: 0,
+                                color: lightGrayColor,
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       );
     }
 
     Widget _buildTotalAndBtnCheckout() {
-      Widget _totalPriceAndItem(data) {
-        /// variabel ini untuk banyaknya menu yang dipesan dari map data
-        /// mengembalikan nilai berupa int
-        /// jika data null return 0
-        int _numberOfItems = data != null ? data['menus'].length : 0;
+      Widget _totalPriceAndItem(MenuOrderModel menuOrder) {
+        num totalBuy = 0;
+        for (var item in menuOrder.listMenus!) {
+          totalBuy += item['totalBuy'];
+        }
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Total | Item $_numberOfItems',
+              'Total | Item $totalBuy',
               style: blackTextStyle.copyWith(
                 fontWeight: regular,
                 fontSize: 14,
               ),
             ),
             Text(
-              data == null
-                  ? 'Rp. 0'
-                  : 'Rp. ${StringHelper.addComma(data['totalPrice'])}',
+              'Rp. ${StringHelper.addComma(menuOrder.total)}',
               style: blackTextStyle.copyWith(
                 fontWeight: semiBold,
                 fontSize: 14,
@@ -178,35 +140,55 @@ class HomePage extends StatelessWidget {
         );
       }
 
-      Widget _buttonCheckOut(data) => Container(
-            width: double.infinity,
-            height: 50,
-            margin: EdgeInsets.only(top: defaultMargin, bottom: 24),
-            decoration: BoxDecoration(
-              color: blueColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: TextButton(
-              onPressed: () {
+      Widget _buttonCheckOut(MenuOrderModel menuOrder) {
+        return Container(
+          width: double.infinity,
+          height: 50,
+          margin: EdgeInsets.only(top: defaultMargin, bottom: 24),
+          decoration: BoxDecoration(
+            color: menuOrder.listMenus!.isNotEmpty ? blueColor : grayColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: TextButton(
+            onPressed: () {
+              if (menuOrder.listMenus!.isNotEmpty) {
+                context.read<MenuOrderCubit>().orderCheckoutPressed();
                 Go.to(context, SelectPaymentPage());
-              },
-              child: Text(
-                'Checkout',
-                style: whiteTextStyle.copyWith(
-                  fontWeight: medium,
-                  fontSize: 16,
-                ),
+              }
+            },
+            child: Text(
+              'Checkout',
+              style: whiteTextStyle.copyWith(
+                fontWeight: medium,
+                fontSize: 16,
               ),
             ),
-          );
+          ),
+        );
+      }
 
-      return BlocBuilder<HomeCubit, Map<String, dynamic>?>(
-        builder: (context, data) {
+      return BlocBuilder<MenuOrderCubit, MenuOrderState>(
+        builder: (context, state) {
+          MenuOrderModel menuOrder;
+          if (state is MenuOrderSuccess) {
+            menuOrder = state.menuOrder;
+          } else {
+            menuOrder = const MenuOrderModel(
+              id: '',
+              listMenus: [],
+              total: 0,
+              dateTimeOrder: null,
+            );
+          }
+
           return Container(
             width: double.infinity,
             height: 140,
             padding: EdgeInsets.only(
-                top: 20, left: defaultMargin, right: defaultMargin),
+              top: 20,
+              left: defaultMargin,
+              right: defaultMargin,
+            ),
             decoration: BoxDecoration(
               color: whiteColor,
               boxShadow: [
@@ -219,8 +201,8 @@ class HomePage extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _totalPriceAndItem(data),
-                _buttonCheckOut(data),
+                _totalPriceAndItem(menuOrder),
+                _buttonCheckOut(menuOrder),
               ],
             ),
           );

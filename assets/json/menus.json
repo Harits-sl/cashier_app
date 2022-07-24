@@ -1,0 +1,22 @@
+{
+  "menus": [
+    {
+      "id": 1,
+      "name": "Kopi Sembunyi",
+      "price": 18000,
+      "order": 0
+    },
+    {
+      "id": 2,
+      "name": "Cappucino",
+      "price": 20000,
+      "order": 0
+    },
+    {
+      "id": 3,
+      "name": "Americano",
+      "price": 23000,
+      "order": 0
+    }
+  ]
+}
