@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         child: TextField(
           // controller: _searchController,
           onSubmitted: (String query) {
-            _search(query);
+            // _search(query);
           },
           decoration: InputDecoration(
             isDense: true,
@@ -255,32 +255,6 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state is MenuOrderSuccess) {
             menuOrder = state.menuOrder;
-
-            return Container(
-              width: double.infinity,
-              height: 140,
-              padding: EdgeInsets.only(
-                top: 20,
-                left: defaultMargin,
-                right: defaultMargin,
-              ),
-              decoration: BoxDecoration(
-                color: whiteColor,
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 1),
-                    color: grayColor,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  _totalPriceAndItem(menuOrder!),
-                  _buttonCheckOut(menuOrder!),
-                ],
-              ),
-            );
           } else {
             menuOrder = const MenuOrderModel(
               id: '',
@@ -290,7 +264,31 @@ class _HomePageState extends State<HomePage> {
             );
           }
 
-          return const SizedBox();
+          return Container(
+            width: double.infinity,
+            height: 140,
+            padding: EdgeInsets.only(
+              top: 20,
+              left: defaultMargin,
+              right: defaultMargin,
+            ),
+            decoration: BoxDecoration(
+              color: whiteColor,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 1),
+                  color: grayColor,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                _totalPriceAndItem(menuOrder!),
+                _buttonCheckOut(menuOrder!),
+              ],
+            ),
+          );
         },
       );
     }

@@ -8,6 +8,23 @@ class Go {
     );
   }
 
+  static void routeWithPath({
+    required BuildContext context,
+    required String path,
+    Map? arguments,
+  }) {
+    Navigator.of(context).pushNamed(path, arguments: arguments);
+  }
+
+  static void routeWithPathAndRemove({
+    required BuildContext context,
+    required String path,
+    Map? arguments,
+  }) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(path, (route) => false, arguments: arguments);
+  }
+
   static void back(BuildContext context, Widget widget) {
     Navigator.pop(context);
   }
