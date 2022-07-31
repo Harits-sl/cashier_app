@@ -9,9 +9,11 @@ import 'button_circle.dart';
 
 class MenuItem extends StatefulWidget {
   final MenuModel menu;
+  final int totalOrder;
 
   const MenuItem({
     required this.menu,
+    required this.totalOrder,
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +22,14 @@ class MenuItem extends StatefulWidget {
 }
 
 class _MenuItemState extends State<MenuItem> {
-  int _totalBuy = 0;
+  late int _totalBuy;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _totalBuy = widget.totalOrder;
+  }
 
   @override
   Widget build(BuildContext context) {

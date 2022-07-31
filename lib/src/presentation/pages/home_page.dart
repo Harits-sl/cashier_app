@@ -1,5 +1,6 @@
+import 'package:cashier_app/src/presentation/cubit/Menu/menu_cubit.dart';
+
 import '../../data/models/menu_order_model.dart';
-import '../cubit/jsonMenu/json_menu_cubit.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,7 @@ import '../../core/utils/string_helper.dart';
 import '../widgets/menu_item.dart';
 import 'select_payment_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   // final BlueThermalPrinter printer;
 
   const HomePage({
@@ -19,14 +20,62 @@ class HomePage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // menjalankan fungsi cubit json menu
-    context.read<JsonMenuCubit>().getAllMenu();
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  // final TextEditingController _searchController = TextEditingController();
+
+  List<Map<String, dynamic>>? menus;
+  List<Map<String, dynamic>>? searchMenus;
+
+  bool isSearch = false;
+
+  MenuOrderModel? menuOrder;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // menjalankan fungsi cubit json menu
+    context.read<MenuCubit>().getAllMenu();
+  }
+
+  @override
+  void didUpdateWidget(covariant HomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    debugPrint('oldWidget: $oldWidget');
+  }
+
+  @override
+  void dispose() {
+    // _searchController.dispose();
+    super.dispose();
+  }
+
+  void _search(String query) {
+    if (query.isNotEmpty) {
+      isSearch = true;
+
+      context.read<MenuCubit>().searchMenu(query);
+    } else {
+      isSearch = false;
+      setState(() {});
+      // context.read<MenuCubit>().getAllMenu();
+      // _menuOrderModel
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget _buildSearch() {
       return Container(
         margin: EdgeInsets.all(defaultMargin),
         child: TextField(
+          // controller: _searchController,
+          onSubmitted: (String query) {
+            _search(query);
+          },
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.fromLTRB(0, 13, 13, 13),
@@ -54,8 +103,8 @@ class HomePage extends StatelessWidget {
       );
     }
 
-    Widget _buildMenu(String title) {
-      Widget textTitle() {
+    Widget _buildMenu() {
+      Widget _title(String title) {
         return Text(
           title,
           style: blackTextStyle.copyWith(
@@ -65,49 +114,84 @@ class HomePage extends StatelessWidget {
         );
       }
 
+      Widget _menu(List listMenu) {
+        return Column(
+          children: (listMenu)
+              .map(
+                (menu) => Column(
+                  children: [
+                    MenuItem(
+                      menu: menu,
+                      totalOrder: 0,
+                    ),
+                    Divider(
+                      thickness: 1,
+                      height: 0,
+                      color: lightGrayColor,
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
+        );
+      }
+
       return Container(
         margin: EdgeInsets.only(
           left: defaultMargin,
           right: defaultMargin,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            textTitle(),
-            const SizedBox(height: 12),
-            Divider(thickness: 1, height: 0, color: lightGrayColor),
-            BlocBuilder<JsonMenuCubit, JsonMenuState>(
-              builder: (context, state) {
-                if (state is JsonMenuLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+        child: BlocBuilder<MenuCubit, MenuState>(
+          buildWhen: (previousState, state) {
+            debugPrint('state: $state');
+            debugPrint('previousState: $previousState');
+            // _menuOrderModel =
+            setState(() {});
+            return true;
+          },
+          builder: (context, state) {
+            if (state is MenuLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-                if (state is JsonMenuSuccess) {
+            if (state is MenuSuccess) {
+              if (!isSearch) {
+                menus ??= state.menu;
+              } else {
+                searchMenus = state.menu;
+              }
+              debugPrint('isSearch: $isSearch');
+
+              for (var item in menus!) {
+                debugPrint('item: $item');
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: (!isSearch ? menus : searchMenus)!.map((item) {
+                  debugPrint('item: $item');
+
                   return Column(
-                    children: state.menu
-                        .map(
-                          (item) => Column(
-                            children: [
-                              MenuItem(
-                                menu: item,
-                              ),
-                              Divider(
-                                thickness: 1,
-                                height: 0,
-                                color: lightGrayColor,
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList(),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _title(item['typeMenu']),
+                      const SizedBox(height: 12),
+                      Divider(
+                        thickness: 1,
+                        height: 0,
+                        color: lightGrayColor,
+                      ),
+                      _menu(item['menu']),
+                      const SizedBox(height: 12),
+                    ],
                   );
-                }
-                return const SizedBox();
-              },
-            ),
-          ],
+                }).toList(),
+              );
+            }
+            return const SizedBox();
+          },
         ),
       );
     }
@@ -169,9 +253,34 @@ class HomePage extends StatelessWidget {
 
       return BlocBuilder<MenuOrderCubit, MenuOrderState>(
         builder: (context, state) {
-          MenuOrderModel menuOrder;
           if (state is MenuOrderSuccess) {
             menuOrder = state.menuOrder;
+
+            return Container(
+              width: double.infinity,
+              height: 140,
+              padding: EdgeInsets.only(
+                top: 20,
+                left: defaultMargin,
+                right: defaultMargin,
+              ),
+              decoration: BoxDecoration(
+                color: whiteColor,
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 1),
+                    color: grayColor,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  _totalPriceAndItem(menuOrder!),
+                  _buttonCheckOut(menuOrder!),
+                ],
+              ),
+            );
           } else {
             menuOrder = const MenuOrderModel(
               id: '',
@@ -181,31 +290,7 @@ class HomePage extends StatelessWidget {
             );
           }
 
-          return Container(
-            width: double.infinity,
-            height: 140,
-            padding: EdgeInsets.only(
-              top: 20,
-              left: defaultMargin,
-              right: defaultMargin,
-            ),
-            decoration: BoxDecoration(
-              color: whiteColor,
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 1),
-                  color: grayColor,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                _totalPriceAndItem(menuOrder),
-                _buttonCheckOut(menuOrder),
-              ],
-            ),
-          );
+          return const SizedBox();
         },
       );
     }
@@ -217,7 +302,7 @@ class HomePage extends StatelessWidget {
             ListView(
               children: [
                 _buildSearch(),
-                _buildMenu('Coffe'),
+                _buildMenu(),
                 // spasi dari menu ke widget _totalAndBtnCheckout
                 SizedBox(
                   height: defaultMargin + 140,

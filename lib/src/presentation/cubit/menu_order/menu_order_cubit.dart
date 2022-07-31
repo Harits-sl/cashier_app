@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/menu_order_model.dart';
@@ -46,7 +46,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
   }
 
   void orderMenu({
-    int? id,
+    String? id,
     int price = 0,
     String? menuName,
     int totalBuy = 0,
@@ -119,5 +119,9 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     );
 
     emit(MenuOrderSuccess(_menuOrderModel));
+  }
+
+  void addOrderToFirestore(MenuOrderModel menuOrder) async {
+    OrderService().addOrder(menuOrder);
   }
 }

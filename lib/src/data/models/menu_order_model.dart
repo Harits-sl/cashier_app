@@ -19,7 +19,7 @@ class MenuOrderModel extends Equatable {
     this.change = 0,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toFirestore() {
     final result = <String, dynamic>{};
 
     result.addAll({'id': id});
@@ -33,7 +33,7 @@ class MenuOrderModel extends Equatable {
     return result;
   }
 
-  factory MenuOrderModel.fromMap(Map<String, dynamic> map) {
+  factory MenuOrderModel.fromFirestore(Map<String, dynamic> map) {
     return MenuOrderModel(
       id: map['id'] ?? '',
       total: map['total']?.toInt() ?? 0,

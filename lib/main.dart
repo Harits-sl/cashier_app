@@ -1,8 +1,8 @@
+import 'package:cashier_app/src/presentation/cubit/Menu/menu_cubit.dart';
 import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
-import 'src/presentation/cubit/jsonMenu/json_menu_cubit.dart';
 import 'src/presentation/cubit/menu_order/menu_order_cubit.dart';
 
 import 'src/config/theme/app_theme.dart';
@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<MenuOrderCubit>(
           create: (BuildContext context) => MenuOrderCubit(),
         ),
-        BlocProvider<JsonMenuCubit>(
-          create: (BuildContext context) => JsonMenuCubit(),
+        BlocProvider<MenuCubit>(
+          create: (BuildContext context) => MenuCubit(),
         ),
         BlocProvider<ThermalPrinterCubit>(
           create: (BuildContext context) => ThermalPrinterCubit(),

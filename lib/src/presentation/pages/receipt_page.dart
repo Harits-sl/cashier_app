@@ -229,7 +229,9 @@ class ReceiptPage extends StatelessWidget {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 2,
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<MenuOrderCubit>().addOrderToFirestore(_menuOrder);
+          },
           style: TextButton.styleFrom(
             backgroundColor: Colors.transparent,
             primary: blackColor,

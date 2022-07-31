@@ -1,6 +1,6 @@
-part of 'thermal_printer_cubit.dart';
+// part of 'thermal_printer_cubit.dart';
 
-@immutable
-abstract class ThermalPrinterState {}
+// @immutable
+// abstract class ThermalPrinterState {}
 
-class ThermalPrinterInitial extends ThermalPrinterState {}
+// class ThermalPrinterInitial extends ThermalPrinterState {}

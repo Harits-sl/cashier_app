@@ -11,7 +11,7 @@ class MenuJsonService {
     final data = await json.decode(response);
 
     List<MenuModel> listMenu = data['menus']
-        .map<MenuModel>((item) => MenuModel.fromJSon(item))
+        .map<MenuModel>((item) => MenuModel.fromFirestore(item))
         .toList();
     return listMenu;
   }

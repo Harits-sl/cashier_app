@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 
 class MenuModel extends Equatable {
-  final int id;
-  final int order;
-  final int price;
+  final String id;
   final String name;
+  final String typeMenu;
+  final int price;
 
   const MenuModel({
     required this.id,
-    required this.order,
+    required this.typeMenu,
     required this.price,
     required this.name,
   });
@@ -16,21 +16,21 @@ class MenuModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'order': order,
-      'price': price,
       'name': name,
+      'typeMenu': typeMenu,
+      'price': price,
     };
   }
 
-  factory MenuModel.fromJSon(Map<String, dynamic> json) {
+  factory MenuModel.fromFirestore(Map<String, dynamic> json) {
     return MenuModel(
-      id: json['id']?.toInt() ?? 0,
-      order: json['order']?.toInt() ?? 0,
-      price: json['price']?.toInt() ?? 0,
+      id: json['id'] ?? '',
       name: json['name'] ?? '',
+      typeMenu: json['typeMenu'] ?? '',
+      price: json['price']?.toInt() ?? 0,
     );
   }
 
   @override
-  List<Object> get props => [id, order, price, name];
+  List<Object> get props => [id, typeMenu, price, name];
 }
