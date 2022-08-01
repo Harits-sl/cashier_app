@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class MenuOrderModel extends Equatable {
   final String? id;
   final int total;
-  final List<Map<String, dynamic>>? listMenus;
+  final List? listMenus;
   final DateTime? dateTimeOrder;
   final String? typePayment;
   final int cash;
@@ -38,7 +39,7 @@ class MenuOrderModel extends Equatable {
       id: map['id'] ?? '',
       total: map['total']?.toInt() ?? 0,
       listMenus: map['listMenus'] ?? [],
-      dateTimeOrder: DateTime.fromMillisecondsSinceEpoch(map['dateTimeOrder']),
+      dateTimeOrder: (map['dateTimeOrder'] as Timestamp).toDate(),
       typePayment: map['typePayment'],
       cash: map['cash'],
       change: map['change'],
@@ -48,7 +49,7 @@ class MenuOrderModel extends Equatable {
   MenuOrderModel copyWith({
     String? id,
     int? total,
-    List<Map<String, dynamic>>? listMenus,
+    List? listMenus,
     DateTime? dateTimeOrder,
     String? typePayment,
     int? cash,

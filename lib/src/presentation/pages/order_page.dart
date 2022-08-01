@@ -11,19 +11,19 @@ import '../../core/utils/string_helper.dart';
 import '../widgets/menu_item.dart';
 import 'select_payment_page.dart';
 
-class HomePage extends StatefulWidget {
+class OrderPage extends StatefulWidget {
   // final BlueThermalPrinter printer;
 
-  const HomePage({
+  const OrderPage({
     // required this.printer,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _OrderPageState extends State<OrderPage> {
   // final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>>? menus;
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void didUpdateWidget(covariant HomePage oldWidget) {
+  void didUpdateWidget(covariant OrderPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint('oldWidget: $oldWidget');
   }
@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage> {
           onSubmitted: (String query) {
             // _search(query);
           },
+          enabled: false,
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.fromLTRB(0, 13, 13, 13),
