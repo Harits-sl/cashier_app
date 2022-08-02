@@ -50,8 +50,7 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.orderMenu: (context) => const OrderPage(),
-          // TODO: fix payment amount page
-          // Routes.paymentAmount: (context) =>const PaymentAmountPage(),
+          Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.selectPayment: (context) => const SelectPaymentPage(),
           Routes.receipt: (context) => const ReceiptPage(),
         },

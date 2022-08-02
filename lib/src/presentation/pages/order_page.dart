@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/presentation/cubit/Menu/menu_cubit.dart';
 
 import '../../data/models/menu_order_model.dart';
@@ -63,6 +64,13 @@ class _OrderPageState extends State<OrderPage> {
       setState(() {});
       // context.read<MenuCubit>().getAllMenu();
       // _menuOrderModel
+    }
+  }
+
+  void checkOutPressed() {
+    if (menuOrder!.listMenus!.isNotEmpty) {
+      context.read<MenuOrderCubit>().orderCheckoutPressed();
+      Go.routeWithPath(context: context, path: Routes.selectPayment);
     }
   }
 
@@ -163,17 +171,10 @@ class _OrderPageState extends State<OrderPage> {
               } else {
                 searchMenus = state.menu;
               }
-              debugPrint('isSearch: $isSearch');
-
-              for (var item in menus!) {
-                debugPrint('item: $item');
-              }
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: (!isSearch ? menus : searchMenus)!.map((item) {
-                  debugPrint('item: $item');
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -235,12 +236,7 @@ class _OrderPageState extends State<OrderPage> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: TextButton(
-            onPressed: () {
-              if (menuOrder.listMenus!.isNotEmpty) {
-                context.read<MenuOrderCubit>().orderCheckoutPressed();
-                Go.to(context, SelectPaymentPage());
-              }
-            },
+            onPressed: checkOutPressed,
             child: Text(
               'Checkout',
               style: whiteTextStyle.copyWith(

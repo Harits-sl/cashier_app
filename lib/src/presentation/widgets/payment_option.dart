@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/config/route/routes.dart';
+
 import '../cubit/menu_order/menu_order_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,10 +30,7 @@ class PaymentOption extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.read<MenuOrderCubit>().orderTypePaymentPressed(title);
-        Go.to(
-          context,
-          PaymentAmountPage(title: title, orderId: 'dadad', total: total),
-        );
+        Go.routeWithPath(context: context, path: Routes.paymentAmount);
       },
       child: Container(
         height: 62,

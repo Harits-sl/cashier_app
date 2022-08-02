@@ -1,7 +1,8 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'package:cashier_app/src/config/route/go.dart';
+import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
-import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -71,15 +72,21 @@ class ReceiptPage extends StatelessWidget {
       if (context.read<ThermalPrinterCubit>().isConnected) {
         _tesPrint();
       } else {
-        print('else');
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => SelectPrinterPage()),
-          ),
-        );
+        Go.routeWithPath(context: context, path: Routes.selectPrinter);
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: ((context) => SelectPrinterPage()),
+        //   ),
+        // );
       }
+    }
+
+    void _onTapSaveOrder() {
+      context.read<MenuOrderCubit>().addOrderToFirestore(_menuOrder);
+      Go.routeWithPathAndRemove(context: context, path: Routes.home);
+
+      context.read<MenuOrderCubit>().initState();
     }
 
     Widget _buildHeader() {
@@ -103,8 +110,10 @@ class ReceiptPage extends StatelessWidget {
           if (state is MenuOrderSuccess) {
             _menuOrder = state.menuOrder;
 
-            String dateFormat = DateFormat('M.d.y - H:mm:ss')
-                .format(state.menuOrder.dateTimeOrder!);
+            String dateFormat = state.menuOrder.dateTimeOrder != null
+                ? DateFormat('M.d.y - H:mm:ss')
+                    .format(state.menuOrder.dateTimeOrder!)
+                : 'hari kosong';
 
             return Container(
               margin: EdgeInsets.only(
@@ -225,13 +234,11 @@ class ReceiptPage extends StatelessWidget {
       );
     }
 
-    Widget _buildButtonBackToHome() {
+    Widget _buildButtonSaveOrder() {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 2,
         child: TextButton(
-          onPressed: () {
-            context.read<MenuOrderCubit>().addOrderToFirestore(_menuOrder);
-          },
+          onPressed: _onTapSaveOrder,
           style: TextButton.styleFrom(
             backgroundColor: Colors.transparent,
             primary: blackColor,
@@ -240,7 +247,7 @@ class ReceiptPage extends StatelessWidget {
               borderRadius: BorderRadius.zero,
             ),
           ),
-          child: const Text('Kembali ke home'),
+          child: const Text('Simpan Order'),
         ),
       );
     }
@@ -258,7 +265,7 @@ class ReceiptPage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Row(
               children: [
-                _buildButtonBackToHome(),
+                _buildButtonSaveOrder(),
                 _buildButtonPrintStruck(),
               ],
             ),

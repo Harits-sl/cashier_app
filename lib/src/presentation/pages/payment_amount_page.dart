@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/config/route/routes.dart';
+
 import '../../config/route/go.dart';
 import '../../core/utils/string_helper.dart';
 import '../cubit/menuQty/menu_qty_cubit.dart';
@@ -14,20 +16,7 @@ import '../widgets/payment_app_bar.dart';
 class PaymentAmountPage extends StatefulWidget {
   const PaymentAmountPage({
     Key? key,
-    required this.title,
-    required this.orderId,
-    required this.total,
   }) : super(key: key);
-
-  /// variabel yang akan diisi untuk payment app bar,
-  /// didapat dari select payment page
-  final String title;
-
-  /// variabel yang akan diisi untuk payment app bar
-  final String orderId;
-
-  /// variabel yang akan diisi untuk payment app bar
-  final int total;
 
   @override
   State<PaymentAmountPage> createState() => _PaymentAmountPageState();
@@ -35,19 +24,19 @@ class PaymentAmountPage extends StatefulWidget {
 
 class _PaymentAmountPageState extends State<PaymentAmountPage> {
   /// controller text field
-  late TextEditingController _payAmountController;
+  late TextEditingController _payAmountController = TextEditingController();
 
   /// variabel untuk kembalian
-  late int _change;
+  late int _change = 0;
 
   /// variabel untuk radio button
-  late int _groupvalue;
+  late int _groupvalue = 0;
 
   @override
   void initState() {
     super.initState();
 
-    initVariable();
+    // initVariable();
   }
 
   @override
@@ -57,51 +46,29 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
   }
 
   /// fungsi untuk initial variabel
-  void initVariable() {
-    _groupvalue = widget.total;
-    _payAmountController = TextEditingController(text: _groupvalue.toString());
-    _change = 0;
+  // void initVariable() {
+  //   _groupvalue = widget.total;
+  //   _payAmountController = TextEditingController(text: _groupvalue.toString());
+  //   _change = 0;
+  // }
+
+  void onTapPay() {
+    context.read<MenuOrderCubit>().orderAddCashAndChangePayment(
+        cash: int.parse(_payAmountController.text), change: _change);
+    Go.routeWithPath(context: context, path: Routes.receipt);
   }
 
   @override
   Widget build(BuildContext context) {
-    /// variabel berisi list banyaknya jumlah yang akan diberikan pelanggan
-    final List<int> _mostListPaymentAmount = [
-      widget.total,
-      20000,
-      30000,
-      50000
-    ];
-
-    List<Map<String, dynamic>> _listPaymentAmount = [
-      {
-        'payment': 18000,
-        'isSelected': false,
-      },
-      {
-        'payment': 20000,
-        'isSelected': false,
-      },
-      {
-        'payment': 30000,
-        'isSelected': false,
-      },
-      {
-        'payment': 50000,
-        'isSelected': false,
-      },
-    ];
-
-    void onTap(int value) {
-      setState(() {
-        _payAmountController = TextEditingController(text: value.toString());
-
-        _change = value - widget.total;
-        print(_change);
-      });
-    }
-
     Widget _buildListRadioPayment(int totalPayment) {
+      /// variabel berisi list banyaknya jumlah yang akan diberikan pelanggan
+      final List<int> _mostListPaymentAmount = [
+        totalPayment,
+        20000,
+        30000,
+        50000
+      ];
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: GridView.count(
@@ -269,11 +236,7 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
           borderRadius: BorderRadius.circular(8),
         ),
         child: TextButton(
-          onPressed: () {
-            context.read<MenuOrderCubit>().orderAddCashAndChangePayment(
-                cash: int.parse(_payAmountController.text), change: _change);
-            Go.to(context, ReceiptPage());
-          },
+          onPressed: onTapPay,
           child: Text(
             'Pay',
             style: whiteTextStyle.copyWith(
@@ -303,7 +266,7 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
                       child: Column(
                         children: [
                           PaymentAppBar(
-                            title: widget.title,
+                            title: state.menuOrder.typePayment!,
                             orderId: state.menuOrder.id!,
                             total: state.menuOrder.total,
                           ),

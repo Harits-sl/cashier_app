@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/models/menu_order_model.dart';
@@ -36,6 +37,26 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     dateTimeOrder: null,
     typePayment: '',
   );
+
+  void initState() {
+    _menuOrderModel = const MenuOrderModel(
+      id: '',
+      total: 0,
+      listMenus: [],
+      dateTimeOrder: null,
+      typePayment: '',
+    );
+    _totalPrice = 0;
+    _listMenu.clear();
+    _mapMenu = {};
+    _data = {};
+    _id = null;
+    _dateTime = null;
+
+    debugPrint('_menuOrderModel: $_menuOrderModel');
+
+    emit(MenuOrderInitial());
+  }
 
   void _addTotalPrice() {
     _totalPrice = 0;
