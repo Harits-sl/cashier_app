@@ -1,10 +1,9 @@
-import 'package:cashier_app/src/config/route/routes.dart';
+import '../../config/route/routes.dart';
 
 import '../cubit/menu_order/menu_order_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../config/route/go.dart';
-import '../pages/payment_amount_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/shared/theme.dart';

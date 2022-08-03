@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 
-import 'package:cashier_app/src/presentation/features/home/index.dart';
-import 'package:flutter/material.dart';
+import 'index.dart';
 
+import '../../../core/utils/date.dart';
 import '../../../data/dataSources/remote/order_service.dart';
 import '../../../data/models/menu_order_model.dart';
 
@@ -14,7 +14,27 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeLoading());
 
       List<MenuOrderModel> listMenuOrder = await OrderService().getAllOrder();
-      debugPrint('listMenuOrder: $listMenuOrder');
+
+      DateTime today = DateTime.now();
+
+      int totalIncomeToday = 0;
+      int totalIncomeYesterday = 0;
+
+      for (MenuOrderModel order in listMenuOrder) {
+        switch (Date.filter(
+            subtractDay: 1, date: order.dateTimeOrder!, today: today)) {
+          case 0:
+            totalIncomeYesterday += order.total;
+            break;
+          case 1:
+            totalIncomeToday += order.total;
+            break;
+        }
+      }
+
+      List<int> incomeList = [totalIncomeToday, totalIncomeYesterday];
+
+      emit(HomeSuccess(incomeList));
     } catch (e) {
       emit(HomeFailed(e.toString()));
     }

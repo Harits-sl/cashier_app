@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
-import 'package:flutter/material.dart';
+import '../../../data/dataSources/remote/menu_service.dart';
 import '../../../data/models/menu_model.dart';
 import 'package:equatable/equatable.dart';
 

@@ -1,11 +1,10 @@
-import '../cubit/menuQty/menu_qty_cubit.dart';
-import '../cubit/menu_order/menu_order_cubit.dart';
-
-import '../../core/shared/theme.dart';
-import '../widgets/payment_app_bar.dart';
-import '../widgets/payment_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../core/shared/theme.dart';
+import '../cubit/menu_order/menu_order_cubit.dart';
+import '../widgets/payment_app_bar.dart';
+import '../widgets/payment_option.dart';
 
 class SelectPaymentPage extends StatelessWidget {
   const SelectPaymentPage({Key? key}) : super(key: key);

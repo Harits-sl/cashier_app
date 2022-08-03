@@ -1,10 +1,10 @@
-import 'package:cashier_app/src/config/route/routes.dart';
-import 'package:cashier_app/src/presentation/cubit/Menu/menu_cubit.dart';
-import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
-import 'package:cashier_app/src/presentation/features/home/index.dart';
-import 'package:cashier_app/src/presentation/pages/payment_amount_page.dart';
-import 'package:cashier_app/src/presentation/pages/receipt_page.dart';
-import 'package:cashier_app/src/presentation/pages/select_payment_page.dart';
+import 'src/config/route/routes.dart';
+import 'src/presentation/cubit/Menu/menu_cubit.dart';
+import 'src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import 'src/presentation/features/home/index.dart';
+import 'src/presentation/pages/payment_amount_page.dart';
+import 'src/presentation/pages/receipt_page.dart';
+import 'src/presentation/pages/select_payment_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';

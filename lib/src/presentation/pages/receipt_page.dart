@@ -1,8 +1,8 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:cashier_app/src/config/route/go.dart';
-import 'package:cashier_app/src/config/route/routes.dart';
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
-import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import '../../config/route/go.dart';
+import '../../config/route/routes.dart';
+import '../../data/models/menu_order_model.dart';
+import '../cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';

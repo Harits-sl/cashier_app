@@ -12,12 +12,13 @@ class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeSuccess extends HomeState {
-  // final List<HomeModel> home;
+  /// [totalIncomeToday, totalIncomeYesterday]
+  final List<int> totalList;
 
-  // const HomeSuccess(this.home);
+  const HomeSuccess(this.totalList);
 
-  // @override
-  // List<Object> get props => [home];
+  @override
+  List<Object> get props => [totalList];
 }
 
 class HomeFailed extends HomeState {

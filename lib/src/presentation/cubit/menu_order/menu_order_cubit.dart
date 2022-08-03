@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
+import '../../../data/dataSources/remote/order_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

@@ -1,5 +1,5 @@
-import 'package:cashier_app/src/config/route/routes.dart';
-import 'package:cashier_app/src/presentation/cubit/Menu/menu_cubit.dart';
+import '../../config/route/routes.dart';
+import '../cubit/Menu/menu_cubit.dart';
 
 import '../../data/models/menu_order_model.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
@@ -10,7 +10,6 @@ import '../../config/route/go.dart';
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
 import '../widgets/menu_item.dart';
-import 'select_payment_page.dart';
 
 class OrderPage extends StatefulWidget {
   // final BlueThermalPrinter printer;

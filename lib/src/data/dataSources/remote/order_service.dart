@@ -1,6 +1,5 @@
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
+import '../../models/menu_order_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 class OrderService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;

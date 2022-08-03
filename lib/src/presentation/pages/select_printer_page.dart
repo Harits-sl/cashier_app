@@ -1,9 +1,7 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:cashier_app/src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import '../cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'order_page.dart';
 
 class SelectPrinterPage extends StatefulWidget {
   const SelectPrinterPage({Key? key}) : super(key: key);
