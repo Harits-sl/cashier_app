@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class MenuModel extends Equatable {
@@ -13,13 +16,15 @@ class MenuModel extends Equatable {
     required this.name,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'typeMenu': typeMenu,
-      'price': price,
-    };
+  Map<String, dynamic> toFirestore() {
+    final result = <String, dynamic>{};
+
+    result.addAll({'id': id});
+    result.addAll({'name': name});
+    result.addAll({'typeMenu': typeMenu});
+    result.addAll({'price': price});
+
+    return result;
   }
 
   factory MenuModel.fromFirestore(Map<String, dynamic> json) {

@@ -1,3 +1,7 @@
+import 'package:cashier_app/src/presentation/features/admin/admin_page.dart';
+import 'package:cashier_app/src/presentation/features/admin/index.dart';
+import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
+
 import 'src/config/route/routes.dart';
 import 'src/presentation/cubit/Menu/menu_cubit.dart';
 import 'src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
@@ -34,6 +38,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<HomeCubit>(
           create: (BuildContext context) => HomeCubit(),
         ),
+        BlocProvider<AdminCubit>(
+          create: (BuildContext context) => AdminCubit(),
+        ),
         BlocProvider<MenuOrderCubit>(
           create: (BuildContext context) => MenuOrderCubit(),
         ),
@@ -50,9 +57,11 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.orderMenu: (context) => const OrderPage(),
+          Routes.admin: (context) => const AdminPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.selectPayment: (context) => const SelectPaymentPage(),
           Routes.receipt: (context) => const ReceiptPage(),
+          Routes.selectPrinter: (context) => const SelectPrinterPage(),
         },
       ),
     );

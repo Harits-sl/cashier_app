@@ -10,13 +10,17 @@ class Menu extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width / 2;
 
-    void onTapOrder() {
+    void _onTapOrder() {
       Go.routeWithPath(context: context, path: Routes.orderMenu);
     }
 
-    Widget item(String title, IconData icon) {
+    void _onTapAdmin() {
+      Go.routeWithPath(context: context, path: Routes.admin);
+    }
+
+    Widget item(String title, IconData icon, Function()? onTap) {
       return InkWell(
-        onTap: onTapOrder,
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           width: width - (defaultMargin * 2),
@@ -47,8 +51,16 @@ class Menu extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          item('Cashier', Icons.receipt_long_outlined),
-          item('Admin', Icons.admin_panel_settings_outlined),
+          item(
+            'Cashier',
+            Icons.receipt_long_outlined,
+            _onTapOrder,
+          ),
+          item(
+            'Admin',
+            Icons.admin_panel_settings_outlined,
+            _onTapAdmin,
+          ),
         ],
       ),
     );

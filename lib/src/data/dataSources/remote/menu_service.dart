@@ -19,5 +19,10 @@ class MenuService {
     return listData;
   }
 
-  void addMenu() async {}
+  void addMenu(MenuModel menuModel) async {
+    Map<String, dynamic> menu = menuModel.toFirestore();
+
+    CollectionReference menus = _db.collection('menus');
+    menus.doc(menuModel.name).set(menu);
+  }
 }
