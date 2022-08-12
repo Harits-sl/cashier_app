@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:204664353036:android:28ab547e7fbd6d6ffd5929",
+        "mobilesdk_app_id": "1:204664353036:android:a4e313dcbc2fa4b3fd5929",
         "android_client_info": {
-          "package_name": "com.example.cashier_app"
+          "package_name": "com.motamorph.cashier_app.dev"
         }
       },
       "oauth_client": [

@@ -43,12 +43,16 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.cashier_app"
+        applicationId "com.motamorph.cashier_app"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
     }
 
     buildTypes {
@@ -58,6 +62,22 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "Dev Cashier MotaMorph"
+            versionNameSuffix "-dev"
+            applicationId "com.motamorph.cashier_app.dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", " Cashier MotaMorph"
+        }
+    }
+
 }
 
 flutter {

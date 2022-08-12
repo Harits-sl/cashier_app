@@ -1,4 +1,4 @@
-package com.example.cashier_app
+package com.motamorph.cashier_app
 
 import io.flutter.embedding.android.FlutterActivity
 
