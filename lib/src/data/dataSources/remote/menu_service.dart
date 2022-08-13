@@ -25,11 +25,23 @@ class MenuService {
     QuerySnapshot querySnapshot = await menus.get();
 
     // Get data from docs and convert map to List
-    List<MenuModel> listData = querySnapshot.docs
-        .map(
-          (doc) => MenuModel.fromFirestore(doc.data() as Map<String, dynamic>),
-        )
-        .toList();
+    List<MenuModel> listData = querySnapshot.docs.map((doc) {
+      return MenuModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      // code for update data
+      // menus.doc(doc.id).update({
+      //   'createdAt': DateTime.now(),
+      //   'updatedAt': DateTime.now(),
+      // });
+      // return MenuModel(
+      //   id: 'id',
+      //   name: 'name',
+      //   typeMenu: 'typeMenu',
+      //   price: 0,
+      //   createdAt: DateTime.now(),
+      //   updatedAt: DateTime.now(),
+      // );
+    }).toList();
 
     return listData;
   }
