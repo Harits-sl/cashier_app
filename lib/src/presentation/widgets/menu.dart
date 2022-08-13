@@ -7,21 +7,21 @@ import '../../data/models/menu_model.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 import 'button_circle.dart';
 
-class MenuItem extends StatefulWidget {
+class Menu extends StatefulWidget {
   final MenuModel menu;
   final int totalOrder;
 
-  const MenuItem({
+  const Menu({
     required this.menu,
     required this.totalOrder,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<MenuItem> createState() => _MenuItemState();
+  State<Menu> createState() => _MenuState();
 }
 
-class _MenuItemState extends State<MenuItem> {
+class _MenuState extends State<Menu> {
   late int _totalBuy;
 
   @override

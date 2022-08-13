@@ -46,10 +46,23 @@ class Menu extends StatelessWidget {
         if (state is AdminSuccess) {
           return listMenu(state.menus);
         }
+        if (state is AdminLoading) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
         if (state is AdminFailed) {
           return Text(state.error);
         }
-        return Container();
+        return SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }

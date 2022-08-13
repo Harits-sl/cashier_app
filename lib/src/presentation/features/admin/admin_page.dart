@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/config/route/go.dart';
+import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 
@@ -8,19 +10,25 @@ class AdminPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _iconPressed() {
+      Go.routeWithPath(context: context, path: Routes.addMenu);
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
         title: const Text('Admin'),
       ),
-      body: Column(
-        children: const [
-          Menu(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: const [
+            Menu(),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: _iconPressed,
       ),
     );
   }

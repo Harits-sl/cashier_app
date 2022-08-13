@@ -34,15 +34,15 @@ class MenuOrderModel extends Equatable {
     return result;
   }
 
-  factory MenuOrderModel.fromFirestore(Map<String, dynamic> map) {
+  factory MenuOrderModel.fromFirestore(Map<String, dynamic> firestore) {
     return MenuOrderModel(
-      id: map['id'] ?? '',
-      total: map['total']?.toInt() ?? 0,
-      listMenus: map['listMenus'] ?? [],
-      dateTimeOrder: (map['dateTimeOrder'] as Timestamp).toDate(),
-      typePayment: map['typePayment'],
-      cash: map['cash'],
-      change: map['change'],
+      id: firestore['id'] ?? '',
+      total: firestore['total']?.toInt() ?? 0,
+      listMenus: firestore['listMenus'] ?? [],
+      dateTimeOrder: (firestore['dateTimeOrder'] as Timestamp).toDate(),
+      typePayment: firestore['typePayment'],
+      cash: firestore['cash'],
+      change: firestore['change'],
     );
   }
 

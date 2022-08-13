@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/route/go.dart';
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../widgets/menu_item.dart';
+import '../widgets/menu.dart';
 
 class OrderPage extends StatefulWidget {
   // final BlueThermalPrinter printer;
@@ -128,7 +128,7 @@ class _OrderPageState extends State<OrderPage> {
               .map(
                 (menu) => Column(
                   children: [
-                    MenuItem(
+                    Menu(
                       menu: menu,
                       totalOrder: 0,
                     ),

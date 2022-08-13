@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 // margin
 double defaultMargin = 25.0;
-double defaultBorderRadius = 8.0;
+double defaultBorderRadius = 12.0;
 
 // colors
 Color whiteColor = const Color(0xffFFFFFF);

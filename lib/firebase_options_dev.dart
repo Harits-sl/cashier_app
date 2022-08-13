@@ -8,13 +8,13 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options.dart';
+/// import 'firebase_options_dev.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class DefaultFirebaseOptions {
+class DefaultFirebaseOptionsDev {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCWxkCVKgfXHpOOyTbW0eUz6OoSEJp3u_s',
-    appId: '1:204664353036:android:28ab547e7fbd6d6ffd5929',
+    appId: '1:204664353036:android:a4e313dcbc2fa4b3fd5929',
     messagingSenderId: '204664353036',
     projectId: 'cashier-motamorph',
     storageBucket: 'cashier-motamorph.appspot.com',
