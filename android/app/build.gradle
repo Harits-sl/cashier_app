@@ -64,17 +64,18 @@ android {
     }
 
     flavorDimensions "app"
-
     productFlavors {
-        dev {
+        development {
             dimension "app"
             resValue "string", "app_name", "Dev Cashier MotaMorph"
             versionNameSuffix "-dev"
-            applicationId "com.motamorph.cashier_app.dev"
+            applicationIdSuffix ".dev"
         }
-        prod {
+        production {
             dimension "app"
             resValue "string", "app_name", " Cashier MotaMorph"
+            versionNameSuffix ""
+            applicationIdSuffix ""
         }
     }
 

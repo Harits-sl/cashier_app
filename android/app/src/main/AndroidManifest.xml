@@ -2,7 +2,7 @@
     package="com.motamorph.cashier_app">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="cashier_app"
+        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -11,7 +11,7 @@
       "program": "lib/main.dart",
       "args": [
         "--flavor",
-        "dev",
+        "development",
         "--target",
         "lib/main.dart"
       ]
@@ -30,7 +30,7 @@
       "program": "lib/main.dart",
       "args": [
         "--flavor",
-        "prod",
+        "production",
         "--target",
         "lib/main.dart"
       ]
