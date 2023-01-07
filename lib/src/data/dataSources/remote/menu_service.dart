@@ -14,8 +14,6 @@ class MenuService {
     menus
         .doc(menuModel.name)
         .set(menu)
-        .then((value) => print("DocumentSnapshot successfully updated!"),
-            onError: (e) => print("Error updating document $e"))
         .catchError((error) => throw Exception(error));
   }
 
@@ -44,5 +42,17 @@ class MenuService {
     }).toList();
 
     return listData;
+  }
+
+  Future<MenuModel> fetchMenuById(String id) async {
+    CollectionReference menusRef = _db.collection('menus');
+    QuerySnapshot menus = await menusRef.where('id', isEqualTo: id).get();
+
+    List<MenuModel> listData = menus.docs.map((doc) {
+      return MenuModel.fromFirestore(doc.data() as Map<String, dynamic>);
+    }).toList();
+
+    // just get 1 data because id is unique
+    return listData[0];
   }
 }

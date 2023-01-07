@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+
 import '../../config/route/routes.dart';
 import '../cubit/Menu/menu_cubit.dart';
 
@@ -191,6 +193,10 @@ class _OrderPageState extends State<OrderPage> {
                 }).toList(),
               );
             }
+            if (state is MenuFailed) {
+              print(state.error);
+              return Text(state.error);
+            }
             return const SizedBox();
           },
         ),
@@ -226,24 +232,14 @@ class _OrderPageState extends State<OrderPage> {
       }
 
       Widget _buttonCheckOut(MenuOrderModel menuOrder) {
-        return Container(
-          width: double.infinity,
-          height: 50,
+        Color color = menuOrder.listMenus!.isNotEmpty ? blueColor : grayColor;
+
+        return CustomButton(
+          color: color,
           margin: EdgeInsets.only(top: defaultMargin, bottom: 24),
-          decoration: BoxDecoration(
-            color: menuOrder.listMenus!.isNotEmpty ? blueColor : grayColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: TextButton(
-            onPressed: checkOutPressed,
-            child: Text(
-              'Checkout',
-              style: whiteTextStyle.copyWith(
-                fontWeight: medium,
-                fontSize: 16,
-              ),
-            ),
-          ),
+          borderRadius: BorderRadius.circular(8),
+          onPressed: checkOutPressed,
+          text: 'Checkout',
         );
       }
 

@@ -1,3 +1,6 @@
+import 'package:cashier_app/src/core/utils/field_helper.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+
 import '../../config/route/routes.dart';
 
 import '../../config/route/go.dart';
@@ -118,18 +121,18 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
               fontSize: 14,
             ),
             onChanged: (value) {
-              /// jika value dari onChanged string kosong,
-              /// set [_payAmountController] jadi 0
+              FieldHelper.number(
+                controller: _payAmountController,
+                value: value,
+                setState: (controller) {
+                  setState(() {
+                    _payAmountController = controller;
+                  });
+                },
+              );
+
               if (value == '') {
                 setState(() {
-                  // set _payAmountController jadi 0
-                  _payAmountController = TextEditingController(text: '0');
-
-                  // set cursor textfield jadi paling ujung
-                  _payAmountController.selection = TextSelection.fromPosition(
-                    TextPosition(offset: _payAmountController.text.length),
-                  );
-
                   _change = int.parse(_payAmountController.text) - totalPrice;
                 });
               } else {
@@ -137,25 +140,6 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
                   _groupvalue = int.parse(value);
                   _change = int.parse(value) - totalPrice;
                 });
-              }
-
-              /// jika karakter value onChanged lebih dari 1, lalu jika
-              /// karakter value pertama sama dengan 0 maka set nilai
-              /// _payAmountController menjadi karakter kedua dari value
-              /// e.g: _payAmountController.text = 01 diubah menjadi
-              /// _payAmountController.text = 1
-              if (value.length > 1) {
-                if (value[0] == '0') {
-                  setState(() {
-                    _payAmountController =
-                        TextEditingController(text: value.substring(1));
-
-                    // set cursor textfield jadi paling ujung
-                    _payAmountController.selection = TextSelection.fromPosition(
-                      TextPosition(offset: _payAmountController.text.length),
-                    );
-                  });
-                }
               }
             },
             decoration: InputDecoration(
@@ -220,29 +204,17 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
     }
 
     Widget _buttonPay() {
-      return Container(
-        width: double.infinity,
-        height: 50,
+      return CustomButton(
+        color: blueColor,
         margin: EdgeInsets.only(
           top: defaultMargin,
           bottom: 24,
           left: defaultMargin,
           right: defaultMargin,
         ),
-        decoration: BoxDecoration(
-          color: blueColor,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: TextButton(
-          onPressed: onTapPay,
-          child: Text(
-            'Pay',
-            style: whiteTextStyle.copyWith(
-              fontWeight: medium,
-              fontSize: 16,
-            ),
-          ),
-        ),
+        borderRadius: BorderRadius.circular(8),
+        onPressed: onTapPay,
+        text: 'Pay',
       );
     }
 

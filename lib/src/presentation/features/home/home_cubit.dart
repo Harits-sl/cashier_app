@@ -13,12 +13,10 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       emit(HomeLoading());
 
-      List<MenuOrderModel> listMenuOrder = await OrderService().getAllOrder();
-
       DateTime today = DateTime.now();
-
       int totalIncomeToday = 0;
       int totalIncomeYesterday = 0;
+      List<MenuOrderModel> listMenuOrder = await OrderService().getAllOrder();
 
       for (MenuOrderModel order in listMenuOrder) {
         switch (Date.filter(

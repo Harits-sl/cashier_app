@@ -1,5 +1,5 @@
 import 'package:cashier_app/src/core/shared/theme.dart';
-import 'package:cashier_app/src/presentation/features/add_menu/index.dart';
+import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -35,3 +35,5 @@ class PriceChanged extends AddMenuEvent {
 }
 
 class ButtonAddMenuPressed extends AddMenuEvent {}
+
+class ClearState extends AddMenuEvent {}

@@ -12,6 +12,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     on<PriceChanged>(_onPriceChanged);
     on<TypeMenuChanged>(_onTypeMenuChanged);
     on<ButtonAddMenuPressed>(_onButtonMenuPressed);
+    on<ClearState>(_onClearState);
   }
 
   void _onNameChanged(NameChanged event, Emitter<AddMenuState> emit) {
@@ -20,7 +21,6 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         name: event.name,
       ),
     );
-    debugPrint('name: ${state.name}');
   }
 
   void _onPriceChanged(PriceChanged event, Emitter<AddMenuState> emit) {
@@ -37,7 +37,6 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         typeMenu: event.typeMenu,
       ),
     );
-    debugPrint('type: ${state.typeMenu}');
   }
 
   void _onButtonMenuPressed(
@@ -61,8 +60,27 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         updatedAt: updatedAt,
       );
 
-      MenuService().addMenu(menuModel);
+      if (name == '') {
+        emit(
+          state.copyWith(
+            status: Status.failed,
+            message: 'Nama Menu Kosong',
+          ),
+        );
+        throw Exception(state.message);
+      }
 
+      if (price == 0) {
+        emit(
+          state.copyWith(
+            status: Status.failed,
+            message: 'Harga Menu Kosong',
+          ),
+        );
+        throw Exception(state.message);
+      }
+
+      MenuService().addMenu(menuModel);
       emit(
         state.copyWith(
           status: Status.success,
@@ -78,5 +96,17 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         ),
       );
     }
+  }
+
+  void _onClearState(ClearState event, Emitter<AddMenuState> emit) {
+    emit(
+      state.copyWith(
+        name: '',
+        typeMenu: '',
+        price: 0,
+        status: Status.initial,
+        message: '',
+      ),
+    );
   }
 }

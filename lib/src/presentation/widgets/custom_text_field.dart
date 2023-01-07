@@ -6,13 +6,13 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     Key? key,
     required this.title,
-    // required this.controller,
+    required this.controller,
     required this.keyboardType,
     required this.onChanged,
   }) : super(key: key);
 
   final String title;
-  // final TextEditingController controller;
+  final TextEditingController controller;
   final TextInputType keyboardType;
   final Function onChanged;
 
@@ -31,7 +31,7 @@ class CustomTextField extends StatelessWidget {
           height: 6,
         ),
         TextField(
-          // controller: controller,
+          controller: controller,
           keyboardType: keyboardType,
           style: blackTextStyle.copyWith(
             fontSize: 16,

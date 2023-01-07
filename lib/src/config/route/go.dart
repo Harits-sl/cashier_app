@@ -11,7 +11,7 @@ class Go {
   static void routeWithPath({
     required BuildContext context,
     required String path,
-    Map? arguments,
+    dynamic arguments,
   }) {
     Navigator.of(context).pushNamed(path, arguments: arguments);
   }
@@ -27,5 +27,13 @@ class Go {
 
   static void back(BuildContext context, Widget widget) {
     Navigator.pop(context);
+  }
+
+  static void routeWithPathAndArgument({
+    required BuildContext context,
+    required String path,
+    required dynamic arguments,
+  }) {
+    Navigator.of(context).pushNamed(path, arguments: arguments);
   }
 }

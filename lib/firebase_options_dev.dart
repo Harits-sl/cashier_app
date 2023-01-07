@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart'
 ///
 /// Example:
 /// ```dart
-/// import 'firebase_options_dev.dart';
+/// import 'firebase_options.dart';
 /// // ...
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
@@ -53,10 +53,10 @@ class DefaultFirebaseOptionsDev {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCWxkCVKgfXHpOOyTbW0eUz6OoSEJp3u_s',
-    appId: '1:204664353036:android:a4e313dcbc2fa4b3fd5929',
-    messagingSenderId: '204664353036',
-    projectId: 'cashier-motamorph',
-    storageBucket: 'cashier-motamorph.appspot.com',
+    apiKey: 'AIzaSyB0mEV9PxwSFIQ_K6UZJxl5cb2V1sSTSaY',
+    appId: '1:203589788462:android:137c91141ccfb7105690bf',
+    messagingSenderId: '203589788462',
+    projectId: 'cashier-motamorph-development',
+    storageBucket: 'cashier-motamorph-development.appspot.com',
   );
 }

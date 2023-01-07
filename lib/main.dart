@@ -1,5 +1,6 @@
-import 'package:cashier_app/src/presentation/features/add_menu/index.dart';
+import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
+import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
 
@@ -61,6 +62,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddMenuBloc>(
           create: (BuildContext context) => AddMenuBloc(),
         ),
+        BlocProvider<AdminMenuEditBloc>(
+          create: (BuildContext context) => AdminMenuEditBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,
@@ -74,6 +78,17 @@ class MyApp extends StatelessWidget {
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          switch (settings.name) {
+            case AdminMenuEditPage.routeName:
+              final id = settings.arguments as String;
+              return MaterialPageRoute(
+                builder: (_) => AdminMenuEditPage(id: id),
+                settings: settings,
+              );
+            default:
+          }
         },
       ),
     );
