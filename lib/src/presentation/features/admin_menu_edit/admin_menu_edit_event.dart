@@ -10,3 +10,5 @@ abstract class AdminMenuEditEvent extends Equatable {
 class FetchMenuById extends AdminMenuEditEvent {}
 
 class ClearState extends AdminMenuEditEvent {}
+
+class ButtonEditMenuPressed extends AdminMenuEditEvent {}
