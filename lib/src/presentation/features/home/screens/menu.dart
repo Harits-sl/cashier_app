@@ -18,6 +18,10 @@ class Menu extends StatelessWidget {
       Go.routeWithPath(context: context, path: Routes.admin);
     }
 
+    void _onTapFilter() {
+      Go.routeWithPath(context: context, path: Routes.filter);
+    }
+
     Widget item(String title, IconData icon, Function()? onTap) {
       return InkWell(
         onTap: onTap,
@@ -48,18 +52,35 @@ class Menu extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          item(
-            'Cashier',
-            Icons.receipt_long_outlined,
-            _onTapOrder,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              item(
+                'Cashier',
+                Icons.receipt_long_outlined,
+                _onTapOrder,
+              ),
+              item(
+                'Admin',
+                Icons.admin_panel_settings_outlined,
+                _onTapAdmin,
+              ),
+            ],
           ),
-          item(
-            'Admin',
-            Icons.admin_panel_settings_outlined,
-            _onTapAdmin,
+          const SizedBox(
+            height: 15,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              item(
+                'Filter',
+                Icons.filter_alt_outlined,
+                _onTapFilter,
+              ),
+            ],
           ),
         ],
       ),

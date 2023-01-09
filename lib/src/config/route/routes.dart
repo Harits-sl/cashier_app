@@ -7,4 +7,5 @@ class Routes {
   static const String selectPayment = '/select-payment';
   static const String selectPrinter = '/select-printer';
   static const String addMenu = 'admin/add-menu';
+  static const String filter = '/filter';
 }
