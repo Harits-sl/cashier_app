@@ -75,6 +75,10 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
+  void cartPressed() {
+    Go.routeWithPath(context: context, path: Routes.cart);
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget _buildSearch() {
@@ -309,6 +313,17 @@ class _OrderPageState extends State<OrderPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        leading: Container(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              cartPressed();
+            },
+          ),
+        ],
+      ),
       body: _buildBody(),
     );
   }

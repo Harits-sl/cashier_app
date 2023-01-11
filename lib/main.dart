@@ -1,6 +1,7 @@
 import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
+import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/features/filter/filter/index.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
@@ -79,7 +80,8 @@ class MyApp extends StatelessWidget {
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
-          Routes.filter: (context) => FilterPage(),
+          Routes.filter: (context) => const FilterPage(),
+          Routes.cart: (context) => const CartPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
