@@ -17,10 +17,17 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
   var _priceController = TextEditingController(text: '0');
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    context.read<AdminMenuEditBloc>().add(FetchMenuById());
+  }
+
+  @override
   Widget build(BuildContext context) {
     String dropdownValue = 'Coffee';
     List<String> listTypesMenu = ['Coffee', 'Non-Coffee', 'Food'];
-    context.read<AdminMenuEditBloc>().add(FetchMenuById());
 
     Widget typeMenu() {
       return Column(
@@ -63,9 +70,9 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
                 onChanged: (String? newValue) {
                   setState(() {
                     dropdownValue = newValue!;
-                    // context
-                    //     .read<AddMenuBloc>()
-                    //     .add(TypeMenuChanged(typeMenu: dropdownValue));
+                    context
+                        .read<AdminMenuEditBloc>()
+                        .add(TypeMenuChanged(typeMenu: dropdownValue));
                   });
                 },
                 items:
@@ -92,52 +99,56 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
         // }
       },
       builder: (context, state) {
+        debugPrint('state: ${state}');
         if (state.status == Status.success) {
           _nameController = TextEditingController(text: state.name);
           _priceController =
               TextEditingController(text: state.price.toString());
-          dropdownValue = state.typeMenu;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextField(
-                  title: 'Nama Menu',
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {}
-                  // context.read<AddMenuBloc>().add(NameChanged(name: value)),
-                  ),
-              // sizedBox1(),
-              CustomTextField(
-                title: 'Harga',
-                controller: _priceController,
-                keyboardType: TextInputType.phone,
-                onChanged: (value) {
-                  FieldHelper.number(
-                    controller: _priceController,
-                    value: value,
-                    setState: (controller) {
-                      setState(() {
-                        _priceController = controller;
-                      });
-                    },
-                  );
-
-                  if (value != '') {
-                    // context
-                    //     .read<AddMenuBloc>()
-                    //     .add(PriceChanged(price: int.parse(value)));
-                  }
-                },
-              ),
-              // sizedBox1(),
-              typeMenu(),
-            ],
+          dropdownValue = state.typeMenu!;
+        }
+        if (state.status == Status.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
-        return const Center(
-          child: CircularProgressIndicator(),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomTextField(
+                title: 'Nama Menu',
+                controller: _nameController,
+                keyboardType: TextInputType.text,
+                onChanged: (value) {
+                  context
+                      .read<AdminMenuEditBloc>()
+                      .add(NameChanged(name: value));
+                }),
+            // sizedBox1(),
+            CustomTextField(
+              title: 'Harga',
+              controller: _priceController,
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                FieldHelper.number(
+                  controller: _priceController,
+                  value: value,
+                  setState: (controller) {
+                    setState(() {
+                      _priceController = controller;
+                    });
+                  },
+                );
+
+                if (value != '') {
+                  context
+                      .read<AdminMenuEditBloc>()
+                      .add(PriceChanged(price: int.parse(value)));
+                }
+              },
+            ),
+            // sizedBox1(),
+            typeMenu(),
+          ],
         );
       },
     );

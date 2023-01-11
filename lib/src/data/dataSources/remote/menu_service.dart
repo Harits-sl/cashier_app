@@ -8,13 +8,21 @@ class MenuService {
 
   void addMenu(MenuModel menuModel) async {
     Map<String, dynamic> menu = menuModel.toFirestore();
-    debugPrint('menu: $menu');
 
     CollectionReference menus = _db.collection('menus');
     menus
-        .doc(menuModel.name)
+        .doc(menuModel.id)
         .set(menu)
         .catchError((error) => throw Exception(error));
+  }
+
+  void editMenu(MenuModel menuModel) async {
+    CollectionReference menus = _db.collection('menus');
+    menus
+        .doc(menuModel.id)
+        .update(menuModel.toFirestore())
+        .then((value) => debugPrint('successfully updated!'))
+        .onError((error, stackTrace) => debugPrint('update error: $error'));
   }
 
   Future<List<MenuModel>> fetchMenu() async {
@@ -42,7 +50,6 @@ class MenuService {
       // );
     }).toList();
 
-    debugPrint('listData: ${listData}');
     return listData;
   }
 

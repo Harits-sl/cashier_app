@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'screens/button_edit_menu.dart';
+
 class AdminMenuEditPage extends StatefulWidget {
   static const String routeName = '/edit-menu';
 
@@ -39,6 +41,7 @@ class _AdminMenuEditPageState extends State<AdminMenuEditPage> {
           child: Column(
             children: [
               FieldEditMenu(),
+              ButtonEditMenu(),
             ],
           ),
         ),

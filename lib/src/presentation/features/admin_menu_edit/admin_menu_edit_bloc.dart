@@ -7,26 +7,65 @@ import 'package:flutter/foundation.dart';
 
 class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
   String _id = '';
+  String _name = '';
 
   set setId(String newValue) {
     _id = newValue;
   }
 
   AdminMenuEditBloc() : super(const AdminMenuEditState()) {
+    on<NameChanged>(_onNameChanged);
+    on<PriceChanged>(_onPriceChanged);
+    on<TypeMenuChanged>(_onTypeMenuChanged);
     on<FetchMenuById>(_fetchMenuById);
     on<ClearState>(_onClearState);
     on<ButtonEditMenuPressed>(_buttonEditMenuPressed);
   }
 
+  void _onNameChanged(NameChanged event, Emitter<AdminMenuEditState> emit) {
+    emit(
+      state.copyWith(
+        status: Status.edit,
+        name: event.name,
+      ),
+    );
+  }
+
+  void _onPriceChanged(PriceChanged event, Emitter<AdminMenuEditState> emit) {
+    emit(
+      state.copyWith(
+        status: Status.edit,
+        price: event.price,
+      ),
+    );
+  }
+
+  void _onTypeMenuChanged(
+      TypeMenuChanged event, Emitter<AdminMenuEditState> emit) {
+    emit(
+      state.copyWith(
+        status: Status.edit,
+        typeMenu: event.typeMenu,
+      ),
+    );
+  }
+
   _fetchMenuById(event, Emitter<AdminMenuEditState> emit) async {
     try {
+      emit(state.copyWith(status: Status.loading));
+
       MenuModel menu = await MenuService().fetchMenuById(_id);
+      _name = menu.name;
+
       emit(
         state.copyWith(
+          id: menu.id,
           name: menu.name,
           price: menu.price,
           status: Status.success,
           typeMenu: StringHelper.capitalize(menu.typeMenu),
+          createdAt: menu.createdAt,
+          updatedAt: menu.updatedAt,
         ),
       );
     } catch (e) {
@@ -58,11 +97,11 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       // emit(AddMenuLoading());
 
       // String id = 'menu-${Random().nextInt(255)}';
-      String id = '';
-      String name = state.name;
-      int price = state.price;
-      String typeMenu = state.typeMenu;
-      final DateTime createdAt = DateTime.now();
+      String id = state.id!;
+      String name = state.name!;
+      int price = state.price!;
+      String typeMenu = state.typeMenu!;
+      final DateTime createdAt = state.createdAt!;
       final DateTime updatedAt = DateTime.now();
 
       MenuModel menuModel = MenuModel(
@@ -94,11 +133,11 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
         throw Exception(state.message);
       }
 
-      MenuService().addMenu(menuModel);
+      MenuService().editMenu(menuModel);
       emit(
         state.copyWith(
           status: Status.success,
-          message: 'Success Add Menu',
+          message: 'Success Edit Menu',
         ),
       );
     } catch (error) {

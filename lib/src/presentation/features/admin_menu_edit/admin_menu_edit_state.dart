@@ -4,24 +4,30 @@ enum Status {
   initial,
   success,
   failed,
+  loading,
+  edit,
 }
 
 class AdminMenuEditState extends Equatable {
   const AdminMenuEditState({
-    this.id = '',
-    this.name = '',
-    this.typeMenu = '',
-    this.price = 0,
-    this.status = Status.initial,
-    this.message = '',
+    this.id,
+    this.name,
+    this.typeMenu,
+    this.price,
+    this.status,
+    this.message,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  final String id;
-  final String name;
-  final String typeMenu;
-  final int price;
-  final Status status;
-  final String message;
+  final String? id;
+  final String? name;
+  final String? typeMenu;
+  final int? price;
+  final Status? status;
+  final String? message;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   AdminMenuEditState copyWith({
     String? id,
@@ -30,6 +36,8 @@ class AdminMenuEditState extends Equatable {
     int? price,
     Status? status,
     String? message,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return AdminMenuEditState(
       id: id ?? this.id,
@@ -38,11 +46,13 @@ class AdminMenuEditState extends Equatable {
       price: price ?? this.price,
       status: status ?? this.status,
       message: message ?? this.message,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,
@@ -50,6 +60,8 @@ class AdminMenuEditState extends Equatable {
       price,
       status,
       message,
+      createdAt,
+      updatedAt,
     ];
   }
 }
