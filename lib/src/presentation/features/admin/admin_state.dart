@@ -21,6 +21,15 @@ class AdminSuccess extends AdminState {
   List<Object> get props => [menus];
 }
 
+class AdminDeleteSuccess extends AdminState {
+  const AdminDeleteSuccess(this.message);
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}
+
 class AdminFailed extends AdminState {
   final String error;
 

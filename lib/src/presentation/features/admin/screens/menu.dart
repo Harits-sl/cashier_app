@@ -8,16 +8,30 @@ import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Menu extends StatelessWidget {
+class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
 
   @override
+  State<Menu> createState() => _MenuState();
+}
+
+class _MenuState extends State<Menu> {
+  @override
   Widget build(BuildContext context) {
-    void onPressed({required String path, required String id}) {
+    context.read<AdminCubit>().getAllMenu();
+
+    void onEditPressed({required String path, required String id}) {
       Go.routeWithPath(context: context, path: path, arguments: id);
     }
 
-    context.read<AdminCubit>().getAllMenu();
+    void onDeletePressed(String id) {
+      context.read<AdminCubit>().deleteMenu(id);
+
+      setState(() {});
+
+      const snackBar = SnackBar(content: Text('success deleted'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
 
     Widget itemMenu(MenuModel menu) {
       return Container(
@@ -45,8 +59,8 @@ class Menu extends StatelessWidget {
               flex: 1,
               child: CustomButton(
                 color: blueColor,
-                onPressed: () =>
-                    onPressed(path: AdminMenuEditPage.routeName, id: menu.id),
+                onPressed: () => onEditPressed(
+                    path: AdminMenuEditPage.routeName, id: menu.id),
                 margin: const EdgeInsets.only(right: 8),
                 text: 'edit',
               ),
@@ -55,7 +69,9 @@ class Menu extends StatelessWidget {
               flex: 1,
               child: CustomButton(
                 color: redColor,
-                onPressed: () {},
+                onPressed: () {
+                  onDeletePressed(menu.id);
+                },
                 text: 'delete',
               ),
             ),
@@ -75,6 +91,7 @@ class Menu extends StatelessWidget {
 
     return BlocBuilder<AdminCubit, AdminState>(
       builder: (context, state) {
+        debugPrint('state: ${state}');
         if (state is AdminSuccess) {
           return listMenu(state.menus);
         }

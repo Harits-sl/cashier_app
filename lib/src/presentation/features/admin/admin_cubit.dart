@@ -17,9 +17,19 @@ class AdminCubit extends Cubit<AdminState> {
 
       emit(AdminSuccess(menus));
     } catch (e, stackTrace) {
-      debugPrint(e.toString());
-      print(stackTrace);
       emit(AdminFailed('$e, \n$stackTrace'));
+    }
+  }
+
+  void deleteMenu(id) async {
+    try {
+      emit(AdminLoading());
+
+      MenuService().deleteMenu(id);
+
+      emit(const AdminDeleteSuccess('Success Deleted'));
+    } catch (e) {
+      emit(AdminFailed('$e'));
     }
   }
 }

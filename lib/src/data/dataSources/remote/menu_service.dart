@@ -5,11 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MenuService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final String menusCollection = 'menus';
 
   void addMenu(MenuModel menuModel) async {
     Map<String, dynamic> menu = menuModel.toFirestore();
 
-    CollectionReference menus = _db.collection('menus');
+    CollectionReference menus = _db.collection(menusCollection);
     menus
         .doc(menuModel.id)
         .set(menu)
@@ -17,7 +18,7 @@ class MenuService {
   }
 
   void editMenu(MenuModel menuModel) async {
-    CollectionReference menus = _db.collection('menus');
+    CollectionReference menus = _db.collection(menusCollection);
     menus
         .doc(menuModel.id)
         .update(menuModel.toFirestore())
@@ -26,7 +27,7 @@ class MenuService {
   }
 
   Future<List<MenuModel>> fetchMenu() async {
-    CollectionReference menus = _db.collection('menus');
+    CollectionReference menus = _db.collection(menusCollection);
 
     QuerySnapshot querySnapshot = await menus.get();
     debugPrint('querySnapshot: ${querySnapshot.docs}');
@@ -53,8 +54,17 @@ class MenuService {
     return listData;
   }
 
+  void deleteMenu(String id) {
+    CollectionReference menus = _db.collection(menusCollection);
+
+    menus.doc(id).delete().then(
+          (value) => debugPrint('Document Deleted'),
+          onError: (e) => debugPrint('error deleting document $e'),
+        );
+  }
+
   Future<MenuModel> fetchMenuById(String id) async {
-    CollectionReference menusRef = _db.collection('menus');
+    CollectionReference menusRef = _db.collection(menusCollection);
     QuerySnapshot menus = await menusRef.where('id', isEqualTo: id).get();
 
     List<MenuModel> listData = menus.docs.map((doc) {
