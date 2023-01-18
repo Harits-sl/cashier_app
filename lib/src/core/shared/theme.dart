@@ -5,6 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 double defaultMargin = 25.0;
 double defaultBorderRadius = 12.0;
 
+// sizedbox
+
+const sizedBox1 = SizedBox(height: 12);
+
 // colors
 Color whiteColor = const Color(0xffFFFFFF);
 Color blackColor = const Color(0xff000000);

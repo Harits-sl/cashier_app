@@ -34,6 +34,15 @@ class PriceChanged extends AddMenuEvent {
   List<Object> get props => [price];
 }
 
+class HppChanged extends AddMenuEvent {
+  const HppChanged({required this.hpp});
+
+  final int hpp;
+
+  @override
+  List<Object> get props => [hpp];
+}
+
 class ButtonAddMenuPressed extends AddMenuEvent {}
 
 class ClearState extends AddMenuEvent {}
