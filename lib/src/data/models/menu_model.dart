@@ -8,6 +8,7 @@ class MenuModel extends Equatable {
   final int price;
   final DateTime createdAt;
   final DateTime updatedAt;
+  final int hpp;
 
   const MenuModel({
     required this.id,
@@ -16,6 +17,7 @@ class MenuModel extends Equatable {
     required this.price,
     required this.createdAt,
     required this.updatedAt,
+    required this.hpp,
   });
 
   Map<String, dynamic> toFirestore() {
@@ -27,6 +29,7 @@ class MenuModel extends Equatable {
     result.addAll({'price': price});
     result.addAll({'createdAt': createdAt});
     result.addAll({'updatedAt': updatedAt});
+    result.addAll({'hpp': hpp});
 
     return result;
   }
@@ -39,6 +42,7 @@ class MenuModel extends Equatable {
       price: firestore['price']?.toInt() ?? 0,
       createdAt: (firestore['createdAt'] as Timestamp).toDate(),
       updatedAt: (firestore['updatedAt'] as Timestamp).toDate(),
+      hpp: firestore['hpp']?.toInt() ?? 0,
     );
   }
 
@@ -50,5 +54,6 @@ class MenuModel extends Equatable {
         name,
         createdAt,
         updatedAt,
+        hpp,
       ];
 }

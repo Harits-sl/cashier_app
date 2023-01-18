@@ -15,6 +15,7 @@ class FieldEditMenu extends StatefulWidget {
 class _FieldEditMenuState extends State<FieldEditMenu> {
   var _nameController = TextEditingController(text: '');
   var _priceController = TextEditingController(text: '0');
+  var _hppController = TextEditingController(text: '0');
 
   @override
   void initState() {
@@ -104,6 +105,8 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
           _nameController = TextEditingController(text: state.name);
           _priceController =
               TextEditingController(text: state.price.toString());
+          _hppController = TextEditingController(text: state.hpp.toString());
+
           dropdownValue = state.typeMenu!;
         }
         if (state.status == Status.loading) {
@@ -115,14 +118,13 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-                title: 'Nama Menu',
-                controller: _nameController,
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  context
-                      .read<AdminMenuEditBloc>()
-                      .add(NameChanged(name: value));
-                }),
+              title: 'Nama Menu',
+              controller: _nameController,
+              keyboardType: TextInputType.text,
+              onChanged: (value) {
+                context.read<AdminMenuEditBloc>().add(NameChanged(name: value));
+              },
+            ),
             // sizedBox1(),
             CustomTextField(
               title: 'Harga',
@@ -146,6 +148,29 @@ class _FieldEditMenuState extends State<FieldEditMenu> {
                 }
               },
             ),
+            CustomTextField(
+              title: 'hpp',
+              controller: _hppController,
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                FieldHelper.number(
+                  controller: _hppController,
+                  value: value,
+                  setState: (controller) {
+                    setState(() {
+                      _hppController = controller;
+                    });
+                  },
+                );
+
+                if (value != '') {
+                  context
+                      .read<AdminMenuEditBloc>()
+                      .add(HppChanged(hpp: int.parse(value)));
+                }
+              },
+            ),
+
             // sizedBox1(),
             typeMenu(),
           ],

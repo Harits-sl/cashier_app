@@ -108,15 +108,43 @@ class _FilterPageState extends State<FilterPage> {
                   total += order.total;
                 }
                 debugPrint('total: ${total}');
-                return Column(
-                  children: [
-                    Column(
-                      children: orders
-                          .map((order) => Text(order.total.toString()))
-                          .toList(),
-                    ),
-                    Text('Total $total'),
-                  ],
+                return Expanded(
+                  child: ListView(
+                    children: [
+                      Column(
+                        children: orders.map((order) {
+                          return Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: order.listMenus!.length,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return Column(
+                                    children: [
+                                      Text(order.listMenus![index]['price']
+                                          .toString()),
+                                      Text(
+                                          '${order.listMenus![index]['menuName']} x ${order.listMenus![index]['totalBuy']}'),
+                                      SizedBox(
+                                        height: 6,
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                              Text('total: ${order.total}'),
+                              Divider(
+                                thickness: 2,
+                                color: blackColor,
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
+                      Text('Total Semua: $total'),
+                    ],
+                  ),
                 );
               }
               if (state is FilterFailed) {

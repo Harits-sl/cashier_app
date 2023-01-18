@@ -50,6 +50,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
       String typeMenu = state.typeMenu;
       final DateTime createdAt = DateTime.now();
       final DateTime updatedAt = DateTime.now();
+      int hpp = state.hpp;
 
       MenuModel menuModel = MenuModel(
         id: id,
@@ -58,6 +59,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         price: price,
         createdAt: createdAt,
         updatedAt: updatedAt,
+        hpp: hpp,
       );
 
       if (name == '') {

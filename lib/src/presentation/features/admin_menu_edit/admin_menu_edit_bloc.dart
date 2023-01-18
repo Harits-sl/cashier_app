@@ -16,6 +16,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
   AdminMenuEditBloc() : super(const AdminMenuEditState()) {
     on<NameChanged>(_onNameChanged);
     on<PriceChanged>(_onPriceChanged);
+    on<HppChanged>(_onHppChanged);
     on<TypeMenuChanged>(_onTypeMenuChanged);
     on<FetchMenuById>(_fetchMenuById);
     on<ClearState>(_onClearState);
@@ -36,6 +37,15 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       state.copyWith(
         status: Status.edit,
         price: event.price,
+      ),
+    );
+  }
+
+  void _onHppChanged(HppChanged event, Emitter<AdminMenuEditState> emit) {
+    emit(
+      state.copyWith(
+        status: Status.edit,
+        hpp: event.hpp,
       ),
     );
   }
@@ -62,6 +72,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
           id: menu.id,
           name: menu.name,
           price: menu.price,
+          hpp: menu.hpp,
           status: Status.success,
           typeMenu: StringHelper.capitalize(menu.typeMenu),
           createdAt: menu.createdAt,
@@ -85,6 +96,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
         name: '',
         typeMenu: '',
         price: 0,
+        hpp: 0,
         status: Status.initial,
         message: '',
       ),
@@ -103,6 +115,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       String typeMenu = state.typeMenu!;
       final DateTime createdAt = state.createdAt!;
       final DateTime updatedAt = DateTime.now();
+      int hpp = state.hpp!;
 
       MenuModel menuModel = MenuModel(
         id: id,
@@ -111,6 +124,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
         price: price,
         createdAt: createdAt,
         updatedAt: updatedAt,
+        hpp: hpp,
       );
 
       if (name == '') {
