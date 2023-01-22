@@ -9,6 +9,7 @@ class MenuOrderModel extends Equatable {
   final String? typePayment;
   final int cash;
   final int change;
+  // final int hpp;
 
   const MenuOrderModel({
     this.id,
@@ -18,6 +19,7 @@ class MenuOrderModel extends Equatable {
     this.typePayment,
     this.cash = 0,
     this.change = 0,
+    // this.hpp = 0,
   });
 
   Map<String, dynamic> toFirestore() {
@@ -30,6 +32,7 @@ class MenuOrderModel extends Equatable {
     result.addAll({'typePayment': typePayment});
     result.addAll({'cash': cash});
     result.addAll({'change': change});
+    // result.addAll({'hpp': hpp});
 
     return result;
   }
@@ -43,6 +46,7 @@ class MenuOrderModel extends Equatable {
       typePayment: firestore['typePayment'],
       cash: firestore['cash'],
       change: firestore['change'],
+      // hpp: firestore['hpp'],
     );
   }
 
@@ -54,6 +58,7 @@ class MenuOrderModel extends Equatable {
     String? typePayment,
     int? cash,
     int? change,
+    // int? hpp,
   }) {
     return MenuOrderModel(
       id: id ?? this.id,
@@ -63,6 +68,7 @@ class MenuOrderModel extends Equatable {
       typePayment: typePayment ?? this.typePayment,
       cash: cash ?? this.cash,
       change: change ?? this.change,
+      // hpp: hpp ?? this.hpp,
     );
   }
 
@@ -76,6 +82,7 @@ class MenuOrderModel extends Equatable {
       typePayment,
       cash,
       change,
+      // hpp,
     ];
   }
 }

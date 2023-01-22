@@ -104,6 +104,7 @@ class _FilterPageState extends State<FilterPage> {
               if (state is FilterSuccess) {
                 final orders = state.orders;
                 int total = 0;
+                int totalHpp = 0;
                 for (var order in orders) {
                   total += order.total;
                 }
@@ -118,22 +119,28 @@ class _FilterPageState extends State<FilterPage> {
                               ListView.builder(
                                 shrinkWrap: true,
                                 itemCount: order.listMenus!.length,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
+                                  // totalHpp +=
+                                  //     order.listMenus![index]['hpp'] as int;
+
                                   return Column(
                                     children: [
-                                      Text(order.listMenus![index]['price']
-                                          .toString()),
                                       Text(
                                           '${order.listMenus![index]['menuName']} x ${order.listMenus![index]['totalBuy']}'),
+                                      Text(
+                                          'harga: ${order.listMenus![index]['price']}'),
+                                      Text(
+                                          'hpp: ${order.listMenus![index]['hpp']}'),
                                       SizedBox(
-                                        height: 6,
+                                        height: 12,
                                       ),
                                     ],
                                   );
                                 },
                               ),
                               Text('total: ${order.total}'),
+                              // Text('hpp: ${order.hpp}'),
                               Divider(
                                 thickness: 2,
                                 color: blackColor,
@@ -143,6 +150,7 @@ class _FilterPageState extends State<FilterPage> {
                         }).toList(),
                       ),
                       Text('Total Semua: $total'),
+                      // Text('Total hpp: $totalHpp'),
                     ],
                   ),
                 );

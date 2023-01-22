@@ -76,6 +76,7 @@ class _MenuState extends State<Menu> {
                           id: widget.menu.id,
                           menuName: widget.menu.name,
                           price: widget.menu.price,
+                          hpp: widget.menu.hpp,
                           totalBuy: _totalBuy,
                         );
                   }
@@ -103,6 +104,7 @@ class _MenuState extends State<Menu> {
                         id: widget.menu.id,
                         menuName: widget.menu.name,
                         price: widget.menu.price,
+                        hpp: widget.menu.hpp,
                         totalBuy: _totalBuy,
                       );
                 },

@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../models/menu_order_model.dart';
@@ -41,7 +42,10 @@ class OrderService {
     debugPrint('snapshotOrders: ${snapshotOrders.docs}');
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
       debugPrint('doc: ${doc.data()}');
-      return MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
     }).toList();
 
     return listData;
