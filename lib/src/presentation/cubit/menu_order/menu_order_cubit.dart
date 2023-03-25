@@ -147,4 +147,11 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
   void addOrderToFirestore(MenuOrderModel menuOrder) async {
     OrderService().addOrder(menuOrder);
   }
+
+  void addBuyerName(String buyer) {
+    _menuOrderModel = _menuOrderModel.copyWith(
+      buyer: buyer,
+    );
+    emit(MenuOrderSuccess(_menuOrderModel));
+  }
 }

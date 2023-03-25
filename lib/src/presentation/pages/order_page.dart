@@ -71,7 +71,7 @@ class _OrderPageState extends State<OrderPage> {
   void checkOutPressed() {
     if (menuOrder!.listMenus!.isNotEmpty) {
       context.read<MenuOrderCubit>().orderCheckoutPressed();
-      Go.routeWithPath(context: context, path: Routes.selectPayment);
+      Go.routeWithPath(context: context, path: Routes.buyer);
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/menu_model.dart';
