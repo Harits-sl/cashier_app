@@ -10,6 +10,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
   AddMenuBloc() : super(const AddMenuState()) {
     on<NameChanged>(_onNameChanged);
     on<PriceChanged>(_onPriceChanged);
+    on<HppChanged>(_onHppChanged);
     on<TypeMenuChanged>(_onTypeMenuChanged);
     on<ButtonAddMenuPressed>(_onButtonMenuPressed);
     on<ClearState>(_onClearState);
@@ -27,6 +28,14 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     emit(
       state.copyWith(
         price: event.price,
+      ),
+    );
+  }
+
+  void _onHppChanged(HppChanged event, Emitter<AddMenuState> emit) {
+    emit(
+      state.copyWith(
+        hpp: event.hpp,
       ),
     );
   }
@@ -50,6 +59,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
       String typeMenu = state.typeMenu;
       final DateTime createdAt = DateTime.now();
       final DateTime updatedAt = DateTime.now();
+      int hpp = state.hpp;
 
       MenuModel menuModel = MenuModel(
         id: id,
@@ -58,6 +68,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         price: price,
         createdAt: createdAt,
         updatedAt: updatedAt,
+        hpp: hpp,
       );
 
       if (name == '') {
@@ -75,6 +86,16 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
           state.copyWith(
             status: Status.failed,
             message: 'Harga Menu Kosong',
+          ),
+        );
+        throw Exception(state.message);
+      }
+
+      if (hpp == 0) {
+        emit(
+          state.copyWith(
+            status: Status.failed,
+            message: 'hpp Menu Kosong',
           ),
         );
         throw Exception(state.message);
@@ -104,6 +125,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         name: '',
         typeMenu: '',
         price: 0,
+        hpp: 0,
         status: Status.initial,
         message: '',
       ),

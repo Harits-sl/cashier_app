@@ -71,12 +71,14 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     int price = 0,
     String? menuName,
     int totalBuy = 0,
+    int hpp = 0,
   }) {
     _mapMenu = {
       'id': id,
       'price': price,
       'menuName': menuName,
       'totalBuy': totalBuy,
+      'hpp': hpp,
     };
 
     /// variabel berupa integer dari indexWhere
@@ -144,5 +146,12 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
 
   void addOrderToFirestore(MenuOrderModel menuOrder) async {
     OrderService().addOrder(menuOrder);
+  }
+
+  void addBuyerName(String buyer) {
+    _menuOrderModel = _menuOrderModel.copyWith(
+      buyer: buyer,
+    );
+    emit(MenuOrderSuccess(_menuOrderModel));
   }
 }

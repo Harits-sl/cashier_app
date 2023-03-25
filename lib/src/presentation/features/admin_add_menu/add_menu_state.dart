@@ -13,6 +13,7 @@ class AddMenuState extends Equatable {
     this.price = 0,
     this.status = Status.initial,
     this.message = '',
+    this.hpp = 0,
   });
 
   final String name;
@@ -20,6 +21,7 @@ class AddMenuState extends Equatable {
   final int price;
   final Status status;
   final String message;
+  final int hpp;
 
   AddMenuState copyWith({
     String? name,
@@ -27,6 +29,7 @@ class AddMenuState extends Equatable {
     int? price,
     Status? status,
     String? message,
+    int? hpp,
   }) {
     return AddMenuState(
       name: name ?? this.name,
@@ -34,6 +37,7 @@ class AddMenuState extends Equatable {
       price: price ?? this.price,
       status: status ?? this.status,
       message: message ?? this.message,
+      hpp: hpp ?? this.hpp,
     );
   }
 
@@ -45,6 +49,7 @@ class AddMenuState extends Equatable {
       price,
       status,
       message,
+      hpp,
     ];
   }
 }

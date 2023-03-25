@@ -1,8 +1,12 @@
+import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../../models/menu_order_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final String ordersCollection = 'orders';
 
   void addOrder(MenuOrderModel menuOrder) async {
     Map<String, dynamic> order = menuOrder.toFirestore();
@@ -21,6 +25,28 @@ class OrderService {
               MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>),
         )
         .toList();
+
+    return listData;
+  }
+
+  Future<List<MenuOrderModel>> getFilterOrder(
+      Timestamp firstDate, Timestamp secondDate) async {
+    CollectionReference orders = _db.collection(ordersCollection);
+
+    QuerySnapshot snapshotOrders = await orders
+        .where('dateTimeOrder',
+            isGreaterThanOrEqualTo: firstDate, isLessThanOrEqualTo: secondDate)
+        // .where('dateTimeOrder', isLessThanOrEqualTo: secondDate)
+        .get();
+
+    debugPrint('snapshotOrders: ${snapshotOrders.docs}');
+    List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
+      debugPrint('doc: ${doc.data()}');
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
+    }).toList();
 
     return listData;
   }

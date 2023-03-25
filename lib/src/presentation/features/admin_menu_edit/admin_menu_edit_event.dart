@@ -35,6 +35,15 @@ class PriceChanged extends AdminMenuEditEvent {
   List<Object> get props => [price];
 }
 
+class HppChanged extends AdminMenuEditEvent {
+  const HppChanged({required this.hpp});
+
+  final int hpp;
+
+  @override
+  List<Object> get props => [hpp];
+}
+
 class FetchMenuById extends AdminMenuEditEvent {}
 
 class ClearState extends AdminMenuEditEvent {}

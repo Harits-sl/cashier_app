@@ -51,6 +51,7 @@ class _MenuState extends State<Menu> {
                 children: [
                   Text(menu.name),
                   Text(StringHelper.addComma(menu.price)),
+                  Text('hpp: ${menu.hpp}'),
                   Text(menu.typeMenu),
                 ],
               ),

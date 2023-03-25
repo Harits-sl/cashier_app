@@ -18,6 +18,7 @@ class AdminMenuEditState extends Equatable {
     this.message,
     this.createdAt,
     this.updatedAt,
+    this.hpp,
   });
 
   final String? id;
@@ -28,6 +29,7 @@ class AdminMenuEditState extends Equatable {
   final String? message;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? hpp;
 
   AdminMenuEditState copyWith({
     String? id,
@@ -38,6 +40,7 @@ class AdminMenuEditState extends Equatable {
     String? message,
     DateTime? createdAt,
     DateTime? updatedAt,
+    int? hpp,
   }) {
     return AdminMenuEditState(
       id: id ?? this.id,
@@ -48,6 +51,7 @@ class AdminMenuEditState extends Equatable {
       message: message ?? this.message,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      hpp: hpp ?? this.hpp,
     );
   }
 
@@ -62,6 +66,7 @@ class AdminMenuEditState extends Equatable {
       message,
       createdAt,
       updatedAt,
+      hpp,
     ];
   }
 }

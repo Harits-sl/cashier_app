@@ -1,7 +1,10 @@
 import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
-import 'package:cashier_app/src/presentation/features/filter/filter/index.dart';
+import 'package:cashier_app/src/presentation/features/cart/index.dart';
+import 'package:cashier_app/src/presentation/features/filter/cubit/filter_cubit.dart';
+import 'package:cashier_app/src/presentation/features/filter/index.dart';
+import 'package:cashier_app/src/presentation/pages/buyer_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
 
@@ -35,6 +38,9 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   runApp(const MyApp());
 }
 
@@ -66,6 +72,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AdminMenuEditBloc>(
           create: (BuildContext context) => AdminMenuEditBloc(),
         ),
+        BlocProvider<FilterCubit>(
+          create: (BuildContext context) => FilterCubit(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,
@@ -79,7 +88,9 @@ class MyApp extends StatelessWidget {
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
-          Routes.filter: (context) => FilterPage(),
+          Routes.filter: (context) => const FilterPage(),
+          Routes.cart: (context) => const CartPage(),
+          Routes.buyer: (context) => const BuyerPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {

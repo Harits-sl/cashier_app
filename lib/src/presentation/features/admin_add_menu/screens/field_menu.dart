@@ -16,18 +16,13 @@ class FieldMenu extends StatefulWidget {
 class _FieldMenuState extends State<FieldMenu> {
   var _nameController = TextEditingController(text: '');
   var _priceController = TextEditingController(text: '0');
+  var _hppController = TextEditingController(text: '0');
 
   @override
   Widget build(BuildContext context) {
     String dropdownValue = 'Coffee';
     List<String> listTypesMenu = ['Coffee', 'Non-Coffee', 'Food'];
     context.read<AddMenuBloc>().add(TypeMenuChanged(typeMenu: dropdownValue));
-
-    Widget sizedBox1() {
-      return const SizedBox(
-        height: 12,
-      );
-    }
 
     Widget typeMenu() {
       return Column(
@@ -95,6 +90,7 @@ class _FieldMenuState extends State<FieldMenu> {
           setState(() {
             _nameController = TextEditingController(text: '');
             _priceController = TextEditingController(text: '0');
+            _hppController = TextEditingController(text: '0');
           });
         }
       },
@@ -108,7 +104,6 @@ class _FieldMenuState extends State<FieldMenu> {
             onChanged: (value) =>
                 context.read<AddMenuBloc>().add(NameChanged(name: value)),
           ),
-          sizedBox1(),
           CustomTextField(
             title: 'Harga',
             controller: _priceController,
@@ -131,7 +126,29 @@ class _FieldMenuState extends State<FieldMenu> {
               }
             },
           ),
-          sizedBox1(),
+          CustomTextField(
+            title: 'hpp',
+            controller: _hppController,
+            keyboardType: TextInputType.phone,
+            onChanged: (value) {
+              FieldHelper.number(
+                controller: _hppController,
+                value: value,
+                setState: (controller) {
+                  setState(() {
+                    _hppController = controller;
+                  });
+                },
+              );
+
+              if (value != '') {
+                context
+                    .read<AddMenuBloc>()
+                    .add(HppChanged(hpp: int.parse(value)));
+              }
+            },
+          ),
+          sizedBox1,
           typeMenu(),
         ],
       ),

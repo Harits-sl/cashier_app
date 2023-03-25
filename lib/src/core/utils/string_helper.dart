@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class StringHelper {
   /// menambahkan koma pada tiga angka belakang
   ///
@@ -12,4 +14,9 @@ class StringHelper {
   }
 
   static String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+
+  static String dateFormat(DateTime date) {
+    var format = DateFormat('d MMM, yyyy');
+    return format.format(date);
+  }
 }

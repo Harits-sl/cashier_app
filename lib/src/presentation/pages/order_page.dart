@@ -71,8 +71,12 @@ class _OrderPageState extends State<OrderPage> {
   void checkOutPressed() {
     if (menuOrder!.listMenus!.isNotEmpty) {
       context.read<MenuOrderCubit>().orderCheckoutPressed();
-      Go.routeWithPath(context: context, path: Routes.selectPayment);
+      Go.routeWithPath(context: context, path: Routes.buyer);
     }
+  }
+
+  void cartPressed() {
+    Go.routeWithPath(context: context, path: Routes.cart);
   }
 
   @override
@@ -309,6 +313,17 @@ class _OrderPageState extends State<OrderPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        leading: Container(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              cartPressed();
+            },
+          ),
+        ],
+      ),
       body: _buildBody(),
     );
   }
