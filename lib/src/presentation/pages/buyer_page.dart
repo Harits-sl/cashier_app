@@ -4,7 +4,7 @@ import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cashier_app/src/data/models/menu_order_model.dart';
-import 'package:cashier_app/src/presentation/cubit/cart/cart_cubit.dart';
+import 'package:cashier_app/src/presentation/cubit/buyer/buyer_cubit.dart';
 import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +37,7 @@ class _BuyerPageState extends State<BuyerPage> {
 
     if (menuOrder is MenuOrderSuccess) {
       CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
-      CartCubit().addToCart(cart);
+      BuyerCubit().addToCart(cart);
       context.read<MenuOrderCubit>().initState();
       Go.routeWithPath(context: context, path: Routes.orderMenu);
     }
