@@ -75,6 +75,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<FilterCubit>(
           create: (BuildContext context) => FilterCubit(),
         ),
+        BlocProvider<CartBloc>(
+          create: (BuildContext context) => CartBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,

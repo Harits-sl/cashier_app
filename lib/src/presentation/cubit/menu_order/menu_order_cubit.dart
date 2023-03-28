@@ -154,4 +154,8 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     );
     emit(MenuOrderSuccess(_menuOrderModel));
   }
+
+  void checkoutFromCart(MenuOrderModel menuOrder) {
+    emit(MenuOrderSuccess(menuOrder));
+  }
 }

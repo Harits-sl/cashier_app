@@ -75,7 +75,9 @@ class SelectPaymentPage extends StatelessWidget {
                   ),
                 );
               }
-              return const SizedBox();
+              return const SizedBox(
+                child: Text('kosong'),
+              );
             },
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -50,6 +51,17 @@ class MenuOrderModel extends Equatable {
       cash: firestore['cash'],
       change: firestore['change'],
       buyer: firestore['buyer'],
+      // hpp: firestore['hpp'],
+    );
+  }
+
+  factory MenuOrderModel.fromCartModel(CartModel cart) {
+    return MenuOrderModel(
+      id: cart.id ?? '',
+      total: cart.total ?? 0,
+      listMenus: cart.listMenus ?? [],
+      dateTimeOrder: cart.dateTimeOrder,
+      buyer: cart.buyer,
       // hpp: firestore['hpp'],
     );
   }

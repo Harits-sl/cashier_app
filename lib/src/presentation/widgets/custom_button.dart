@@ -25,7 +25,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 50,
+      height: height,
       margin: margin,
       decoration: BoxDecoration(
         color: color,

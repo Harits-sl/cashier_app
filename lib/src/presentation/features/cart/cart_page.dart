@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 
@@ -16,6 +17,17 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Cart'),
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.all(defaultMargin),
+          child: Column(
+            children: [
+              MenuOrder(),
+            ],
+          ),
+        ),
       ),
     );
   }

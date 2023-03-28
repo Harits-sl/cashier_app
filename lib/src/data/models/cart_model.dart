@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 class CartModel extends Equatable {
   final String? id;
+  final int? total;
   final List? listMenus;
   final DateTime? dateTimeOrder;
   final String? buyer;
@@ -11,6 +12,7 @@ class CartModel extends Equatable {
 
   const CartModel({
     this.id,
+    this.total,
     this.listMenus,
     this.dateTimeOrder,
     this.buyer,
@@ -21,6 +23,7 @@ class CartModel extends Equatable {
     final result = <String, dynamic>{};
 
     result.addAll({'id': id});
+    result.addAll({'total': total});
     result.addAll({'listMenus': listMenus});
     result.addAll({'dateTimeOrder': dateTimeOrder});
     result.addAll({'buyer': buyer});
@@ -32,6 +35,7 @@ class CartModel extends Equatable {
   factory CartModel.fromFirestore(Map<String, dynamic> firestore) {
     return CartModel(
       id: firestore['id'] ?? '',
+      total: firestore['total'] ?? '',
       listMenus: firestore['listMenus'] ?? [],
       dateTimeOrder: (firestore['dateTimeOrder'] as Timestamp).toDate(),
 
@@ -43,6 +47,7 @@ class CartModel extends Equatable {
   factory CartModel.fromMenuOrderModel(MenuOrderModel menuOrder) {
     return CartModel(
       id: menuOrder.id ?? '',
+      total: menuOrder.total,
       listMenus: menuOrder.listMenus ?? [],
       dateTimeOrder: menuOrder.dateTimeOrder,
 
@@ -53,6 +58,7 @@ class CartModel extends Equatable {
 
   CartModel copyWith({
     String? id,
+    int? total,
     List? listMenus,
     DateTime? dateTimeOrder,
     String? buyer,
@@ -60,6 +66,7 @@ class CartModel extends Equatable {
   }) {
     return CartModel(
       id: id ?? this.id,
+      total: total ?? this.total,
       listMenus: listMenus ?? this.listMenus,
       dateTimeOrder: dateTimeOrder ?? this.dateTimeOrder,
       buyer: buyer ?? this.buyer,
@@ -71,6 +78,7 @@ class CartModel extends Equatable {
   List<Object?> get props {
     return [
       id,
+      total,
       listMenus,
       dateTimeOrder,
       buyer,

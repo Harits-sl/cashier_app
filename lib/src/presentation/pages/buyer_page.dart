@@ -124,7 +124,6 @@ class _BuyerPageState extends State<BuyerPage> {
                                       const EdgeInsets.symmetric(vertical: 16),
                                   child: Row(
                                     children: [
-                                      // Text(state.menuOrder.buyer ?? ''),
                                       Expanded(
                                         flex: 2,
                                         child: Text(
