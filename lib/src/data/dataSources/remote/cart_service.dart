@@ -34,25 +34,8 @@ class CartService {
     return cart;
   }
 
-  // Future<List<MenuOrderModel>> getFilterOrder(
-  //     Timestamp firstDate, Timestamp secondDate) async {
-  //   CollectionReference orders = _db.collection(cartsCollection);
-
-  //   QuerySnapshot snapshotOrders = await orders
-  //       .where('dateTimeOrder',
-  //           isGreaterThanOrEqualTo: firstDate, isLessThanOrEqualTo: secondDate)
-  //       // .where('dateTimeOrder', isLessThanOrEqualTo: secondDate)
-  //       .get();
-
-  //   debugPrint('snapshotOrders: ${snapshotOrders.docs}');
-  //   List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
-  //     debugPrint('doc: ${doc.data()}');
-  //     MenuOrderModel orders =
-  //         MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
-
-  //     return orders;
-  //   }).toList();
-
-  //   return listData;
-  // }
+  void deleteCart(String id) async {
+    CollectionReference carts = _db.collection(cartsCollection);
+    carts.doc(id).delete();
+  }
 }
