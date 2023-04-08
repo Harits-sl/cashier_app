@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +12,12 @@ class SelectPaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final menuOrderCubit = context.read<MenuOrderCubit>();
+    CartModel cart = menuOrderCubit.cart;
+    if (cart.id != null) {
+      menuOrderCubit.getDataFromCart();
+    }
+
     List<Map<String, String>> listPaymentOption = [
       {
         'title': 'Cash',

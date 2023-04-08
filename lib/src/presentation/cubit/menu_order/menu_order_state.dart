@@ -9,6 +9,8 @@ abstract class MenuOrderState extends Equatable {
 
 class MenuOrderInitial extends MenuOrderState {}
 
+class MenuOrderLoading extends MenuOrderState {}
+
 class MenuOrderSuccess extends MenuOrderState {
   const MenuOrderSuccess(this.menuOrder);
 
@@ -16,4 +18,13 @@ class MenuOrderSuccess extends MenuOrderState {
 
   @override
   List<Object> get props => [menuOrder];
+}
+
+class MenuOrderError extends MenuOrderState {
+  const MenuOrderError(this.error);
+
+  final MenuOrderModel error;
+
+  @override
+  List<Object> get props => [error];
 }

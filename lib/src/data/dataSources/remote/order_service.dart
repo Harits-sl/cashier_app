@@ -12,7 +12,10 @@ class OrderService {
     Map<String, dynamic> order = menuOrder.toFirestore();
 
     CollectionReference orders = _db.collection('orders');
-    orders.doc(menuOrder.id).set(order);
+    debugPrint('menuOrder.id: ${menuOrder.id}');
+    orders.doc(menuOrder.id).set(order).then(
+        (value) => debugPrint('success save'),
+        onError: (e) => debugPrint('gagal $e'));
   }
 
   Future<List<MenuOrderModel>> getAllOrder() async {

@@ -12,7 +12,7 @@ class CartService {
     orders.doc(cartModel.id).set(order);
   }
 
-  Future<List<CartModel>> getAllCarts() async {
+  Future<List<CartModel>> fetchAllCarts() async {
     CollectionReference orders = _db.collection(cartsCollection);
     QuerySnapshot querySnapshot = await orders.get();
 
@@ -23,6 +23,15 @@ class CartService {
         .toList();
 
     return listData;
+  }
+
+  Future<CartModel> fetchCartById(String id) async {
+    CollectionReference carts = _db.collection(cartsCollection);
+    QuerySnapshot querySnapshot = await carts.where('id', isEqualTo: id).get();
+
+    CartModel cart =
+        CartModel.fromFirestore(querySnapshot.docs[0] as Map<String, dynamic>);
+    return cart;
   }
 
   // Future<List<MenuOrderModel>> getFilterOrder(

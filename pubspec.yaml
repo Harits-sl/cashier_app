@@ -29,15 +29,16 @@ environment:
 dependencies:
   bloc: ^8.0.1
   blue_thermal_printer: ^1.1.8
-  cloud_firestore: ^3.4.0
+  cloud_firestore: ^4.5.0
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
-  firebase_core: ^1.20.0
+  firebase_core: ^2.9.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
   google_fonts: ^2.2.0
   intl: ^0.18.0
+  sqflite: ^2.2.6
 
 dev_dependencies:
   flutter_lints: ^1.0.0

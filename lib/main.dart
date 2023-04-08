@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/data/dataSources/local/db/database_helper.dart';
 import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
@@ -27,8 +28,14 @@ import 'src/presentation/pages/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// final dbHelper = DatabaseHelper();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // initialize the database
+  // await dbHelper.init();
+
+  // menentukan firebase yang dipakai
   if (kDebugMode) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptionsDev.currentPlatform,

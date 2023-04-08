@@ -17,8 +17,8 @@ class MenuOrder extends StatelessWidget {
     context.read<CartBloc>().add(FetchCart());
 
     void onTapCheckout(CartModel cart) {
-      final menuOrder = MenuOrderModel.fromCartModel(cart);
-      context.read<MenuOrderCubit>().checkoutFromCart(menuOrder);
+      // final menuOrder = MenuOrderModel.fromCartModel(cart);
+      context.read<MenuOrderCubit>().setCart = cart;
 
       Go.routeWithPath(context: context, path: Routes.selectPayment);
     }

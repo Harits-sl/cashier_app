@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:cashier_app/src/data/dataSources/remote/cart_service.dart';
+import 'package:cashier_app/src/data/models/cart_model.dart';
 import '../../../data/dataSources/remote/order_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,18 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
 
   DateTime? _dateTime;
 
+  bool _isfFromCart = false;
+  get isFromCart => _isfFromCart;
+  set setIsFromCart(bool newValue) {
+    _isfFromCart = newValue;
+  }
+
+  CartModel _cart = const CartModel();
+  get cart => _cart;
+  set setCart(CartModel newValue) {
+    _cart = newValue;
+  }
+
   MenuOrderModel _menuOrderModel = const MenuOrderModel(
     id: '',
     total: 0,
@@ -52,6 +66,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     _data = {};
     _id = null;
     _dateTime = null;
+    _cart = const CartModel();
 
     debugPrint('_menuOrderModel: $_menuOrderModel');
 
@@ -157,5 +172,19 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
 
   void checkoutFromCart(MenuOrderModel menuOrder) {
     emit(MenuOrderSuccess(menuOrder));
+  }
+
+  void getDataFromCart() {
+    // final cartData = CartService().fetchCartById(cart.id!);
+    final menuOrder = MenuOrderModel.fromCartModel(_cart);
+    _menuOrderModel = _menuOrderModel.copyWith(
+      id: menuOrder.id,
+      buyer: menuOrder.buyer,
+      dateTimeOrder: menuOrder.dateTimeOrder,
+      listMenus: menuOrder.listMenus,
+      total: menuOrder.total,
+    );
+
+    emit(MenuOrderSuccess(_menuOrderModel));
   }
 }

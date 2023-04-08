@@ -17,7 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     try {
       emit(CartLoading());
 
-      final cart = await CartService().getAllCarts();
+      final cart = await CartService().fetchAllCarts();
       emit(CartSuccess(cart));
     } catch (e) {
       debugPrint(e.toString());
