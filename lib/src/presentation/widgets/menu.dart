@@ -29,6 +29,17 @@ class _MenuState extends State<Menu> {
     super.initState();
 
     _totalBuy = widget.totalOrder;
+
+    /// jika [_totalBuy] lebih dari 0 masukan data ke orderMenu
+    if (_totalBuy > 0) {
+      context.read<MenuOrderCubit>().orderMenu(
+            id: widget.menu.id,
+            menuName: widget.menu.name,
+            price: widget.menu.price,
+            hpp: widget.menu.hpp,
+            totalBuy: _totalBuy,
+          );
+    }
   }
 
   @override

@@ -6,6 +6,7 @@ import '../../config/route/routes.dart';
 import '../cubit/Menu/menu_cubit.dart';
 
 import '../../data/models/menu_order_model.dart';
+import '../cubit/buyer/buyer_cubit.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,19 +16,19 @@ import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
 import '../widgets/menu.dart';
 
-class OrderPage extends StatefulWidget {
+class EditOrderPage extends StatefulWidget {
   // final BlueThermalPrinter printer;
 
-  const OrderPage({
+  const EditOrderPage({
     // required this.printer,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<OrderPage> createState() => _OrderPageState();
+  State<EditOrderPage> createState() => _EditOrderPageState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _EditOrderPageState extends State<EditOrderPage> {
   // final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>>? menus;
@@ -55,7 +56,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   @override
-  void didUpdateWidget(covariant OrderPage oldWidget) {
+  void didUpdateWidget(covariant EditOrderPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint('oldWidget: $oldWidget');
   }
@@ -82,8 +83,15 @@ class _OrderPageState extends State<OrderPage> {
 
   void checkOutPressed() {
     if (menuOrder!.listMenus!.isNotEmpty) {
-      context.read<MenuOrderCubit>().orderCheckoutPressed();
-      Go.routeWithPath(context: context, path: Routes.buyer);
+      CartModel cart = CartModel.fromMenuOrderModel(menuOrder!).copyWith(
+        id: carts.id,
+        dateTimeOrder: carts.dateTimeOrder,
+        buyer: carts.buyer,
+      );
+      debugPrint('menuOrder: ${menuOrder}');
+      context.read<MenuOrderCubit>().setCart = cart;
+      // context.read<MenuOrderCubit>().orderCheckoutPressed();
+      Go.routeWithPath(context: context, path: Routes.selectPayment);
     }
   }
 
@@ -124,6 +132,23 @@ class _OrderPageState extends State<OrderPage> {
               borderSide: BorderSide(color: blueColor, width: 2),
               borderRadius: BorderRadius.circular(defaultBorderRadius),
             ),
+          ),
+        ),
+      );
+    }
+
+    Widget _buildBuyer() {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: defaultMargin,
+          right: defaultMargin,
+          bottom: 12,
+        ),
+        child: Text(
+          'pembeli: ${carts.buyer!}',
+          style: blackTextStyle.copyWith(
+            fontWeight: light,
+            fontSize: 16,
           ),
         ),
       );
@@ -322,6 +347,7 @@ class _OrderPageState extends State<OrderPage> {
             ListView(
               children: [
                 _buildSearch(),
+                _buildBuyer(),
                 _buildMenu(),
                 // spasi dari menu ke widget _totalAndBtnCheckout
                 SizedBox(

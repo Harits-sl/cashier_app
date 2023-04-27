@@ -6,6 +6,7 @@ import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/features/filter/cubit/filter_cubit.dart';
 import 'package:cashier_app/src/presentation/features/filter/index.dart';
 import 'package:cashier_app/src/presentation/pages/buyer_page.dart';
+import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
 
@@ -92,6 +93,7 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.orderMenu: (context) => const OrderPage(),
+          Routes.editOrderMenu: (context) => const EditOrderPage(),
           Routes.admin: (context) => const AdminPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.selectPayment: (context) => const SelectPaymentPage(),

@@ -16,6 +16,12 @@ class MenuOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<CartBloc>().add(FetchCart());
 
+    void onTapEdit(CartModel cart) {
+      context.read<MenuOrderCubit>().setCart = cart;
+
+      Go.routeWithPathAndRemove(context: context, path: Routes.editOrderMenu);
+    }
+
     void onTapCheckout(CartModel cart) {
       // final menuOrder = MenuOrderModel.fromCartModel(cart);
       context.read<MenuOrderCubit>().setCart = cart;
@@ -78,6 +84,18 @@ class MenuOrder extends StatelessWidget {
                           ],
                         );
                       }).toList(),
+                    ),
+                    CustomButton(
+                      color: whiteColor,
+                      height: 40,
+                      onPressed: () => onTapEdit(cart),
+                      margin: const EdgeInsets.only(top: 12),
+                      borderRadius: BorderRadius.circular(4),
+                      text: 'Edit',
+                      textStyle: blackTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 16,
+                      ),
                     ),
                     CustomButton(
                       color: blueColor,

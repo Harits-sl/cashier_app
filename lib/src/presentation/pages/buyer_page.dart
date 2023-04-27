@@ -178,7 +178,7 @@ class _BuyerPageState extends State<BuyerPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        context.read<MenuOrderCubit>().initState();
+        // context.read<MenuOrderCubit>().initState();
         return true;
       },
       child: Scaffold(
