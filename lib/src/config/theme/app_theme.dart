@@ -11,7 +11,7 @@ class AppTheme {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: blueColor,
       ),
-      scaffoldBackgroundColor: whiteColor,
+      scaffoldBackgroundColor: backgroundColor,
     );
   }
 }

@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:cashier_app/src/core/utils/date.dart';
+import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
+import 'package:cashier_app/src/data/models/menu_order_model.dart';
 
-import 'index.dart';
-
-import '../../../core/utils/date.dart';
-import '../../../data/dataSources/remote/order_service.dart';
-import '../../../data/models/menu_order_model.dart';
+import '../index.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());

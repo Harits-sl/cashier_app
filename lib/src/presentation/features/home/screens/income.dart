@@ -11,24 +11,34 @@ class Income extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<HomeCubit>().getAllOrder();
 
-    Widget totalIncome(String title, int total) {
+    Widget totalIncome(
+      String title,
+      int total, [
+      bool isToday = false,
+    ]) {
       return Column(
         children: [
           Text(
             title,
-            style: whiteTextStyle.copyWith(
-              fontWeight: light,
+            style: primaryTextStyle.copyWith(
+              fontWeight: regular,
+              fontSize: 16,
             ),
           ),
           const SizedBox(
-            height: 8,
+            height: 12,
           ),
           Text(
             StringHelper.addComma(total),
-            style: whiteTextStyle.copyWith(
-              fontSize: 20,
-              fontWeight: semiBold,
-            ),
+            style: isToday
+                ? secondaryTextStyle.copyWith(
+                    fontSize: 20,
+                    fontWeight: semiBold,
+                  )
+                : primaryTextStyle.copyWith(
+                    fontSize: 20,
+                    fontWeight: semiBold,
+                  ),
           ),
         ],
       );
@@ -41,33 +51,61 @@ class Income extends StatelessWidget {
           totalList = state.totalList;
         }
         return Container(
-          margin: EdgeInsets.all(defaultMargin),
-          padding: EdgeInsets.symmetric(vertical: defaultMargin),
+          margin: const EdgeInsets.all(defaultMargin),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-            color: blueColor,
+            color: backgroundColor,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: 12),
                 child: Center(
                   child: Text(
                     'Income',
-                    style: whiteTextStyle.copyWith(
+                    style: primaryTextStyle.copyWith(
                       fontSize: 16,
-                      fontWeight: semiBold,
+                      fontWeight: medium,
                     ),
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  totalIncome('Today', totalList.isEmpty ? 0 : totalList[0]),
-                  totalIncome(
-                      'Yesterday', totalList.isEmpty ? 0 : totalList[1]),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        totalIncome(
+                          'Today',
+                          totalList.isEmpty ? 0 : totalList[0],
+                          true,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        // TODO: add filter for one week
+                        totalIncome(
+                            'One Week', totalList.isEmpty ? 0 : totalList[1]),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        totalIncome(
+                            'Yesterday', totalList.isEmpty ? 0 : totalList[1]),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        // TODO: add filter for one Month
+                        totalIncome(
+                            'One Month', totalList.isEmpty ? 0 : totalList[1]),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
