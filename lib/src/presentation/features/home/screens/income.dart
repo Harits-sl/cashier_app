@@ -1,5 +1,6 @@
-import '../../../../core/shared/theme.dart';
-import '../../../../core/utils/string_helper.dart';
+import 'package:cashier_app/src/core/shared/theme.dart';
+import 'package:cashier_app/src/core/utils/string_helper.dart';
+
 import '../index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,7 @@ class Income extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<HomeCubit>().getAllOrder();
+    context.read<HomeCubit>().fetchOrder();
 
     Widget totalIncome(
       String title,
@@ -46,7 +47,7 @@ class Income extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        List<int> totalList = [];
+        Map<DateStatus, int> totalList = {};
         if (state is HomeSuccess) {
           totalList = state.totalList;
         }
@@ -81,27 +82,34 @@ class Income extends StatelessWidget {
                       children: [
                         totalIncome(
                           'Today',
-                          totalList.isEmpty ? 0 : totalList[0],
+                          totalList.isEmpty ? 0 : totalList[DateStatus.today]!,
                           true,
                         ),
                         const SizedBox(
                           height: 16,
                         ),
-                        // TODO: add filter for one week
                         totalIncome(
-                            'One Week', totalList.isEmpty ? 0 : totalList[1]),
+                            'One Week',
+                            totalList.isEmpty
+                                ? 0
+                                : totalList[DateStatus.oneWeek]!),
                       ],
                     ),
                     Column(
                       children: [
                         totalIncome(
-                            'Yesterday', totalList.isEmpty ? 0 : totalList[1]),
+                            'Yesterday',
+                            totalList.isEmpty
+                                ? 0
+                                : totalList[DateStatus.yesterday]!),
                         const SizedBox(
                           height: 16,
                         ),
-                        // TODO: add filter for one Month
                         totalIncome(
-                            'One Month', totalList.isEmpty ? 0 : totalList[1]),
+                            'One Month',
+                            totalList.isEmpty
+                                ? 0
+                                : totalList[DateStatus.oneMonth]!),
                       ],
                     ),
                   ],

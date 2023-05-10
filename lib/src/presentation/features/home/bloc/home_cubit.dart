@@ -1,35 +1,29 @@
 import 'package:bloc/bloc.dart';
-import 'package:cashier_app/src/core/utils/date.dart';
 import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
+import 'package:equatable/equatable.dart';
 
-import '../index.dart';
+part 'home_state.dart';
+
+enum DateStatus { today, yesterday, oneWeek, oneMonth }
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
-  void getAllOrder() async {
+  void fetchOrder() async {
     try {
       emit(HomeLoading());
 
-      DateTime today = DateTime.now();
-      int totalIncomeToday = 0;
-      int totalIncomeYesterday = 0;
-      List<MenuOrderModel> listMenuOrder = await OrderService().getAllOrder();
+      int incomeToday = await OrderService().getTodayOrder();
+      int incomeYesterday = await OrderService().getYesterdayOrder();
+      int incomeOneWeek = await OrderService().getOneWeekOrder();
+      int incomeOneMonth = await OrderService().getOneMonthOrder();
 
-      for (MenuOrderModel order in listMenuOrder) {
-        switch (Date.filter(
-            subtractDay: 1, date: order.dateTimeOrder!, today: today)) {
-          case 0:
-            totalIncomeYesterday += order.total;
-            break;
-          case 1:
-            totalIncomeToday += order.total;
-            break;
-        }
-      }
-
-      List<int> incomeList = [totalIncomeToday, totalIncomeYesterday];
+      Map<DateStatus, int> incomeList = {
+        DateStatus.today: incomeToday,
+        DateStatus.yesterday: incomeYesterday,
+        DateStatus.oneWeek: incomeOneWeek,
+        DateStatus.oneMonth: incomeOneMonth
+      };
 
       emit(HomeSuccess(incomeList));
     } catch (e) {

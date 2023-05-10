@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'home_cubit.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -13,7 +13,7 @@ class HomeLoading extends HomeState {}
 
 class HomeSuccess extends HomeState {
   /// [totalIncomeToday, totalIncomeYesterday]
-  final List<int> totalList;
+  final Map<DateStatus, int> totalList;
 
   const HomeSuccess(this.totalList);
 
