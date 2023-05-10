@@ -25,7 +25,7 @@ import 'src/presentation/cubit/menu_order/menu_order_cubit.dart';
 
 import 'src/config/theme/app_theme.dart';
 
-import 'src/presentation/pages/order_page.dart';
+import 'src/presentation/pages/cashier_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -92,15 +92,15 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           Routes.home: (context) => const HomePage(),
-          Routes.orderMenu: (context) => const OrderPage(),
+          Routes.cashier: (context) => const CashierPage(),
           Routes.editOrderMenu: (context) => const EditOrderPage(),
-          Routes.admin: (context) => const AdminPage(),
+          Routes.product: (context) => const AdminPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.selectPayment: (context) => const SelectPaymentPage(),
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
-          Routes.filter: (context) => const FilterPage(),
+          Routes.report: (context) => const FilterPage(),
           Routes.cart: (context) => const CartPage(),
           Routes.buyer: (context) => const BuyerPage(),
         },

@@ -35,11 +35,11 @@ class MenuCubit extends Cubit<MenuState> {
 
       List<Map<String, dynamic>> newListMenus = [
         {
-          'typeMenu': 'Coffees',
+          'typeMenu': 'Coffee',
           'menu': coffees,
         },
         {
-          'typeMenu': 'Non-Coffees',
+          'typeMenu': 'Non Coffee',
           'menu': nonCoffees,
         },
         {

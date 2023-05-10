@@ -1,7 +1,7 @@
 class Routes {
   static const String home = '/';
-  static const String admin = '/admin';
-  static const String orderMenu = '/order';
+  static const String product = '/product';
+  static const String cashier = '/cashier';
   static const String editOrderMenu = '/edit-order';
   static const String receipt = '/receipt';
   static const String paymentAmount = '/payment';
@@ -9,6 +9,6 @@ class Routes {
   static const String selectPrinter = '/select-printer';
   static const String addMenu = 'admin/add-menu';
   static const String cart = '/cart';
-  static const String filter = '/filter';
+  static const String report = '/report';
   static const String buyer = '/buyer';
 }

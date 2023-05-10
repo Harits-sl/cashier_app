@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/route/go.dart';
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../widgets/menu.dart';
+import '../widgets/item_menu.dart';
 
 class EditOrderPage extends StatefulWidget {
   // final BlueThermalPrinter printer;
@@ -185,7 +185,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
             }
             return Column(
               children: [
-                Menu(
+                ItemMenu(
                   menu: menu,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,

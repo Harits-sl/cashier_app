@@ -31,6 +31,7 @@ dependencies:
   blue_thermal_printer: ^1.1.8
   cloud_firestore: ^4.5.0
   cupertino_icons: ^1.0.2
+  dotted_line: ^3.1.0
   equatable: ^2.0.3
   firebase_core: ^2.9.0
   flutter:

@@ -11,17 +11,15 @@ class Shortcut extends StatelessWidget {
     double _width = MediaQuery.of(context).size.width / 2;
 
     void _onTapCashier() {
-      Go.routeWithPath(context: context, path: Routes.orderMenu);
+      Go.routeWithPath(context: context, path: Routes.cashier);
     }
 
     void _onTapProducts() {
-      // TODO: change name routes to product
-      Go.routeWithPath(context: context, path: Routes.admin);
+      Go.routeWithPath(context: context, path: Routes.product);
     }
 
     void _onTapReports() {
-      // TODO: change name routes to report
-      Go.routeWithPath(context: context, path: Routes.filter);
+      Go.routeWithPath(context: context, path: Routes.report);
     }
 
     Widget item(String title, String imageUrl, Function()? onTap) {

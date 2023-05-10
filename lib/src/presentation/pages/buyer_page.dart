@@ -39,7 +39,7 @@ class _BuyerPageState extends State<BuyerPage> {
       CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
       BuyerCubit().addToCart(cart);
       context.read<MenuOrderCubit>().initState();
-      Go.routeWithPath(context: context, path: Routes.orderMenu);
+      Go.routeWithPath(context: context, path: Routes.cashier);
     }
   }
 

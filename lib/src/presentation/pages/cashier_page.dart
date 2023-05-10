@@ -1,6 +1,6 @@
 import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cashier_app/src/data/models/menu_model.dart';
-import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 
 import '../../config/route/routes.dart';
 import '../cubit/Menu/menu_cubit.dart';
@@ -13,21 +13,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/route/go.dart';
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../widgets/menu.dart';
+import '../widgets/item_menu.dart';
 
-class OrderPage extends StatefulWidget {
+class CashierPage extends StatefulWidget {
   // final BlueThermalPrinter printer;
 
-  const OrderPage({
+  const CashierPage({
     // required this.printer,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<OrderPage> createState() => _OrderPageState();
+  State<CashierPage> createState() => _CashierPageState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _CashierPageState extends State<CashierPage> {
   // final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>>? menus;
@@ -55,7 +55,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   @override
-  void didUpdateWidget(covariant OrderPage oldWidget) {
+  void didUpdateWidget(covariant CashierPage oldWidget) {
     super.didUpdateWidget(oldWidget);
     debugPrint('oldWidget: $oldWidget');
   }
@@ -87,42 +87,92 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
+  void backPressed() {
+    Go.back(context, widget);
+  }
+
   void cartPressed() {
     Go.routeWithPathAndRemove(context: context, path: Routes.cart);
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget _buildAppBar() {
+      return Container(
+        padding: const EdgeInsets.all(defaultMargin),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: backPressed,
+              child: Image.asset(
+                'assets/images/ic_back.png',
+                width: 30,
+              ),
+            ),
+            Text(
+              'Cashier',
+              style: primaryTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
+            ),
+            GestureDetector(
+              onTap: cartPressed,
+              child: Image.asset(
+                'assets/images/ic_cart.png',
+                width: 30,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget _buildSearch() {
       return Container(
-        margin: EdgeInsets.all(defaultMargin),
+        margin: const EdgeInsets.only(bottom: defaultMargin),
+        padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
         child: TextField(
           // controller: _searchController,
           onSubmitted: (String query) {
             // _search(query);
+            // TODO: CAN SEARCH MENU
           },
-          enabled: false,
+          // enabled: false,
+          style: primaryTextStyle.copyWith(
+            fontWeight: medium,
+            fontSize: 12,
+          ),
+          cursorColor: primaryColor,
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.fromLTRB(0, 13, 13, 13),
-            hintText: 'Cari menu...',
-            hintStyle: grayTextStyle.copyWith(fontWeight: light, fontSize: 14),
-            prefixIcon: const Padding(
-              padding: EdgeInsets.fromLTRB(15, 11, 20, 11),
+            contentPadding: const EdgeInsets.symmetric(vertical: 12),
+            hintText: 'Search menu...',
+            hintStyle: gray2TextStyle.copyWith(
+              fontWeight: medium,
+              fontSize: 12,
+            ),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
               child: ImageIcon(
-                AssetImage('assets/images/ic_search.png'),
+                const AssetImage(
+                  'assets/images/ic_search.png',
+                ),
+                size: 26,
+                color: gray2Color,
               ),
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(defaultBorderRadius),
+              borderSide: BorderSide(color: primaryColor, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: lightGrayColor, width: 2),
-              borderRadius: BorderRadius.circular(defaultBorderRadius),
+              borderSide: BorderSide(color: lightGray2Color, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: blueColor, width: 2),
-              borderRadius: BorderRadius.circular(defaultBorderRadius),
+              borderSide: BorderSide(color: primaryColor, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
@@ -133,9 +183,9 @@ class _OrderPageState extends State<OrderPage> {
       Widget _title(String title) {
         return Text(
           title,
-          style: blackTextStyle.copyWith(
+          style: primaryTextStyle.copyWith(
             fontWeight: semiBold,
-            fontSize: 18,
+            fontSize: 16,
           ),
         );
       }
@@ -160,15 +210,10 @@ class _OrderPageState extends State<OrderPage> {
             }
             return Column(
               children: [
-                Menu(
+                ItemMenu(
                   menu: menu,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
-                ),
-                Divider(
-                  thickness: 1,
-                  height: 0,
-                  color: lightGrayColor,
                 ),
               ],
             );
@@ -177,7 +222,7 @@ class _OrderPageState extends State<OrderPage> {
       }
 
       return Container(
-        margin: EdgeInsets.only(
+        margin: const EdgeInsets.only(
           left: defaultMargin,
           right: defaultMargin,
         ),
@@ -185,7 +230,6 @@ class _OrderPageState extends State<OrderPage> {
           buildWhen: (previousState, state) {
             debugPrint('state: $state');
             debugPrint('previousState: $previousState');
-            // _menuOrderModel =
             setState(() {});
             return true;
           },
@@ -211,13 +255,9 @@ class _OrderPageState extends State<OrderPage> {
                     children: [
                       _title(item['typeMenu']),
                       const SizedBox(height: 12),
-                      Divider(
-                        thickness: 1,
-                        height: 0,
-                        color: lightGrayColor,
-                      ),
+                      const CustomDivider(),
                       _menu(item['menu']),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 4),
                     ],
                   );
                 }).toList(),
@@ -233,50 +273,16 @@ class _OrderPageState extends State<OrderPage> {
       );
     }
 
-    Widget _buildTotalAndBtnCheckout() {
-      Widget _totalPriceAndItem(MenuOrderModel menuOrder) {
-        num totalBuy = 0;
-        for (var item in menuOrder.listMenus!) {
-          totalBuy += item['totalBuy'];
-        }
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Total | Item $totalBuy',
-              style: blackTextStyle.copyWith(
-                fontWeight: regular,
-                fontSize: 14,
-              ),
-            ),
-            Text(
-              'Rp. ${StringHelper.addComma(menuOrder.total)}',
-              style: blackTextStyle.copyWith(
-                fontWeight: semiBold,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        );
-      }
-
-      Widget _buttonCheckOut(MenuOrderModel menuOrder) {
-        Color color = menuOrder.listMenus!.isNotEmpty ? blueColor : grayColor;
-
-        return CustomButton(
-          color: color,
-          margin: EdgeInsets.only(top: defaultMargin, bottom: 24),
-          borderRadius: BorderRadius.circular(8),
-          onPressed: checkOutPressed,
-          text: 'Checkout',
-        );
-      }
-
+    Widget _buttonCheckout() {
       return BlocBuilder<MenuOrderCubit, MenuOrderState>(
         builder: (context, state) {
+          num totalBuy = 0;
+          MenuOrderModel menuOrder = const MenuOrderModel();
           if (state is MenuOrderSuccess) {
             menuOrder = state.menuOrder;
+            for (var item in menuOrder.listMenus!) {
+              totalBuy += item['totalBuy'];
+            }
           } else {
             menuOrder = const MenuOrderModel(
               id: '',
@@ -286,29 +292,57 @@ class _OrderPageState extends State<OrderPage> {
             );
           }
 
-          return Container(
-            width: double.infinity,
-            height: 140,
-            padding: EdgeInsets.only(
-              top: 20,
-              left: defaultMargin,
-              right: defaultMargin,
-            ),
-            decoration: BoxDecoration(
-              color: whiteColor,
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 1),
-                  color: grayColor,
-                  blurRadius: 5,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                _totalPriceAndItem(menuOrder!),
-                _buttonCheckOut(menuOrder!),
-              ],
+          return GestureDetector(
+            onTap: checkOutPressed,
+            child: Container(
+              height: 55,
+              margin: const EdgeInsets.all(defaultMargin),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              decoration: BoxDecoration(
+                color: totalBuy > 0 ? primaryColor : gray2Color,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: primaryColor.withOpacity(.25),
+                    offset: const Offset(0, 12),
+                    blurRadius: 27,
+                    spreadRadius: 4,
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Your added $totalBuy items',
+                    style: totalBuy > 0
+                        ? white2TextStyle.copyWith(
+                            fontSize: 12,
+                          )
+                        : primaryTextStyle.copyWith(
+                            fontSize: 12,
+                          ),
+                  ),
+                  Row(
+                    children: [
+                      Image.asset('assets/images/ic_bag.png',
+                          width: 18,
+                          color: totalBuy > 0 ? backgroundColor : primaryColor),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Rp. ${StringHelper.addComma(menuOrder.total)}',
+                        style: totalBuy > 0
+                            ? white2TextStyle.copyWith(
+                                fontSize: 12,
+                              )
+                            : primaryTextStyle.copyWith(
+                                fontSize: 12,
+                              ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -321,17 +355,16 @@ class _OrderPageState extends State<OrderPage> {
           children: [
             ListView(
               children: [
+                _buildAppBar(),
                 _buildSearch(),
                 _buildMenu(),
-                // spasi dari menu ke widget _totalAndBtnCheckout
-                SizedBox(
-                  height: defaultMargin + 140,
-                ),
+                // spasi dari menu ke widget checkout button
+                const SizedBox(height: defaultMargin + 55),
               ],
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: _buildTotalAndBtnCheckout(),
+              child: _buttonCheckout(),
             ),
           ],
         ),
@@ -346,17 +379,6 @@ class _OrderPageState extends State<OrderPage> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: Container(),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.shopping_cart),
-              onPressed: () {
-                cartPressed();
-              },
-            ),
-          ],
-        ),
         body: _buildBody(),
       ),
     );
