@@ -277,10 +277,10 @@ class _CashierPageState extends State<CashierPage> {
       return BlocBuilder<MenuOrderCubit, MenuOrderState>(
         builder: (context, state) {
           num totalBuy = 0;
-          MenuOrderModel menuOrder = const MenuOrderModel();
+          // MenuOrderModel menuOrder = const MenuOrderModel();
           if (state is MenuOrderSuccess) {
             menuOrder = state.menuOrder;
-            for (var item in menuOrder.listMenus!) {
+            for (var item in menuOrder!.listMenus!) {
               totalBuy += item['totalBuy'];
             }
           } else {
@@ -330,7 +330,7 @@ class _CashierPageState extends State<CashierPage> {
                           color: totalBuy > 0 ? backgroundColor : primaryColor),
                       const SizedBox(width: 8),
                       Text(
-                        'Rp. ${StringHelper.addComma(menuOrder.total)}',
+                        'Rp. ${StringHelper.addComma(menuOrder!.total)}',
                         style: totalBuy > 0
                             ? white2TextStyle.copyWith(
                                 fontSize: 12,
