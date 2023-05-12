@@ -88,7 +88,7 @@ class _CashierPageState extends State<CashierPage> {
   }
 
   void backPressed() {
-    Go.back(context, widget);
+    Go.back(context);
   }
 
   void cartPressed() {
@@ -145,13 +145,8 @@ class _CashierPageState extends State<CashierPage> {
           ),
           cursorColor: primaryColor,
           decoration: InputDecoration(
-            isDense: true,
             contentPadding: const EdgeInsets.symmetric(vertical: 12),
             hintText: 'Search menu...',
-            hintStyle: gray2TextStyle.copyWith(
-              fontWeight: medium,
-              fontSize: 12,
-            ),
             prefixIcon: Padding(
               padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
               child: ImageIcon(
@@ -161,18 +156,6 @@ class _CashierPageState extends State<CashierPage> {
                 size: 26,
                 color: gray2Color,
               ),
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(color: primaryColor, width: 1.5),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: lightGray2Color, width: 1.5),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: primaryColor, width: 1.5),
-              borderRadius: BorderRadius.circular(8),
             ),
           ),
         ),
@@ -211,7 +194,10 @@ class _CashierPageState extends State<CashierPage> {
             return Column(
               children: [
                 ItemMenu(
-                  menu: menu,
+                  id: menu.id,
+                  name: menu.name,
+                  price: menu.price,
+                  hpp: menu.price,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
                 ),

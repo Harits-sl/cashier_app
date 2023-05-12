@@ -3,17 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../../data/models/menu_model.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 
 class ItemMenu extends StatefulWidget {
-  final MenuModel menu;
+  // final MenuModel menu;
+  final String id;
+  final String name;
+  final int price;
+  final int hpp;
   final int totalOrder;
 
   const ItemMenu({
-    required this.menu,
-    required this.totalOrder,
+    // required this.menu,
     Key? key,
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.hpp,
+    required this.totalOrder,
   }) : super(key: key);
 
   @override
@@ -32,10 +39,10 @@ class _ItemMenuState extends State<ItemMenu> {
     /// jika [_totalBuy] lebih dari 0 masukan data ke orderMenu
     if (_totalBuy > 0) {
       context.read<MenuOrderCubit>().orderMenu(
-            id: widget.menu.id,
-            menuName: widget.menu.name,
-            price: widget.menu.price,
-            hpp: widget.menu.hpp,
+            id: widget.id,
+            menuName: widget.name,
+            price: widget.price,
+            hpp: widget.hpp,
             totalBuy: _totalBuy,
           );
     }
@@ -64,7 +71,7 @@ class _ItemMenuState extends State<ItemMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.menu.name,
+                    widget.name,
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                       fontSize: 12,
@@ -72,7 +79,7 @@ class _ItemMenuState extends State<ItemMenu> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Rp. ${StringHelper.addComma(widget.menu.price)}',
+                    'Rp. ${StringHelper.addComma(widget.price)}',
                     style: secondaryTextStyle.copyWith(
                       fontWeight: medium,
                       fontSize: 12,
@@ -97,10 +104,10 @@ class _ItemMenuState extends State<ItemMenu> {
                         _totalBuy--;
                       });
                       context.read<MenuOrderCubit>().orderMenu(
-                            id: widget.menu.id,
-                            menuName: widget.menu.name,
-                            price: widget.menu.price,
-                            hpp: widget.menu.hpp,
+                            id: widget.id,
+                            menuName: widget.name,
+                            price: widget.price,
+                            hpp: widget.hpp,
                             totalBuy: _totalBuy,
                           );
                     }
@@ -127,10 +134,10 @@ class _ItemMenuState extends State<ItemMenu> {
                       _totalBuy++;
                     });
                     context.read<MenuOrderCubit>().orderMenu(
-                          id: widget.menu.id,
-                          menuName: widget.menu.name,
-                          price: widget.menu.price,
-                          hpp: widget.menu.hpp,
+                          id: widget.id,
+                          menuName: widget.name,
+                          price: widget.price,
+                          hpp: widget.hpp,
                           totalBuy: _totalBuy,
                         );
                   },

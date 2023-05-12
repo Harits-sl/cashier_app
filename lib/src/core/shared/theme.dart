@@ -29,6 +29,7 @@ TextStyle primaryTextStyle = GoogleFonts.poppins(color: primaryColor);
 TextStyle secondaryTextStyle = GoogleFonts.poppins(color: secondaryColor);
 TextStyle gray2TextStyle = GoogleFonts.poppins(color: gray2Color);
 TextStyle white2TextStyle = GoogleFonts.poppins(color: backgroundColor);
+TextStyle redTextStyle = GoogleFonts.poppins(color: redColor);
 
 TextStyle whiteTextStyle = GoogleFonts.poppins(color: whiteColor);
 TextStyle blackTextStyle = GoogleFonts.poppins(color: blackColor);

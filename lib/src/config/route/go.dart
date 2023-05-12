@@ -24,7 +24,7 @@ class Go {
     Navigator.of(context).pushReplacementNamed(path, arguments: arguments);
   }
 
-  static void back(BuildContext context, Widget widget) {
+  static void back(BuildContext context) {
     Navigator.pop(context);
   }
 

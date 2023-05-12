@@ -186,7 +186,10 @@ class _EditOrderPageState extends State<EditOrderPage> {
             return Column(
               children: [
                 ItemMenu(
-                  menu: menu,
+                  id: menu.id,
+                  name: menu.name,
+                  price: menu.price,
+                  hpp: menu.price,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
                 ),
