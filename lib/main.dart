@@ -5,7 +5,7 @@ import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/features/filter/cubit/filter_cubit.dart';
 import 'package:cashier_app/src/presentation/features/filter/index.dart';
-import 'package:cashier_app/src/presentation/pages/buyer_page.dart';
+import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
 import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';

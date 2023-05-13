@@ -243,7 +243,7 @@ class _CashierPageState extends State<CashierPage> {
                       const SizedBox(height: 12),
                       const CustomDivider(),
                       _menu(item['menu']),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 16),
                     ],
                   );
                 }).toList(),
