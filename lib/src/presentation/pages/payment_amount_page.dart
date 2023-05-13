@@ -12,7 +12,7 @@ import '../../core/shared/theme.dart';
 import '../widgets/custom_radio_payment_amount.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/payment_app_bar.dart';
+import '../widgets/order_information.dart';
 
 class PaymentAmountPage extends StatefulWidget {
   const PaymentAmountPage({
@@ -235,7 +235,7 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
                       ),
                       child: Column(
                         children: [
-                          PaymentAppBar(
+                          OrderInformation(
                             title: state.menuOrder.typePayment!,
                             orderId: state.menuOrder.id!,
                             total: state.menuOrder.total,

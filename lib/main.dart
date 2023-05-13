@@ -18,7 +18,7 @@ import 'src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'src/presentation/features/home/index.dart';
 import 'src/presentation/pages/payment_amount_page.dart';
 import 'src/presentation/pages/receipt_page.dart';
-import 'src/presentation/pages/select_payment_page.dart';
+import 'src/presentation/pages/payment_method_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'src/presentation/cubit/menu_order/menu_order_cubit.dart';
@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
           Routes.editOrderMenu: (context) => const EditOrderPage(),
           Routes.product: (context) => const AdminPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
-          Routes.selectPayment: (context) => const SelectPaymentPage(),
+          Routes.selectPayment: (context) => const PaymentMethod(),
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),

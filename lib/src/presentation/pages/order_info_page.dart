@@ -8,7 +8,6 @@ import 'package:cashier_app/src/presentation/cubit/buyer/buyer_cubit.dart';
 import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
-import 'package:cashier_app/src/presentation/widgets/custom_text_field.dart';
 import 'package:cashier_app/src/presentation/widgets/item_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
