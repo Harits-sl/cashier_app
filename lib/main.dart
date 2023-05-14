@@ -1,4 +1,3 @@
-import 'package:cashier_app/src/data/dataSources/local/db/database_helper.dart';
 import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
@@ -114,6 +113,7 @@ class MyApp extends StatelessWidget {
               );
             default:
           }
+          return null;
         },
       ),
     );

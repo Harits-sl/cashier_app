@@ -7,6 +7,7 @@ import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:cashier_app/src/presentation/cubit/buyer/buyer_cubit.dart';
 import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 import 'package:cashier_app/src/presentation/widgets/item_menu.dart';
 import 'package:flutter/material.dart';
@@ -193,47 +194,27 @@ class _BuyerPageState extends State<BuyerPage> {
 
     Widget _buildButtonPayment() {
       return Expanded(
-        child: GestureDetector(
-          onTap: checkOutPressed,
-          child: Container(
-            height: 55,
-            margin: const EdgeInsets.only(left: defaultMargin, right: 12),
-            decoration: BoxDecoration(
-              color: backgroundColor,
-              borderRadius: BorderRadius.circular(28),
-              border: Border.all(width: 1, color: primaryColor),
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Payment',
-                style: primaryTextStyle.copyWith(fontSize: 12),
-              ),
-            ),
+        child: CustomButton(
+          color: backgroundColor,
+          onPressed: checkOutPressed,
+          text: 'Payment',
+          textStyle: primaryTextStyle.copyWith(fontSize: 12),
+          margin: const EdgeInsets.only(
+            right: 12,
+            left: defaultMargin,
           ),
+          border: Border.all(width: 1, color: primaryColor),
         ),
       );
     }
 
     Widget _buildButtonToCart() {
       return Expanded(
-        child: GestureDetector(
-          onTap: saveToCart,
-          child: Container(
-            height: 55,
-            margin: const EdgeInsets.only(right: defaultMargin, left: 12),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.circular(28),
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                '+ Cart',
-                style: white2TextStyle.copyWith(fontSize: 12),
-              ),
-            ),
-          ),
+        child: CustomButton(
+          color: primaryColor,
+          onPressed: saveToCart,
+          text: '+ Cart',
+          margin: const EdgeInsets.only(right: defaultMargin, left: 12),
         ),
       );
     }

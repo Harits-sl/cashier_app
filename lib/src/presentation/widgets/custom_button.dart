@@ -12,6 +12,8 @@ class CustomButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     this.textStyle,
+    this.isShadowed = false,
+    this.border,
   }) : super(key: key);
 
   final double width;
@@ -22,6 +24,8 @@ class CustomButton extends StatelessWidget {
   final Function() onPressed;
   final String text;
   final TextStyle? textStyle;
+  final bool isShadowed;
+  final Border? border;
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +34,27 @@ class CustomButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        margin: const EdgeInsets.all(defaultMargin),
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        margin: margin ?? const EdgeInsets.all(defaultMargin),
+        padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(28),
-          boxShadow: [
-            BoxShadow(
-              color: primaryColor.withOpacity(.25),
-              offset: const Offset(0, 12),
-              blurRadius: 27,
-              spreadRadius: 4,
-            ),
-          ],
+          boxShadow: isShadowed
+              ? [
+                  BoxShadow(
+                    color: primaryColor.withOpacity(.25),
+                    offset: const Offset(0, 12),
+                    blurRadius: 27,
+                    spreadRadius: 4,
+                  ),
+                ]
+              : [],
+          border: border,
         ),
         child: Center(
           child: Text(
             text,
-            style: white2TextStyle.copyWith(fontSize: 12),
+            style: textStyle ?? white2TextStyle.copyWith(fontSize: 12),
           ),
         ),
       ),

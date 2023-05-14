@@ -1,4 +1,7 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 import '../../config/route/go.dart';
 import '../../config/route/routes.dart';
 import '../../data/models/menu_order_model.dart';
@@ -89,21 +92,6 @@ class ReceiptPage extends StatelessWidget {
       context.read<MenuOrderCubit>().initState();
     }
 
-    Widget _buildHeader() {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 45),
-          child: Text(
-            'STRUK',
-            style: blackTextStyle.copyWith(
-              fontWeight: medium,
-              fontSize: 18,
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget _buildReceipt() {
       return BlocBuilder<MenuOrderCubit, MenuOrderState>(
         builder: (context, state) {
@@ -111,59 +99,129 @@ class ReceiptPage extends StatelessWidget {
             _menuOrder = state.menuOrder;
 
             String dateFormat = state.menuOrder.dateTimeOrder != null
-                ? DateFormat('M.d.y - H:mm:ss')
+                ? DateFormat('M.d.yy-H:mm')
                     .format(state.menuOrder.dateTimeOrder!)
                 : 'hari kosong';
 
             return Container(
-              margin: EdgeInsets.only(
-                left: defaultMargin,
-                right: defaultMargin,
-                bottom: defaultMargin,
-                top: 35,
-              ),
+              margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    state.menuOrder.typePayment!,
-                    style: blackTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 16,
+                  Image.asset(
+                    'assets/images/logo.png',
+                    width: 80,
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: 240,
+                    child: Text(
+                      'Jl. Warakas Gg. 8 No.98, RW.3, Warakas, Kec. Tj. Priok, Jkt Utara, Daerah Khusus Ibukota Jakarta 14370',
+                      style: primaryTextStyle.copyWith(fontSize: 12),
+                      textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 25),
-                  Text(
-                    dateFormat,
-                    style: blackTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 16,
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: CustomDivider(),
                   ),
-                  const SizedBox(height: 14),
-                  const Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Order ID',
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        state.menuOrder.id!,
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Date Order',
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        dateFormat,
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Payment Method',
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Text(
+                        state.menuOrder.typePayment!,
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: CustomDivider(),
+                  ),
                   Column(
                     children: state.menuOrder.listMenus!
                         .map(
                           (menu) => Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16),
+                            margin: const EdgeInsets.only(bottom: 12),
                             child: Row(
                               children: [
                                 Expanded(
                                   flex: 2,
                                   child: Text(
                                     menu['menuName'],
+                                    style: primaryTextStyle.copyWith(
+                                      fontWeight: medium,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
                                     menu['totalBuy'].toString(),
+                                    style: primaryTextStyle.copyWith(
+                                      fontWeight: medium,
+                                      fontSize: 12,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
                                 Expanded(
                                   child: Text(
                                     StringHelper.addComma(menu['price']),
+                                    style: primaryTextStyle.copyWith(
+                                      fontWeight: medium,
+                                      fontSize: 12,
+                                    ),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
@@ -171,6 +229,10 @@ class ReceiptPage extends StatelessWidget {
                                   child: Text(
                                     StringHelper.addComma(
                                         menu['totalBuy'] * menu['price']),
+                                    style: primaryTextStyle.copyWith(
+                                      fontWeight: medium,
+                                      fontSize: 12,
+                                    ),
                                     textAlign: TextAlign.right,
                                   ),
                                 ),
@@ -180,29 +242,47 @@ class ReceiptPage extends StatelessWidget {
                         )
                         .toList(),
                   ),
-                  const Divider(),
-                  const SizedBox(height: 14),
+                  const CustomDivider(),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('TOTAL'),
-                      Text(StringHelper.addComma(state.menuOrder.total)),
+                      const Text('Total Price'),
+                      Text(
+                        StringHelper.addComma(state.menuOrder.total),
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('CASH'),
-                      Text(StringHelper.addComma(state.menuOrder.cash)),
+                      const Text('Cash'),
+                      Text(
+                        StringHelper.addComma(state.menuOrder.cash),
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('CHANGE'),
-                      Text(StringHelper.addComma(state.menuOrder.change)),
+                      const Text('Change'),
+                      Text(
+                        StringHelper.addComma(state.menuOrder.change),
+                        style: primaryTextStyle.copyWith(
+                          fontWeight: medium,
+                          fontSize: 12,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -214,40 +294,29 @@ class ReceiptPage extends StatelessWidget {
       );
     }
 
-    Widget _buildButtonPrintStruck() {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width / 2,
-        child: TextButton(
-          onPressed: () {
-            onTapReceiptPrint();
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: blueColor,
-            primary: whiteColor,
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
+    Widget _buildButtonSaveOrder() {
+      return Expanded(
+        child: CustomButton(
+          color: backgroundColor,
+          onPressed: _onTapSaveOrder,
+          text: 'Save Order',
+          textStyle: primaryTextStyle.copyWith(fontSize: 12),
+          margin: const EdgeInsets.only(
+            right: 12,
+            left: defaultMargin,
           ),
-          child: const Text('Cetak Struk'),
+          border: Border.all(width: 1, color: primaryColor),
         ),
       );
     }
 
-    Widget _buildButtonSaveOrder() {
-      return SizedBox(
-        width: MediaQuery.of(context).size.width / 2,
-        child: TextButton(
-          onPressed: _onTapSaveOrder,
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            primary: blackColor,
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-          ),
-          child: const Text('Simpan Order'),
+    Widget _buildButtonPrintStruck() {
+      return Expanded(
+        child: CustomButton(
+          color: primaryColor,
+          onPressed: onTapReceiptPrint,
+          text: 'Print Receipt',
+          margin: const EdgeInsets.only(right: defaultMargin, left: 12),
         ),
       );
     }
@@ -257,17 +326,23 @@ class ReceiptPage extends StatelessWidget {
         children: [
           ListView(
             children: [
-              _buildHeader(),
+              const CustomAppBar(
+                title: 'Receipt',
+                isCanBack: false,
+              ),
               _buildReceipt(),
             ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Row(
-              children: [
-                _buildButtonSaveOrder(),
-                _buildButtonPrintStruck(),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: defaultMargin),
+              child: Row(
+                children: [
+                  _buildButtonSaveOrder(),
+                  _buildButtonPrintStruck(),
+                ],
+              ),
             ),
           ),
         ],
