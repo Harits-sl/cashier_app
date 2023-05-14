@@ -39,17 +39,18 @@ class _CustomRadioPaymentAmountState extends State<CustomRadioPaymentAmount> {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(defaultBorderRadius),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: _value != widget.groupValue ? grayColor : blueColor,
+            color: _value != widget.groupValue ? gray2Color : primaryColor,
+            width: _value != widget.groupValue ? 1 : 2,
           ),
         ),
-        child: Center(
+        child: Align(
+          alignment: Alignment.center,
           child: Text(
             StringHelper.addComma(_value),
-            style: blackTextStyle.copyWith(
+            style: primaryTextStyle.copyWith(
               fontWeight: medium,
-              fontSize: 14,
             ),
           ),
         ),

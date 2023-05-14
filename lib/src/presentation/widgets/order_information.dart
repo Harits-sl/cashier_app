@@ -6,19 +6,18 @@ import '../../core/utils/string_helper.dart';
 class OrderInformation extends StatelessWidget {
   const OrderInformation({
     Key? key,
-    this.title,
     required this.orderId,
     required this.total,
+    this.paymentMethod,
   }) : super(key: key);
-
-  /// varibel untuk judul app bar
-  final String? title;
 
   /// variabel untuk order id
   final String orderId;
 
   /// variabel untuk total bill
   final int total;
+
+  final String? paymentMethod;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +45,28 @@ class OrderInformation extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
+          paymentMethod != null
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Payment Method',
+                      style: gray2TextStyle.copyWith(
+                        fontWeight: light,
+                        fontSize: 11,
+                      ),
+                    ),
+                    Text(
+                      paymentMethod!,
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                )
+              : const SizedBox(),
+          paymentMethod != null ? const SizedBox(height: 12) : const SizedBox(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

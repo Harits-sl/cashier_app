@@ -1,5 +1,7 @@
 import 'package:cashier_app/src/core/utils/field_helper.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 
 import '../../config/route/routes.dart';
 
@@ -25,7 +27,7 @@ class PaymentAmountPage extends StatefulWidget {
 
 class _PaymentAmountPageState extends State<PaymentAmountPage> {
   /// controller text field
-  late TextEditingController _payAmountController = TextEditingController();
+  TextEditingController _payAmountController = TextEditingController(text: '0');
 
   /// variabel untuk kembalian
   late int _change = 0;
@@ -55,7 +57,9 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
 
   void onTapPay() {
     context.read<MenuOrderCubit>().orderAddCashAndChangePayment(
-        cash: int.parse(_payAmountController.text), change: _change);
+          cash: int.parse(StringHelper.removeComma(_payAmountController.text)),
+          change: _change,
+        );
     Go.routeWithPath(context: context, path: Routes.receipt);
   }
 
@@ -66,19 +70,19 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
       final List<int> _mostListPaymentAmount = [
         totalPayment,
         20000,
-        30000,
-        50000
+        50000,
+        100000,
       ];
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.all(defaultMargin),
         child: GridView.count(
           // menentukan child aspect ratio lihat dari sini
           // https://calculateaspectratio.com/
           childAspectRatio: 16 / 7,
           crossAxisCount: 2,
-          crossAxisSpacing: 58,
-          mainAxisSpacing: 15,
+          crossAxisSpacing: 24,
+          mainAxisSpacing: 16,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           children: _mostListPaymentAmount.map((value) {
@@ -93,8 +97,8 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
               onChanged: (value) {
                 setState(() {
                   _groupvalue = value;
-                  _payAmountController =
-                      TextEditingController(text: _groupvalue.toString());
+                  _payAmountController = TextEditingController(
+                      text: StringHelper.addComma(_groupvalue));
                   _change = _groupvalue - totalPayment;
                 });
               },
@@ -107,20 +111,18 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
     Widget _buildFieldPayAndChange(int totalPrice) {
       Widget title() => Text(
             'Enter The Pay Amount',
-            style: grayTextStyle.copyWith(
-              fontWeight: regular,
-              fontSize: 14,
+            style: gray2TextStyle.copyWith(
+              fontWeight: light,
+              fontSize: 11,
             ),
           );
 
       Widget textField() => TextField(
             controller: _payAmountController,
             keyboardType: TextInputType.number,
-            style: blackTextStyle.copyWith(
-              fontWeight: regular,
-              fontSize: 14,
-            ),
-            onChanged: (value) {
+            style: primaryTextStyle.copyWith(fontSize: 14),
+            onChanged: (valueOnChanged) {
+              String value = StringHelper.removeComma(valueOnChanged);
               FieldHelper.number(
                 controller: _payAmountController,
                 value: value,
@@ -143,28 +145,17 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
               }
             },
             decoration: InputDecoration(
-              isDense: true,
-              contentPadding: const EdgeInsets.fromLTRB(0, 21, 21, 21),
-              hintStyle:
-                  grayTextStyle.copyWith(fontWeight: light, fontSize: 14),
-              prefixIcon: const Padding(
-                padding: EdgeInsets.only(left: 15, right: 10),
-                child: Text('Rp.'),
+              prefixIcon: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 17),
+                child: Text(
+                  'Rp.',
+                  style: primaryTextStyle,
+                ),
               ),
               prefixIconConstraints: const BoxConstraints(
                 minWidth: 0,
                 minHeight: 0,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: lightGrayColor, width: 2),
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: blueColor, width: 2),
-                borderRadius: BorderRadius.circular(defaultBorderRadius),
               ),
             ),
           );
@@ -174,23 +165,22 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
             children: [
               Text(
                 'Change',
-                style: grayTextStyle.copyWith(
-                  fontWeight: regular,
+                style: gray2TextStyle.copyWith(
+                  fontWeight: light,
                   fontSize: 12,
                 ),
               ),
               Text(
                 StringHelper.addComma(_change),
-                style: blackTextStyle.copyWith(
-                  fontWeight: regular,
-                  fontSize: 16,
+                style: primaryTextStyle.copyWith(
+                  fontSize: 12,
                 ),
               ),
             ],
           );
 
       return Padding(
-        padding: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.all(defaultMargin),
         child: Column(
           children: [
             title(),
@@ -205,16 +195,10 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
 
     Widget _buttonPay() {
       return CustomButton(
-        color: blueColor,
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-          bottom: 24,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
-        borderRadius: BorderRadius.circular(8),
+        color: primaryColor,
+        borderRadius: BorderRadius.circular(28),
         onPressed: onTapPay,
-        text: 'Pay',
+        text: 'Pay Now',
       );
     }
 
@@ -226,29 +210,28 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
               child: BlocBuilder<MenuOrderCubit, MenuOrderState>(
                 builder: (context, state) {
                   if (state is MenuOrderSuccess) {
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        defaultMargin,
-                        45,
-                        defaultMargin,
-                        0,
-                      ),
-                      child: Column(
-                        children: [
-                          OrderInformation(
-                            title: state.menuOrder.typePayment!,
-                            orderId: state.menuOrder.id!,
-                            total: state.menuOrder.total,
-                          ),
-                          const SizedBox(height: 30),
-                          Divider(
-                              thickness: 2, height: 0, color: lightGrayColor),
-                          _buildListRadioPayment(state.menuOrder.total),
-                          Divider(
-                              thickness: 2, height: 0, color: lightGrayColor),
-                          _buildFieldPayAndChange(state.menuOrder.total),
-                        ],
-                      ),
+                    return Column(
+                      children: [
+                        const CustomAppBar(title: 'Payment Amount'),
+                        OrderInformation(
+                          orderId: state.menuOrder.id!,
+                          total: state.menuOrder.total,
+                          paymentMethod: state.menuOrder.typePayment,
+                        ),
+                        const SizedBox(height: 12),
+                        const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: defaultMargin),
+                          child: CustomDivider(),
+                        ),
+                        _buildListRadioPayment(state.menuOrder.total),
+                        const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: defaultMargin),
+                          child: CustomDivider(),
+                        ),
+                        _buildFieldPayAndChange(state.menuOrder.total),
+                      ],
                     );
                   }
                   return const SizedBox();

@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:flutter/widgets.dart';
 
 class FieldHelper {
@@ -31,6 +32,14 @@ class FieldHelper {
         );
         setState(controller);
       }
+      controller = TextEditingController(
+        text: StringHelper.addComma(int.parse(value)),
+      );
+      // set cursor textfield jadi paling ujung
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+      setState(controller);
     }
   }
 }

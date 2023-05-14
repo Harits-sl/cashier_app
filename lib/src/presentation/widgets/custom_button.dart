@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     Key? key,
     this.width = double.infinity,
-    this.height = 50,
+    this.height = 55,
     this.margin,
     required this.color,
     this.borderRadius,
@@ -25,23 +25,30 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: height,
-      margin: margin,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: borderRadius,
-      ),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: textStyle ??
-              whiteTextStyle.copyWith(
-                fontWeight: medium,
-                fontSize: 16,
-              ),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: width,
+        height: height,
+        margin: const EdgeInsets.all(defaultMargin),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: primaryColor.withOpacity(.25),
+              offset: const Offset(0, 12),
+              blurRadius: 27,
+              spreadRadius: 4,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: white2TextStyle.copyWith(fontSize: 12),
+          ),
         ),
       ),
     );

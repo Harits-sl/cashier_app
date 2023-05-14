@@ -19,4 +19,8 @@ class StringHelper {
     var format = DateFormat('d MMM, yyyy');
     return format.format(date);
   }
+
+  static String removeComma(String value) {
+    return value.replaceAll(RegExp('[^A-Za-z0-9]'), '');
+  }
 }
