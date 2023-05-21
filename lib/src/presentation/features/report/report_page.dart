@@ -1,19 +1,20 @@
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
-import 'package:cashier_app/src/presentation/features/filter/cubit/filter_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FilterPage extends StatefulWidget {
-  const FilterPage({Key? key}) : super(key: key);
-  static const String routeName = '/filter';
+import 'index.dart';
+
+class ReportPage extends StatefulWidget {
+  const ReportPage({Key? key}) : super(key: key);
+  static const String routeName = '/report';
 
   @override
-  State<FilterPage> createState() => _FilterPageState();
+  State<ReportPage> createState() => _ReportPageState();
 }
 
-class _FilterPageState extends State<FilterPage> {
+class _ReportPageState extends State<ReportPage> {
   DateTime? firstDate;
   DateTime? secondDate;
   late Timestamp firstTimestamp;
@@ -34,7 +35,7 @@ class _FilterPageState extends State<FilterPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Filter'),
+        title: const Text('Report'),
       ),
       body: Column(
         children: [
@@ -60,7 +61,7 @@ class _FilterPageState extends State<FilterPage> {
                         Timestamp secondTimestamp =
                             Timestamp.fromDate(secondDate!);
 
-                        context.read<FilterCubit>().fetchFilterDateOrder(
+                        context.read<ReportCubit>().fetchReportDateOrder(
                             firstTimestamp, secondTimestamp);
                       });
                     });
@@ -87,7 +88,7 @@ class _FilterPageState extends State<FilterPage> {
                         Timestamp secondTimestamp =
                             Timestamp.fromDate(secondDate!);
 
-                        context.read<FilterCubit>().fetchFilterDateOrder(
+                        context.read<ReportCubit>().fetchReportDateOrder(
                             firstTimestamp, secondTimestamp);
                       });
                     });
@@ -96,12 +97,12 @@ class _FilterPageState extends State<FilterPage> {
               ),
             ],
           ),
-          BlocBuilder<FilterCubit, FilterState>(
+          BlocBuilder<ReportCubit, ReportState>(
             builder: (context, state) {
-              if (state is FilterLoading) {
+              if (state is ReportLoading) {
                 return const CircularProgressIndicator();
               }
-              if (state is FilterSuccess) {
+              if (state is ReportSuccess) {
                 final orders = state.orders;
                 int total = 0;
                 int totalHpp = 0;
@@ -155,7 +156,7 @@ class _FilterPageState extends State<FilterPage> {
                   ),
                 );
               }
-              if (state is FilterFailed) {
+              if (state is ReportFailed) {
                 return Text(state.error);
               }
               return Container();

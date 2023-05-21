@@ -16,6 +16,8 @@ import '../../core/utils/string_helper.dart';
 import '../widgets/item_menu.dart';
 
 class CashierPage extends StatefulWidget {
+  static const String routeName = '/cashier';
+
   // final BlueThermalPrinter printer;
 
   const CashierPage({
@@ -83,7 +85,7 @@ class _CashierPageState extends State<CashierPage> {
   void checkOutPressed() {
     if (menuOrder!.listMenus!.isNotEmpty) {
       context.read<MenuOrderCubit>().orderCheckoutPressed();
-      Go.routeWithPath(context: context, path: Routes.buyer);
+      Go.routeWithPath(context: context, path: Routes.orderInfo);
     }
   }
 

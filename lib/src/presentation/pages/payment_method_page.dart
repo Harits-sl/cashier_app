@@ -11,6 +11,8 @@ import '../../core/shared/theme.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 
 class PaymentMethod extends StatelessWidget {
+  static const String routeName = '/payment-method';
+
   const PaymentMethod({Key? key}) : super(key: key);
 
   @override

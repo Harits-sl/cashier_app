@@ -13,20 +13,22 @@ import 'package:cashier_app/src/presentation/widgets/item_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BuyerPage extends StatefulWidget {
-  const BuyerPage({super.key});
+class OrderInfoPage extends StatefulWidget {
+  static const String routeName = '/order-info';
+
+  const OrderInfoPage({super.key});
 
   @override
-  State<BuyerPage> createState() => _BuyerPageState();
+  State<OrderInfoPage> createState() => _OrderInfoPageState();
 }
 
-class _BuyerPageState extends State<BuyerPage> {
+class _OrderInfoPageState extends State<OrderInfoPage> {
   TextEditingController buyerController = TextEditingController();
   bool isBuyerEmpty = false;
 
   void checkOutPressed() {
     // context.read<MenuOrderCubit>().orderCheckoutPressed();
-    Go.routeWithPath(context: context, path: Routes.selectPayment);
+    Go.routeWithPath(context: context, path: Routes.paymentMethod);
   }
 
   void saveToCart() {

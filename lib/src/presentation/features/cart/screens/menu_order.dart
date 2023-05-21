@@ -29,7 +29,7 @@ class MenuOrder extends StatelessWidget {
       // final menuOrder = MenuOrderModel.fromCartModel(cart);
       context.read<MenuOrderCubit>().setCart = cart;
 
-      Go.routeWithPath(context: context, path: Routes.selectPayment);
+      Go.routeWithPath(context: context, path: Routes.paymentMethod);
     }
 
     return Padding(

@@ -15,6 +15,8 @@ import '../../core/utils/string_helper.dart';
 import '../cubit/menu_order/menu_order_cubit.dart';
 
 class ReceiptPage extends StatelessWidget {
+  static const String routeName = '/receipt';
+
   const ReceiptPage({
     Key? key,
   }) : super(key: key);

@@ -91,7 +91,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
       debugPrint('menuOrder: ${menuOrder}');
       context.read<MenuOrderCubit>().setCart = cart;
       // context.read<MenuOrderCubit>().orderCheckoutPressed();
-      Go.routeWithPath(context: context, path: Routes.selectPayment);
+      Go.routeWithPath(context: context, path: Routes.paymentMethod);
     }
   }
 

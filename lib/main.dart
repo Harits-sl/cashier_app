@@ -2,8 +2,6 @@ import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart'
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
-import 'package:cashier_app/src/presentation/features/filter/cubit/filter_cubit.dart';
-import 'package:cashier_app/src/presentation/features/filter/index.dart';
 import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
 import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
@@ -15,6 +13,7 @@ import 'src/config/route/routes.dart';
 import 'src/presentation/cubit/Menu/menu_cubit.dart';
 import 'src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'src/presentation/features/home/index.dart';
+import 'src/presentation/features/report/index.dart';
 import 'src/presentation/pages/payment_amount_page.dart';
 import 'src/presentation/pages/receipt_page.dart';
 import 'src/presentation/pages/payment_method_page.dart';
@@ -79,8 +78,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<AdminMenuEditBloc>(
           create: (BuildContext context) => AdminMenuEditBloc(),
         ),
-        BlocProvider<FilterCubit>(
-          create: (BuildContext context) => FilterCubit(),
+        BlocProvider<ReportCubit>(
+          create: (BuildContext context) => ReportCubit(),
         ),
         BlocProvider<CartBloc>(
           create: (BuildContext context) => CartBloc(),
@@ -99,7 +98,7 @@ class MyApp extends StatelessWidget {
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
-          Routes.report: (context) => const FilterPage(),
+          Routes.report: (context) => const ReportPage(),
           Routes.cart: (context) => const CartPage(),
           Routes.buyer: (context) => const BuyerPage(),
         },

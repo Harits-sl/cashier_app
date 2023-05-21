@@ -17,6 +17,8 @@ import 'package:flutter/material.dart';
 import '../widgets/order_information.dart';
 
 class PaymentAmountPage extends StatefulWidget {
+  static const String routeName = '/payment-amount';
+
   const PaymentAmountPage({
     Key? key,
   }) : super(key: key);
