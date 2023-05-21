@@ -36,7 +36,7 @@ class MenuOrder extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
       child: BlocBuilder<CartBloc, CartState>(
         builder: (context, state) {
-          int i = 1;
+          int i = 0;
           if (state is CartSuccess) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,12 +145,14 @@ class MenuOrder extends StatelessWidget {
                         ],
                       ),
                     ),
-                    i == state.carts.length
+                    i != state.carts.length
                         ? const Padding(
                             padding: EdgeInsets.symmetric(vertical: 12),
                             child: CustomDivider(),
                           )
-                        : const SizedBox(),
+                        : const SizedBox(
+                            height: defaultMargin,
+                          ),
                   ],
                 );
               }).toList(),

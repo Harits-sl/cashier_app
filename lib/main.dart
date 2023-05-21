@@ -94,13 +94,13 @@ class MyApp extends StatelessWidget {
           Routes.editOrderMenu: (context) => const EditOrderPage(),
           Routes.product: (context) => const AdminPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
-          Routes.selectPayment: (context) => const PaymentMethod(),
+          Routes.paymentMethod: (context) => const PaymentMethod(),
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
           Routes.addMenu: (context) => const AddMenuPage(),
           Routes.report: (context) => const ReportPage(),
           Routes.cart: (context) => const CartPage(),
-          Routes.buyer: (context) => const BuyerPage(),
+          Routes.orderInfo: (context) => const OrderInfoPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {

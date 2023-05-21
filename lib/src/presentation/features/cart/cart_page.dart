@@ -33,12 +33,14 @@ class _CartPageState extends State<CartPage> {
                 ),
               );
             } else if (state is CartSuccess) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  CustomAppBar(title: 'Cart'),
-                  MenuOrder(),
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    CustomAppBar(title: 'Cart'),
+                    MenuOrder(),
+                  ],
+                ),
               );
             } else if (state is CartFailed) {
               return Text(state.error);
