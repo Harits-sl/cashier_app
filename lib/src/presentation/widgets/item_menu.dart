@@ -12,6 +12,7 @@ class ItemMenu extends StatefulWidget {
   final int price;
   final int hpp;
   final int totalOrder;
+  final bool isDisabled;
 
   const ItemMenu({
     // required this.menu,
@@ -21,6 +22,7 @@ class ItemMenu extends StatefulWidget {
     required this.price,
     required this.hpp,
     required this.totalOrder,
+    this.isDisabled = false,
   }) : super(key: key);
 
   @override
@@ -99,17 +101,19 @@ class _ItemMenuState extends State<ItemMenu> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (_totalBuy > 0) {
-                      setState(() {
-                        _totalBuy--;
-                      });
-                      context.read<MenuOrderCubit>().orderMenu(
-                            id: widget.id,
-                            menuName: widget.name,
-                            price: widget.price,
-                            hpp: widget.hpp,
-                            totalBuy: _totalBuy,
-                          );
+                    if (!widget.isDisabled) {
+                      if (_totalBuy > 0) {
+                        setState(() {
+                          _totalBuy--;
+                        });
+                        context.read<MenuOrderCubit>().orderMenu(
+                              id: widget.id,
+                              menuName: widget.name,
+                              price: widget.price,
+                              hpp: widget.hpp,
+                              totalBuy: _totalBuy,
+                            );
+                      }
                     }
                   },
                   child: Image.asset(
@@ -130,16 +134,18 @@ class _ItemMenuState extends State<ItemMenu> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _totalBuy++;
-                    });
-                    context.read<MenuOrderCubit>().orderMenu(
-                          id: widget.id,
-                          menuName: widget.name,
-                          price: widget.price,
-                          hpp: widget.hpp,
-                          totalBuy: _totalBuy,
-                        );
+                    if (!widget.isDisabled) {
+                      setState(() {
+                        _totalBuy++;
+                      });
+                      context.read<MenuOrderCubit>().orderMenu(
+                            id: widget.id,
+                            menuName: widget.name,
+                            price: widget.price,
+                            hpp: widget.hpp,
+                            totalBuy: _totalBuy,
+                          );
+                    }
                   },
                   child: Image.asset(
                     'assets/images/ic_plus.png',
