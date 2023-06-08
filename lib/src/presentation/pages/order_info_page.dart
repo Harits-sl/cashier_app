@@ -134,6 +134,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       price: menu['price'],
                       hpp: menu['hpp'],
                       totalOrder: menu['totalBuy'],
+                      typeMenu: menu['typeMenu'],
                     ),
                     i != menuOrder.listMenus!.length
                         ? const SizedBox(height: 12)
@@ -235,7 +236,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                   children: [
                     const CustomAppBar(title: 'Order'),
                     _buildCustomerInformation(),
-                    _buildListMenu(menuOrder!),
+                    _buildListMenu(menuOrder ?? MenuOrderModel()),
                     _buildOrderSummary(menuOrder!),
                     const SizedBox(
                       height: (defaultMargin * 2) + 55,

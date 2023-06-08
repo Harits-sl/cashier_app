@@ -199,9 +199,10 @@ class _CashierPageState extends State<CashierPage> {
                   id: menu.id,
                   name: menu.name,
                   price: menu.price,
-                  hpp: menu.price,
+                  hpp: menu.hpp,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
+                  typeMenu: menu.typeMenu,
                 ),
               ],
             );

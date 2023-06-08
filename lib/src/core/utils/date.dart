@@ -16,4 +16,9 @@ class Date {
     // debugPrint('dateCompare: ${dateCompare}');
     return dateCompare;
   }
+
+  static String format(DateTime date) {
+    DateFormat format = DateFormat('dd-MM-yyyy');
+    return format.format(date);
+  }
 }

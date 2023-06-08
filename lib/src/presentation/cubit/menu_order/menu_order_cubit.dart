@@ -87,6 +87,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     String? menuName,
     int totalBuy = 0,
     int hpp = 0,
+    required String typeMenu,
   }) {
     _mapMenu = {
       'id': id,
@@ -94,6 +95,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
       'menuName': menuName,
       'totalBuy': totalBuy,
       'hpp': hpp,
+      'typeMenu': typeMenu,
     };
 
     /// variabel berupa integer dari indexWhere

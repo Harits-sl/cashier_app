@@ -192,6 +192,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
                   hpp: menu.price,
                   totalOrder:
                       totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
+                  typeMenu: menu.typeMenu,
                 ),
                 Divider(
                   thickness: 1,

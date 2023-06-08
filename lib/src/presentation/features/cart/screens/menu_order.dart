@@ -75,6 +75,7 @@ class MenuOrder extends StatelessWidget {
                           price: menu['price'],
                           hpp: menu['hpp'],
                           totalOrder: menu['totalBuy'],
+                          typeMenu: menu['typeMenu'] ?? '',
                           isDisabled: true,
                         );
                       }).toList(),

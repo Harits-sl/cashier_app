@@ -12,6 +12,7 @@ class ItemMenu extends StatefulWidget {
   final int price;
   final int hpp;
   final int totalOrder;
+  final String typeMenu;
   final bool isDisabled;
 
   const ItemMenu({
@@ -22,6 +23,7 @@ class ItemMenu extends StatefulWidget {
     required this.price,
     required this.hpp,
     required this.totalOrder,
+    required this.typeMenu,
     this.isDisabled = false,
   }) : super(key: key);
 
@@ -46,6 +48,7 @@ class _ItemMenuState extends State<ItemMenu> {
             price: widget.price,
             hpp: widget.hpp,
             totalBuy: _totalBuy,
+            typeMenu: widget.typeMenu,
           );
     }
   }
@@ -112,6 +115,7 @@ class _ItemMenuState extends State<ItemMenu> {
                               price: widget.price,
                               hpp: widget.hpp,
                               totalBuy: _totalBuy,
+                              typeMenu: widget.typeMenu,
                             );
                       }
                     }
@@ -144,6 +148,7 @@ class _ItemMenuState extends State<ItemMenu> {
                             price: widget.price,
                             hpp: widget.hpp,
                             totalBuy: _totalBuy,
+                            typeMenu: widget.typeMenu,
                           );
                     }
                   },

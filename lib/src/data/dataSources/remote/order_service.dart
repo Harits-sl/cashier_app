@@ -56,7 +56,7 @@ class OrderService {
     return listData;
   }
 
-  Future<int> getTodayOrder() async {
+  Future<List<MenuOrderModel>> getTodayOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
 
     DateTime date = DateTime(yearNow, monthNow, dateNow);
@@ -71,10 +71,10 @@ class OrderService {
       return orders;
     }).toList();
 
-    return totalOrder(listData);
+    return listData;
   }
 
-  Future<int> getYesterdayOrder() async {
+  Future<List<MenuOrderModel>> getYesterdayOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
     DateTime today = DateTime(yearNow, monthNow, dateNow);
     DateTime yesterday = DateTime(yearNow, monthNow, dateNow - 1);
@@ -90,10 +90,10 @@ class OrderService {
       return orders;
     }).toList();
 
-    return totalOrder(listData);
+    return listData;
   }
 
-  Future<int> getOneWeekOrder() async {
+  Future<List<MenuOrderModel>> getOneWeekOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
     DateTime oneWeek = DateTime(yearNow, monthNow, dateNow - 7);
 
@@ -107,10 +107,10 @@ class OrderService {
       return orders;
     }).toList();
 
-    return totalOrder(listData);
+    return listData;
   }
 
-  Future<int> getOneMonthOrder() async {
+  Future<List<MenuOrderModel>> getOneMonthOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
     DateTime oneMonth = DateTime(yearNow, monthNow - 1, dateNow);
 
@@ -124,15 +124,6 @@ class OrderService {
       return orders;
     }).toList();
 
-    return totalOrder(listData);
-  }
-
-  int totalOrder(List<MenuOrderModel> orders) {
-    int total = 0;
-
-    for (var order in orders) {
-      total += order.total;
-    }
-    return total;
+    return listData;
   }
 }

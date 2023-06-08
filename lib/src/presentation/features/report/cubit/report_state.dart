@@ -14,7 +14,7 @@ class ReportLoading extends ReportState {}
 class ReportSuccess extends ReportState {
   const ReportSuccess(this.orders);
 
-  final List<MenuOrderModel> orders;
+  final List<ReportOrder> orders;
 
   @override
   List<Object> get props => [orders];
