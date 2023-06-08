@@ -89,7 +89,7 @@ class Income extends StatelessWidget {
                           height: 16,
                         ),
                         totalIncome(
-                            'One Week',
+                            'This Week',
                             totalList.isEmpty
                                 ? 0
                                 : totalList[DateStatus.oneWeek]!),
@@ -106,7 +106,7 @@ class Income extends StatelessWidget {
                           height: 16,
                         ),
                         totalIncome(
-                            'One Month',
+                            'This Month',
                             totalList.isEmpty
                                 ? 0
                                 : totalList[DateStatus.oneMonth]!),

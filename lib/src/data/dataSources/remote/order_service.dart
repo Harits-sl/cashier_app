@@ -76,10 +76,12 @@ class OrderService {
 
   Future<int> getYesterdayOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
+    DateTime today = DateTime(yearNow, monthNow, dateNow);
     DateTime yesterday = DateTime(yearNow, monthNow, dateNow - 1);
 
-    QuerySnapshot snapshotOrders =
-        await orders.where('dateTimeOrder', isGreaterThan: yesterday).get();
+    QuerySnapshot snapshotOrders = await orders
+        .where('dateTimeOrder', isGreaterThan: yesterday, isLessThan: today)
+        .get();
 
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
       MenuOrderModel orders =

@@ -1,4 +1,3 @@
-import 'package:cashier_app/src/presentation/features/admin_menu_edit/admin_menu_edit_state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class AdminMenuEditEvent extends Equatable {

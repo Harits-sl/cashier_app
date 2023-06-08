@@ -3,7 +3,6 @@ import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:cashier_app/src/data/models/cart_model.dart';
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
