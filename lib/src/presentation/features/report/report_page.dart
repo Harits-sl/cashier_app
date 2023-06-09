@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/core/utils/string_helper.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -31,75 +33,147 @@ class _ReportPageState extends State<ReportPage> {
     firstDate = DateTime.now();
     secondDate = DateTime.now();
 
-    firstTimestamp = Timestamp.fromDate(firstDate!);
-    secondTimestamp = Timestamp.fromDate(secondDate!);
-
     reportCubit = context.read<ReportCubit>();
-    reportCubit.fetchReportOrderToday();
+    reportCubit.setIdRadio = 1;
+    fetchReportOrder();
+    // reportCubit.fetchReportOrderToday();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    reportCubit.initState();
+  }
+
+  fetchReportOrder() {
+    switch (reportCubit.idRadio) {
+      case 1:
+        reportCubit.fetchReportOrderToday();
+        break;
+      case 2:
+        reportCubit.fetchReportOrderThisMonth();
+        break;
+      default:
+        reportCubit.fetchReportOrderToday();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Widget _buildDatePickerCustom() {
-    //   return Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Container(
-    //         padding: const EdgeInsets.all(10),
-    //         color: blueColor,
-    //         child: GestureDetector(
-    //           child: Text(StringHelper.dateFormat(firstDate!)),
-    //           onTap: () {
-    //             showDatePicker(
-    //               context: context,
-    //               initialDate: DateTime.now(),
-    //               firstDate: DateTime(2000),
-    //               lastDate: DateTime(2099),
-    //             ).then((date) {
-    //               setState(() {
-    //                 firstDate = date;
-    //                 Timestamp firstTimestamp = Timestamp.fromDate(firstDate!);
-    //                 Timestamp secondTimestamp = Timestamp.fromDate(secondDate!);
+    Widget _buildDatePickerCustom() {
+      Widget _datePickerItem({
+        DateTime? fromDate,
+        DateTime? toDate,
+      }) {
+        DateTime selectInitialDate() {
+          if (fromDate != null) {
+            return fromDate!;
+          } else if (toDate != null) {
+            return toDate!;
+          } else {
+            return DateTime.now();
+          }
+        }
 
-    //                 context
-    //                     .read<ReportCubit>()
-    //                     .fetchReportDateOrder(firstTimestamp, secondTimestamp);
-    //               });
-    //             });
-    //           },
-    //         ),
-    //       ),
-    //       Container(
-    //         padding: const EdgeInsets.all(10),
-    //         color: blueColor,
-    //         child: GestureDetector(
-    //           child: Text(StringHelper.dateFormat(secondDate!)),
-    //           onTap: () {
-    //             showDatePicker(
-    //               context: context,
-    //               initialDate: DateTime.now(),
-    //               firstDate: DateTime(2000),
-    //               lastDate: DateTime(2099),
-    //             ).then((date) {
-    //               setState(() {
-    //                 secondDate = date;
+        DateTime initialDate = selectInitialDate();
 
-    //                 Timestamp firstTimestamp = Timestamp.fromDate(firstDate!);
-    //                 Timestamp secondTimestamp = Timestamp.fromDate(secondDate!);
+        return GestureDetector(
+          child: Row(
+            children: [
+              Text(
+                fromDate != null
+                    ? 'From ${StringHelper.dateFormat(firstDate!)}'
+                    : 'To ${StringHelper.dateFormat(secondDate!)}',
+                style: primaryTextStyle,
+              ),
+              const SizedBox(width: 8),
+              Image.asset(
+                'assets/images/ic_date.png',
+                width: 22,
+                color: primaryColor,
+              ),
+            ],
+          ),
+          onTap: () {
+            showDatePicker(
+              context: context,
+              initialDate: initialDate,
+              firstDate: DateTime(2000),
+              lastDate: DateTime(2099),
+              currentDate: DateTime.now(),
+            ).then((date) {
+              setState(() {
+                if (date != null) {
+                  if (fromDate != null) {
+                    firstDate = date;
+                  } else {
+                    secondDate = date;
+                  }
+                }
+              });
+            });
+          },
+        );
+      }
 
-    //                 context
-    //                     .read<ReportCubit>()
-    //                     .fetchReportDateOrder(firstTimestamp, secondTimestamp);
-    //               });
-    //             });
-    //           },
-    //         ),
-    //       ),
-    //     ],
-    //   );
-    // }
+      return Container(
+        margin: const EdgeInsets.fromLTRB(defaultMargin, 12, defaultMargin, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _datePickerItem(fromDate: firstDate),
+            const SizedBox(height: 8),
+            _datePickerItem(toDate: secondDate),
+            CustomButton(
+              margin: const EdgeInsets.only(top: 12),
+              width: 150,
+              height: 40,
+              color: primaryColor,
+              text: 'Search',
+              onPressed: () {
+                reportCubit.initState();
+                context
+                    .read<ReportCubit>()
+                    .fetchReportDateOrder(firstDate!, secondDate!);
+              },
+            ),
+          ],
+        ),
+      );
+    }
 
     Widget _buildDatePicker() {
+      Widget _datePickerItem(int id, String title) {
+        return Expanded(
+          child: GestureDetector(
+            onTap: () {
+              reportCubit.initState();
+              reportCubit.setIdRadio = id;
+              fetchReportOrder();
+              setState(() {});
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: reportCubit.idRadio == id
+                    ? backgroundColor
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Text(
+                title,
+                style: primaryTextStyle.copyWith(
+                  fontSize: 12,
+                  fontWeight: medium,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        );
+      }
+
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
         padding: const EdgeInsets.all(4),
@@ -109,57 +183,9 @@ class _ReportPageState extends State<ReportPage> {
         ),
         child: Row(
           children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: backgroundColor,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Text(
-                  'Today',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: medium,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  // color: backgroundColor,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Text(
-                  'This Month',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: medium,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  // color: backgroundColor,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Text(
-                  'Custom',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 12,
-                    fontWeight: medium,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
+            _datePickerItem(1, 'Today'),
+            _datePickerItem(2, 'This Month'),
+            _datePickerItem(3, 'Custom'),
           ],
         ),
       );
@@ -183,28 +209,36 @@ class _ReportPageState extends State<ReportPage> {
       return BlocBuilder<ReportCubit, ReportState>(
         builder: (context, state) {
           if (state is ReportSuccess) {
-            return SfDataGrid(
-              shrinkWrapRows: true,
-              source: ReportDataSource(
-                reportOrders: state.orders,
-                reportCubit: reportCubit,
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
+              child: SfDataGrid(
+                shrinkWrapRows: true,
+                isScrollbarAlwaysShown: true,
+                source: ReportDataSource(
+                  reportOrders: state.orders,
+                  reportCubit: reportCubit,
+                ),
+                columnWidthMode: ColumnWidthMode.auto,
+                verticalScrollPhysics: const NeverScrollableScrollPhysics(),
+                defaultColumnWidth: 150,
+                gridLinesVisibility: GridLinesVisibility.both,
+                headerGridLinesVisibility: GridLinesVisibility.both,
+                columns: [
+                  gridColumnItem('no', 'No.'),
+                  gridColumnItem('tanggal', 'Tanggal'),
+                  gridColumnItem('totalMinuman', 'Total Minuman'),
+                  gridColumnItem('totalMakanan', 'Total Makanan'),
+                  gridColumnItem(
+                      'jumlahMinumanTerjual', 'Jumlah Minuman Terjual'),
+                  gridColumnItem(
+                      'jumlahMakananTerjual', 'Jumlah Makanan Terjual'),
+                  gridColumnItem('labaMinuman', 'Laba Minuman'),
+                  gridColumnItem('labaMakanan', 'Laba Makanan'),
+                  gridColumnItem('labaBersihMinuman', 'Laba Bersih Minuman'),
+                  gridColumnItem('labaBersihMakanan', 'Laba Bersih Makanan'),
+                  gridColumnItem('labaBersihSeluruh', 'Laba Bersih Seluruh'),
+                ],
               ),
-              columnWidthMode: ColumnWidthMode.auto,
-              columns: [
-                gridColumnItem('no', 'No.'),
-                gridColumnItem('tanggal', 'Tanggal'),
-                gridColumnItem('totalMinuman', 'Total Minuman'),
-                gridColumnItem('totalMakanan', 'Total Makanan'),
-                gridColumnItem(
-                    'jumlahMinumanTerjual', 'Jumlah Minuman Terjual'),
-                gridColumnItem(
-                    'jumlahMakananTerjual', 'Jumlah Makanan Terjual'),
-                gridColumnItem('labaMinuman', 'Laba Minuman'),
-                gridColumnItem('labaMakanan', 'Laba Makanan'),
-                gridColumnItem('labaBersihMinuman', 'Laba Bersih Minuman'),
-                gridColumnItem('labaBersihMakanan', 'Laba Bersih Makanan'),
-                gridColumnItem('labaBersihSeluruh', 'Laba Bersih Seluruh'),
-              ],
             );
           } else if (state is ReportLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -218,15 +252,23 @@ class _ReportPageState extends State<ReportPage> {
     }
 
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          children: [
-            const CustomAppBar(title: 'Report'),
-            _buildDatePicker(),
-            // _buildDatePickerCustom(),
-            const SizedBox(height: 16),
-            tableSfDataGrid(),
-          ],
+      body: WillPopScope(
+        onWillPop: () async {
+          reportCubit.initState();
+          return true;
+        },
+        child: SafeArea(
+          child: ListView(
+            children: [
+              const CustomAppBar(title: 'Report'),
+              _buildDatePicker(),
+              reportCubit.idRadio == 3
+                  ? _buildDatePickerCustom()
+                  : const SizedBox(),
+              const SizedBox(height: 12),
+              tableSfDataGrid(),
+            ],
+          ),
         ),
       ),
     );

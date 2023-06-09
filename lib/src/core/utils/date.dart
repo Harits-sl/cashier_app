@@ -18,7 +18,7 @@ class Date {
   }
 
   static String format(DateTime date) {
-    DateFormat format = DateFormat('dd-MM-yyyy');
+    DateFormat format = DateFormat('dd/MM/yyyy');
     return format.format(date);
   }
 }

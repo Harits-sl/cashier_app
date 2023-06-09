@@ -36,16 +36,33 @@ class OrderService {
   }
 
   Future<List<MenuOrderModel>> getFilterOrder(
-      Timestamp firstDate, Timestamp secondDate) async {
+      DateTime firstDate, DateTime secondDate) async {
     CollectionReference orders = _db.collection(ordersCollection);
+    DateTime fromDate = DateTime(
+      firstDate.year,
+      firstDate.month,
+      firstDate.day,
+    );
+    DateTime toDate = DateTime(
+      secondDate.year,
+      secondDate.month,
+      secondDate.day,
+      23,
+      59,
+      59,
+    );
+
+    Timestamp fromTimestamp = Timestamp.fromDate(fromDate);
+    Timestamp toTimestamp = Timestamp.fromDate(toDate);
 
     QuerySnapshot snapshotOrders = await orders
-        .where('dateTimeOrder',
-            isGreaterThanOrEqualTo: firstDate, isLessThanOrEqualTo: secondDate)
-        // .where('dateTimeOrder', isLessThanOrEqualTo: secondDate)
+        .where(
+          'dateTimeOrder',
+          isGreaterThanOrEqualTo: fromTimestamp,
+          isLessThanOrEqualTo: toTimestamp,
+        )
         .get();
 
-    debugPrint('snapshotOrders: ${snapshotOrders.docs}');
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
       MenuOrderModel orders =
           MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
