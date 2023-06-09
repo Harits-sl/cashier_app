@@ -3,8 +3,6 @@ import 'package:cashier_app/src/core/utils/date.dart';
 import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
 import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:cashier_app/src/presentation/features/report/report_order.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 part 'report_state.dart';
@@ -125,7 +123,7 @@ class ReportCubit extends Cubit<ReportState> {
   void fetchReportOrderThisMonth() async {
     emit(ReportLoading());
     try {
-      List<MenuOrderModel> orders = await OrderService().getOneMonthOrder();
+      List<MenuOrderModel> orders = await OrderService().getThisMonthOrder();
       List<ReportOrder> reportOrders = orders.map(
         (order) {
           int totalMinuman = 0;

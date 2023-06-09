@@ -17,8 +17,8 @@ class HomeCubit extends Cubit<HomeState> {
       int incomeToday = totalOrder(await OrderService().getTodayOrder());
       int incomeYesterday =
           totalOrder(await OrderService().getYesterdayOrder());
-      int incomeOneWeek = totalOrder(await OrderService().getOneWeekOrder());
-      int incomeOneMonth = totalOrder(await OrderService().getOneMonthOrder());
+      int incomeOneWeek = totalOrder(await OrderService().getThisWeekOrder());
+      int incomeOneMonth = totalOrder(await OrderService().getThisMonthOrder());
 
       Map<DateStatus, int> incomeList = {
         DateStatus.today: incomeToday,

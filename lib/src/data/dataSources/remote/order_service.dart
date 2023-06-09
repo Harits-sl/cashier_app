@@ -110,12 +110,17 @@ class OrderService {
     return listData;
   }
 
-  Future<List<MenuOrderModel>> getOneWeekOrder() async {
+  Future<List<MenuOrderModel>> getThisWeekOrder() async {
+    /// from https://stackoverflow.com/questions/58287278/how-to-get-start-of-or-end-of-week-in-dart
+    /// The [weekday] may be 0 for Sunday, 1 for Monday, etc. up to 7 for Sunday.
+    DateTime getDateMonday(DateTime date) =>
+        DateTime(date.year, date.month, date.day - (date.weekday - 1) % 7);
+
     CollectionReference orders = _db.collection(ordersCollection);
-    DateTime oneWeek = DateTime(yearNow, monthNow, dateNow - 7);
+    DateTime thisWeek = getDateMonday(DateTime.now());
 
     QuerySnapshot snapshotOrders =
-        await orders.where('dateTimeOrder', isGreaterThan: oneWeek).get();
+        await orders.where('dateTimeOrder', isGreaterThan: thisWeek).get();
 
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
       MenuOrderModel orders =
@@ -127,12 +132,12 @@ class OrderService {
     return listData;
   }
 
-  Future<List<MenuOrderModel>> getOneMonthOrder() async {
+  Future<List<MenuOrderModel>> getThisMonthOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
-    DateTime oneMonth = DateTime(yearNow, monthNow - 1, dateNow);
+    DateTime thisMonth = DateTime(yearNow, monthNow, 1);
 
     QuerySnapshot snapshotOrders =
-        await orders.where('dateTimeOrder', isGreaterThan: oneMonth).get();
+        await orders.where('dateTimeOrder', isGreaterThan: thisMonth).get();
 
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
       MenuOrderModel orders =
@@ -142,5 +147,11 @@ class OrderService {
     }).toList();
 
     return listData;
+  }
+}
+
+extension DateUtils on DateTime {
+  DateTime getDay({required int dayOfWeek}) {
+    return subtract(Duration(days: weekday - dayOfWeek));
   }
 }
