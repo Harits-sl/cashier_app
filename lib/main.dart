@@ -2,6 +2,7 @@ import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart'
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
+import 'package:cashier_app/src/presentation/features/stock/index.dart';
 import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
 import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
@@ -84,6 +85,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<CartBloc>(
           create: (BuildContext context) => CartBloc(),
         ),
+        BlocProvider<StockBloc>(
+          create: (BuildContext context) => StockBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,
@@ -101,6 +105,7 @@ class MyApp extends StatelessWidget {
           Routes.report: (context) => const ReportPage(),
           Routes.cart: (context) => const CartPage(),
           Routes.orderInfo: (context) => const OrderInfoPage(),
+          Routes.stock: (context) => const StockPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {

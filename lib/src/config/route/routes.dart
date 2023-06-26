@@ -1,4 +1,5 @@
 import 'package:cashier_app/src/presentation/features/report/index.dart';
+import 'package:cashier_app/src/presentation/features/stock/index.dart';
 import 'package:cashier_app/src/presentation/pages/cashier_page.dart';
 import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
 import 'package:cashier_app/src/presentation/pages/payment_amount_page.dart';
@@ -16,6 +17,7 @@ class Routes {
   static const String selectPrinter = '/select-printer';
   static const String addMenu = 'admin/add-menu';
   static const String cart = '/cart';
-  static const String report = ReportPage.routeName;
   static const String orderInfo = OrderInfoPage.routeName;
+  static const String report = ReportPage.routeName;
+  static const String stock = StockPage.routeName;
 }

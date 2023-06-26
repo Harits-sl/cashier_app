@@ -59,7 +59,7 @@ class _MenuState extends State<Menu> {
             Expanded(
               flex: 1,
               child: CustomButton(
-                color: blueColor,
+                color: yellowColor,
                 onPressed: () => onEditPressed(
                     path: AdminMenuEditPage.routeName, id: menu.id),
                 margin: const EdgeInsets.only(right: 8),

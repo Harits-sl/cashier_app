@@ -22,6 +22,10 @@ class Shortcut extends StatelessWidget {
       Go.routeWithPath(context: context, path: Routes.report);
     }
 
+    void _onTapStocks() {
+      Go.routeWithPath(context: context, path: Routes.stock);
+    }
+
     Widget item(String title, String imageUrl, Function()? onTap) {
       return InkWell(
         onTap: onTap,
@@ -96,15 +100,20 @@ class Shortcut extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            height: 15,
+            height: 16,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               item(
-                'Reports ',
+                'Reports',
                 'assets/images/ic_report.png',
                 _onTapReports,
+              ),
+              item(
+                'Stocks',
+                'assets/images/ic_stock.png',
+                _onTapStocks,
               ),
             ],
           ),

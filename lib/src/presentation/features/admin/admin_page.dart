@@ -1,5 +1,6 @@
 import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
+import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cashier_app/src/presentation/features/admin/index.dart';
 
@@ -16,6 +17,7 @@ class AdminPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         leading: Container(),
         title: const Text('Admin'),
       ),

@@ -1,5 +1,6 @@
 import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_table.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import 'index.dart';
-import 'widget/report_data_source.dart';
+import 'data_row/report_data_source.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -67,9 +68,9 @@ class _ReportPageState extends State<ReportPage> {
       }) {
         DateTime selectInitialDate() {
           if (fromDate != null) {
-            return fromDate!;
+            return fromDate;
           } else if (toDate != null) {
-            return toDate!;
+            return toDate;
           } else {
             return DateTime.now();
           }
@@ -192,53 +193,29 @@ class _ReportPageState extends State<ReportPage> {
     }
 
     Widget tableSfDataGrid() {
-      GridColumn gridColumnItem(String columnName, String label) {
-        return GridColumn(
-          columnName: columnName,
-          label: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            alignment: Alignment.center,
-            child: Text(
-              label,
-              style: primaryTextStyle.copyWith(fontSize: 12),
-            ),
-          ),
-        );
-      }
-
       return BlocBuilder<ReportCubit, ReportState>(
         builder: (context, state) {
           if (state is ReportSuccess) {
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
-              child: SfDataGrid(
-                shrinkWrapRows: true,
-                isScrollbarAlwaysShown: true,
-                source: ReportDataSource(
-                  reportOrders: state.orders,
-                  reportCubit: reportCubit,
-                ),
-                columnWidthMode: ColumnWidthMode.auto,
-                verticalScrollPhysics: const NeverScrollableScrollPhysics(),
-                defaultColumnWidth: 150,
-                gridLinesVisibility: GridLinesVisibility.both,
-                headerGridLinesVisibility: GridLinesVisibility.both,
-                columns: [
-                  gridColumnItem('no', 'No.'),
-                  gridColumnItem('tanggal', 'Tanggal'),
-                  gridColumnItem('totalMinuman', 'Total Minuman'),
-                  gridColumnItem('totalMakanan', 'Total Makanan'),
-                  gridColumnItem(
-                      'jumlahMinumanTerjual', 'Jumlah Minuman Terjual'),
-                  gridColumnItem(
-                      'jumlahMakananTerjual', 'Jumlah Makanan Terjual'),
-                  gridColumnItem('labaMinuman', 'Laba Minuman'),
-                  gridColumnItem('labaMakanan', 'Laba Makanan'),
-                  gridColumnItem('labaBersihMinuman', 'Laba Bersih Minuman'),
-                  gridColumnItem('labaBersihMakanan', 'Laba Bersih Makanan'),
-                  gridColumnItem('labaBersihSeluruh', 'Laba Bersih Seluruh'),
-                ],
+            return CustomTable(
+              frozenColumnsCount: 2,
+              columnWidthMode: ColumnWidthMode.auto,
+              source: ReportDataSource(
+                reportOrders: state.orders,
+                reportCubit: reportCubit,
               ),
+              columns: [
+                columnItem('no', 'No.'),
+                columnItem('tanggal', 'Tanggal'),
+                columnItem('totalMinuman', 'Total Minuman'),
+                columnItem('totalMakanan', 'Total Makanan'),
+                columnItem('jumlahMinumanTerjual', 'Jumlah Minuman Terjual'),
+                columnItem('jumlahMakananTerjual', 'Jumlah Makanan Terjual'),
+                columnItem('labaMinuman', 'Laba Minuman'),
+                columnItem('labaMakanan', 'Laba Makanan'),
+                columnItem('labaBersihMinuman', 'Laba Bersih Minuman'),
+                columnItem('labaBersihMakanan', 'Laba Bersih Makanan'),
+                columnItem('labaBersihSeluruh', 'Laba Bersih Seluruh'),
+              ],
             );
           } else if (state is ReportLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -258,7 +235,7 @@ class _ReportPageState extends State<ReportPage> {
           return true;
         },
         child: SafeArea(
-          child: ListView(
+          child: Column(
             children: [
               const CustomAppBar(title: 'Report'),
               _buildDatePicker(),
@@ -266,7 +243,9 @@ class _ReportPageState extends State<ReportPage> {
                   ? _buildDatePickerCustom()
                   : const SizedBox(),
               const SizedBox(height: 12),
-              tableSfDataGrid(),
+              Expanded(
+                child: tableSfDataGrid(),
+              ),
             ],
           ),
         ),
