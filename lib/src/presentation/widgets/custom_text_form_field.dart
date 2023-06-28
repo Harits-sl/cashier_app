@@ -10,6 +10,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.textValidator,
     required this.hintText,
     this.keyboardType,
+    this.initialValue,
     this.inputFormatters,
     this.onChanged,
   }) : super(key: key);
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final String title;
   final String textValidator;
   final String hintText;
+  final String? initialValue;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
@@ -34,6 +36,7 @@ class CustomTextFormField extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           TextFormField(
+            initialValue: initialValue,
             keyboardType: keyboardType,
             inputFormatters: inputFormatters,
             decoration: InputDecoration(hintText: hintText),

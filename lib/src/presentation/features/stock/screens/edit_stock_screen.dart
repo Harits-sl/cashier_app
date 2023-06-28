@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
@@ -11,12 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AddStockScreen extends StatelessWidget {
-  const AddStockScreen({super.key});
+class EditStockScreen extends StatefulWidget {
+  const EditStockScreen({
+    super.key,
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  State<EditStockScreen> createState() => _EditStockScreenState();
+}
+
+class _EditStockScreenState extends State<EditStockScreen> {
+  String initialName = '';
+  String initialQuantity = '';
+  String initialMinimumQuantity = '';
+  String valueUnit = '';
+  late EditStockBloc editStockBloc;
+
+  @override
+  void initState() {
+    super.initState();
+
+    editStockBloc = context.read<EditStockBloc>();
+    editStockBloc.add(FetchStockById(widget.id));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final AddStockBloc addStockBloc = context.read<AddStockBloc>();
+    final EditStockBloc editStockBloc = context.read<EditStockBloc>();
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     final List<String> listUnits = ['g', 'pcs'];
 
@@ -25,8 +47,9 @@ class AddStockScreen extends StatelessWidget {
         title: 'Stock Name',
         hintText: 'susu',
         textValidator: 'Please enter stock name',
+        initialValue: initialName,
         onChanged: (value) {
-          addStockBloc.add(InputStockName(stockName: value));
+          editStockBloc.add(EditStockName(stockName: value));
         },
       );
     }
@@ -40,13 +63,14 @@ class AddStockScreen extends StatelessWidget {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly
         ],
+        initialValue: initialQuantity,
         onChanged: (value) {
           int? quantity = int.tryParse(value);
           // jika quantity bisa diparse
           // atau diubah menjadi angka
           // masukan data ke state
           if (quantity != null) {
-            addStockBloc.add(InputQuantity(quantity: quantity));
+            editStockBloc.add(EditQuantity(quantity: quantity));
           }
         },
       );
@@ -61,21 +85,22 @@ class AddStockScreen extends StatelessWidget {
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly
         ],
+        initialValue: initialMinimumQuantity,
         onChanged: (value) {
           int? minimumQuantity = int.tryParse(value);
           // jika minimumQuantity bisa diparse
           // atau diubah menjadi angka
           // masukan data ke state
           if (minimumQuantity != null) {
-            context
-                .read<AddStockBloc>()
-                .add(InputMinimumQuantity(minimumQuantity: minimumQuantity));
+            editStockBloc.add(
+              EditMinimumQuantity(minimumQuantity: minimumQuantity),
+            );
           }
         },
       );
     }
 
-    Widget selectUnits() {
+    Widget selectUnits(String value) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
         child: Column(
@@ -90,6 +115,7 @@ class AddStockScreen extends StatelessWidget {
               dropdownColor: lightGray2Color,
               borderRadius: BorderRadius.circular(16),
               iconEnabledColor: primaryColor,
+              value: value,
               items: listUnits.map((unit) {
                 return DropdownMenuItem(
                   child: Text(
@@ -107,7 +133,7 @@ class AddStockScreen extends StatelessWidget {
               },
               onChanged: (value) {
                 if (value != null) {
-                  addStockBloc.add(InputUnit(unit: value));
+                  editStockBloc.add(EditUnit(unit: value));
                 }
               },
             ),
@@ -128,7 +154,7 @@ class AddStockScreen extends StatelessWidget {
               const SnackBar(content: Text('Processing Data')),
             );
 
-            addStockBloc.add(SubmitAddNewStock());
+            editStockBloc.add(SubmitEditStock());
           }
         },
         text: 'Submit',
@@ -136,55 +162,70 @@ class AddStockScreen extends StatelessWidget {
     }
 
     return SafeArea(
-      child: BlocListener<AddStockBloc, AddStockState>(
+      child: BlocConsumer<EditStockBloc, EditStockState>(
         listener: (context, state) {
           // jika data berhasil ditambahkan
           if (state.isError != null && !state.isError!) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
-            addStockBloc.add(InitialStock());
-            Timer(const Duration(seconds: 3), () {
-              // balik ke halaman stock
-              // lalu redirect ke halaman stock agar seperti setstate
-              Go.back(context);
-              Go.routeWithPathAndRemove(context: context, path: Routes.stock);
-            });
+            editStockBloc.add(InitialEditStock());
+            // balik ke halaman stock
+            // lalu redirect ke halaman stock agar seperti setstate
+            Go.back(context);
+            Go.routeWithPathAndRemove(context: context, path: Routes.stock);
+
             // jika data gagal ditambahkan
           } else if (state.isError != null && state.isError!) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
+          } else if (state.isSuccessFetchData) {
+            initialName = state.stockName;
+            initialQuantity = state.quantity.toString();
+            initialMinimumQuantity = state.minimumQuantity.toString();
+            valueUnit = state.unit;
           }
         },
-        child: WillPopScope(
-          onWillPop: () async {
-            addStockBloc.add(InitialStock());
-            return true;
-          },
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                CustomAppBar(
-                  title: 'Add New Stock',
-                  onTap: () {
-                    addStockBloc.add(InitialStock());
-                    Go.back(context);
-                  },
+        builder: (context, state) {
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (!state.isLoading && state.isSuccessFetchData) {
+            return WillPopScope(
+              onWillPop: () async {
+                editStockBloc.add(InitialEditStock());
+                return true;
+              },
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    CustomAppBar(
+                      title: 'Edit Stock',
+                      onTap: () {
+                        editStockBloc.add(InitialEditStock());
+                        Go.back(context);
+                      },
+                    ),
+                    nameInput(),
+                    const SizedBox(height: 16),
+                    quantityInput(),
+                    const SizedBox(height: 16),
+                    minimumQuantity(),
+                    const SizedBox(height: 16),
+                    selectUnits(valueUnit),
+                    buttonSubmit(),
+                  ],
                 ),
-                nameInput(),
-                const SizedBox(height: 16),
-                quantityInput(),
-                const SizedBox(height: 16),
-                minimumQuantity(),
-                const SizedBox(height: 16),
-                selectUnits(),
-                buttonSubmit(),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else if (state.isError != null && state.isError!) {
+            return Text(state.message);
+          }
+          return const SizedBox();
+        },
       ),
     );
   }

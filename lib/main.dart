@@ -91,6 +91,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<AddStockBloc>(
           create: (BuildContext context) => AddStockBloc(),
         ),
+        BlocProvider<EditStockBloc>(
+          create: (BuildContext context) => EditStockBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,
@@ -114,9 +117,15 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
             case AdminMenuEditPage.routeName:
-              final id = settings.arguments as String;
+              final String id = settings.arguments as String;
               return MaterialPageRoute(
                 builder: (_) => AdminMenuEditPage(id: id),
+                settings: settings,
+              );
+            case EditStockPage.routeName:
+              final String id = settings.arguments as String;
+              return MaterialPageRoute(
+                builder: (_) => EditStockPage(id: id),
                 settings: settings,
               );
 

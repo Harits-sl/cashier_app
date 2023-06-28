@@ -1,3 +1,5 @@
+import 'package:cashier_app/src/config/route/go.dart';
+import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/status_inventory.dart';
 import 'package:cashier_app/src/data/models/stock_model.dart';
@@ -78,9 +80,12 @@ class StockDataSource extends DataGridSource {
   Widget action(String id) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        void _deleteStock() {
-          print(id);
-          // context.read<StockBloc>().setId = id;
+        void editStock() {
+          Go.routeWithPathAndArgument(
+              context: context, path: Routes.editStock, arguments: id);
+        }
+
+        void deleteStock() {
           context.read<StockBloc>().add(DeleteStock(id));
         }
 
@@ -91,7 +96,7 @@ class StockDataSource extends DataGridSource {
                 height: 55,
                 margin: const EdgeInsets.all(8),
                 color: yellowColor,
-                onPressed: () {},
+                onPressed: editStock,
                 text: 'Edit',
                 textStyle: primaryTextStyle,
               ),
@@ -101,7 +106,7 @@ class StockDataSource extends DataGridSource {
                 height: 55,
                 margin: const EdgeInsets.all(8),
                 color: redColor,
-                onPressed: _deleteStock,
+                onPressed: deleteStock,
                 text: 'Delete',
               ),
             ),
