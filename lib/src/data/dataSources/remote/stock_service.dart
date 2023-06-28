@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cashier_app/src/data/models/stock_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class StockService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -10,8 +14,8 @@ class StockService {
   Future<List<StockModel>> fetchStocks() async {
     CollectionReference stocks = _db.collection(stocksCollection);
 
-    QuerySnapshot querySnapshot = await stocks.get();
-    debugPrint('querySnapshot: ${querySnapshot.docs}');
+    QuerySnapshot querySnapshot =
+        await stocks.orderBy('status', descending: true).get();
 
     // Get data from docs and convert map to List
     List<StockModel> listData = querySnapshot.docs.map((doc) {
@@ -21,15 +25,24 @@ class StockService {
     return listData;
   }
 
-  // void addStock(StockModel stockModel) async {
-  //   Map<String, dynamic> menu = menuModel.toFirestore();
+  Future<void> addStock(StockModel stockModel) async {
+    try {
+      Map<String, dynamic> stock = stockModel.toFirestore();
 
-  //   CollectionReference menus = _db.collection(menusCollection);
-  //   menus
-  //       .doc(menuModel.id)
-  //       .set(menu)
-  //       .catchError((error) => throw Exception(error));
-  // }
+      CollectionReference stocks = _db.collection(stocksCollection);
+      stocks
+          .doc(stockModel.id)
+          .set(stock)
+          .catchError((error) => throw Exception(error))
+          .onError(
+            (error, stackTrace) => throw Exception(error),
+          );
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   // void editMenu(MenuModel menuModel) async {
   //   CollectionReference menus = _db.collection(menusCollection);
@@ -40,14 +53,21 @@ class StockService {
   //       .onError((error, stackTrace) => debugPrint('update error: $error'));
   // }
 
-  // void deleteMenu(String id) {
-  //   CollectionReference menus = _db.collection(menusCollection);
+  Future<void> deleteStock(String id) {
+    CollectionReference stocks = _db.collection(stocksCollection);
 
-  //   menus.doc(id).delete().then(
-  //         (value) => debugPrint('Document Deleted'),
-  //         onError: (e) => debugPrint('error deleting document $e'),
-  //       );
-  // }
+    try {
+      return stocks
+          .doc(id)
+          .delete()
+          .then(
+            (value) => debugPrint('Document Deleted'),
+          )
+          .catchError((e) => throw Exception(e));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   // Future<MenuModel> fetchMenuById(String id) async {
   //   CollectionReference menusRef = _db.collection(menusCollection);

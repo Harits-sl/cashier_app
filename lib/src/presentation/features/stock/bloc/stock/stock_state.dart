@@ -28,3 +28,14 @@ class StockFailed extends StockState {
   @override
   List<Object> get props => [error];
 }
+
+class StockDeleteLoading extends StockState {}
+
+class StockDeleteSuccess extends StockState {
+  final String message;
+
+  const StockDeleteSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

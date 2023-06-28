@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget {
     Key? key,
     this.width = double.infinity,
     this.height = 55,
-    this.margin,
+    this.margin = const EdgeInsets.all(defaultMargin),
     required this.color,
     this.borderRadius,
     required this.onPressed,
@@ -34,7 +34,7 @@ class CustomButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        margin: margin ?? const EdgeInsets.all(defaultMargin),
+        margin: margin,
         padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
         decoration: BoxDecoration(
           color: color,

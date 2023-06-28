@@ -20,4 +20,5 @@ class Routes {
   static const String orderInfo = OrderInfoPage.routeName;
   static const String report = ReportPage.routeName;
   static const String stock = StockPage.routeName;
+  static const String addStock = AddStockPage.routeName;
 }

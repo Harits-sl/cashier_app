@@ -88,6 +88,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<StockBloc>(
           create: (BuildContext context) => StockBloc(),
         ),
+        BlocProvider<AddStockBloc>(
+          create: (BuildContext context) => AddStockBloc(),
+        ),
       ],
       child: MaterialApp(
         theme: AppTheme.light,
@@ -106,6 +109,7 @@ class MyApp extends StatelessWidget {
           Routes.cart: (context) => const CartPage(),
           Routes.orderInfo: (context) => const OrderInfoPage(),
           Routes.stock: (context) => const StockPage(),
+          Routes.addStock: (context) => const AddStockPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
@@ -115,8 +119,15 @@ class MyApp extends StatelessWidget {
                 builder: (_) => AdminMenuEditPage(id: id),
                 settings: settings,
               );
+
             default:
           }
+          // Other values need to be implemented if we
+          // add them. The assertion here will help remind
+          // us of that higher up in the call stack, since
+          // this assertion would otherwise fire somewhere
+          // in the framework.
+          assert(false, 'Need to implement ${settings.name}');
           return null;
         },
       ),

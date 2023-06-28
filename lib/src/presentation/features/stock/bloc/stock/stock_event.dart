@@ -8,3 +8,12 @@ abstract class StockEvent extends Equatable {
 }
 
 class FetchStock extends StockEvent {}
+
+class DeleteStock extends StockEvent {
+  final String id;
+
+  const DeleteStock(this.id);
+
+  @override
+  List<Object> get props => [id];
+}
