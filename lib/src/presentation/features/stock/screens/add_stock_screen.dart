@@ -6,6 +6,7 @@ import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_dropdown_form_field.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -76,43 +77,15 @@ class AddStockScreen extends StatelessWidget {
     }
 
     Widget selectUnits() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Units',
-              style: primaryTextStyle,
-            ),
-            const SizedBox(height: 8),
-            DropdownButtonFormField(
-              dropdownColor: lightGray2Color,
-              borderRadius: BorderRadius.circular(16),
-              iconEnabledColor: primaryColor,
-              items: listUnits.map((unit) {
-                return DropdownMenuItem(
-                  child: Text(
-                    unit,
-                    style: primaryTextStyle,
-                  ),
-                  value: unit,
-                );
-              }).toList(),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select unit for quantity';
-                }
-                return null;
-              },
-              onChanged: (value) {
-                if (value != null) {
-                  addStockBloc.add(InputUnit(unit: value));
-                }
-              },
-            ),
-          ],
-        ),
+      return CustomDropdownFormField(
+        title: 'Units',
+        listDropdown: listUnits,
+        textValidator: 'Please select unit for quantity',
+        onChanged: (value) {
+          if (value != null) {
+            addStockBloc.add(InputUnit(unit: value.toString()));
+          }
+        },
       );
     }
 

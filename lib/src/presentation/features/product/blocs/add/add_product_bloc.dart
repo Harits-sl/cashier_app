@@ -3,20 +3,23 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/models/menu_model.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'index.dart';
 
-class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
-  AddMenuBloc() : super(const AddMenuState()) {
+part 'add_product_event.dart';
+part 'add_product_state.dart';
+
+class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
+  AddProductBloc() : super(const AddProductState()) {
     on<NameChanged>(_onNameChanged);
     on<PriceChanged>(_onPriceChanged);
     on<HppChanged>(_onHppChanged);
-    on<TypeMenuChanged>(_onTypeMenuChanged);
-    on<ButtonAddMenuPressed>(_onButtonMenuPressed);
+    on<TypeProductChanged>(_onTypeProductChanged);
+    on<ButtonAddProductPressed>(_onButtonProductPressed);
     on<ClearState>(_onClearState);
   }
 
-  void _onNameChanged(NameChanged event, Emitter<AddMenuState> emit) {
+  void _onNameChanged(NameChanged event, Emitter<AddProductState> emit) {
     emit(
       state.copyWith(
         name: event.name,
@@ -24,7 +27,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     );
   }
 
-  void _onPriceChanged(PriceChanged event, Emitter<AddMenuState> emit) {
+  void _onPriceChanged(PriceChanged event, Emitter<AddProductState> emit) {
     emit(
       state.copyWith(
         price: event.price,
@@ -32,7 +35,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     );
   }
 
-  void _onHppChanged(HppChanged event, Emitter<AddMenuState> emit) {
+  void _onHppChanged(HppChanged event, Emitter<AddProductState> emit) {
     emit(
       state.copyWith(
         hpp: event.hpp,
@@ -40,23 +43,24 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     );
   }
 
-  void _onTypeMenuChanged(TypeMenuChanged event, Emitter<AddMenuState> emit) {
+  void _onTypeProductChanged(
+      TypeProductChanged event, Emitter<AddProductState> emit) {
     emit(
       state.copyWith(
-        typeMenu: event.typeMenu,
+        typeProduct: event.typeProduct,
       ),
     );
   }
 
-  void _onButtonMenuPressed(
-      ButtonAddMenuPressed event, Emitter<AddMenuState> emit) async {
+  void _onButtonProductPressed(
+      ButtonAddProductPressed event, Emitter<AddProductState> emit) async {
     try {
-      // emit(AddMenuLoading());
+      // emit(AddProductLoading());
 
       String id = 'menu-${Random().nextInt(255)}';
       String name = state.name;
       int price = state.price;
-      String typeMenu = state.typeMenu;
+      String typeProduct = state.typeProduct;
       final DateTime createdAt = DateTime.now();
       final DateTime updatedAt = DateTime.now();
       int hpp = state.hpp;
@@ -64,7 +68,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
       MenuModel menuModel = MenuModel(
         id: id,
         name: name,
-        typeMenu: typeMenu.toLowerCase(),
+        typeMenu: typeProduct.toLowerCase(),
         price: price,
         createdAt: createdAt,
         updatedAt: updatedAt,
@@ -75,7 +79,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         emit(
           state.copyWith(
             status: Status.failed,
-            message: 'Nama Menu Kosong',
+            message: 'Nama Produk Kosong',
           ),
         );
         throw Exception(state.message);
@@ -85,7 +89,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         emit(
           state.copyWith(
             status: Status.failed,
-            message: 'Harga Menu Kosong',
+            message: 'Harga Produk Kosong',
           ),
         );
         throw Exception(state.message);
@@ -95,7 +99,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
         emit(
           state.copyWith(
             status: Status.failed,
-            message: 'hpp Menu Kosong',
+            message: 'hpp Produk Kosong',
           ),
         );
         throw Exception(state.message);
@@ -105,7 +109,7 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
       emit(
         state.copyWith(
           status: Status.success,
-          message: 'Success Add Menu',
+          message: 'Success Add Product',
         ),
       );
     } catch (error) {
@@ -119,11 +123,11 @@ class AddMenuBloc extends Bloc<AddMenuEvent, AddMenuState> {
     }
   }
 
-  void _onClearState(ClearState event, Emitter<AddMenuState> emit) {
+  void _onClearState(ClearState event, Emitter<AddProductState> emit) {
     emit(
       state.copyWith(
         name: '',
-        typeMenu: '',
+        typeProduct: '',
         price: 0,
         hpp: 0,
         status: Status.initial,

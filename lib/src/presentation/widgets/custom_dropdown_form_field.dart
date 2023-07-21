@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:cashier_app/src/core/shared/theme.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({
+class CustomDropdownFormField extends StatelessWidget {
+  const CustomDropdownFormField({
     Key? key,
     required this.title,
+    required this.listDropdown,
     required this.textValidator,
-    required this.hintText,
-    this.controller,
-    this.keyboardType,
-    this.initialValue,
-    this.inputFormatters,
+    this.value,
     this.onChanged,
   }) : super(key: key);
 
   final String title;
-  final TextEditingController? controller;
+  final List listDropdown;
   final String textValidator;
-  final String hintText;
-  final String? initialValue;
-  final TextInputType? keyboardType;
-  final List<TextInputFormatter>? inputFormatters;
-  final void Function(String)? onChanged;
+  final String? value;
+  final void Function(Object?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +30,23 @@ class CustomTextFormField extends StatelessWidget {
             style: primaryTextStyle,
           ),
           const SizedBox(height: 8),
-          TextFormField(
-            initialValue: initialValue,
-            controller: controller,
-            keyboardType: keyboardType,
-            inputFormatters: inputFormatters,
-            decoration: InputDecoration(hintText: hintText),
+          DropdownButtonFormField(
+            dropdownColor: lightGray2Color,
+            borderRadius: BorderRadius.circular(16),
+            iconEnabledColor: primaryColor,
+            value: value,
+            hint: Text(listDropdown[0]),
+            items: listDropdown.map((unit) {
+              return DropdownMenuItem(
+                child: Text(
+                  unit,
+                  style: primaryTextStyle,
+                ),
+                value: unit,
+              );
+            }).toList(),
             validator: (value) {
-              if (value == null || value.isEmpty) {
+              if (value == null) {
                 return textValidator;
               }
               return null;

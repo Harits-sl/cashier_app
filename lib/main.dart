@@ -1,7 +1,5 @@
-import 'package:cashier_app/src/presentation/features/admin_add_menu/index.dart';
-import 'package:cashier_app/src/presentation/features/admin/index.dart';
-import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
+import 'package:cashier_app/src/presentation/features/product/index.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';
 import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
 import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
@@ -61,8 +59,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<HomeCubit>(
           create: (BuildContext context) => HomeCubit(),
         ),
-        BlocProvider<AdminCubit>(
-          create: (BuildContext context) => AdminCubit(),
+        BlocProvider<ProductCubit>(
+          create: (BuildContext context) => ProductCubit(),
         ),
         BlocProvider<MenuOrderCubit>(
           create: (BuildContext context) => MenuOrderCubit(),
@@ -73,11 +71,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<ThermalPrinterCubit>(
           create: (BuildContext context) => ThermalPrinterCubit(),
         ),
-        BlocProvider<AddMenuBloc>(
-          create: (BuildContext context) => AddMenuBloc(),
+        BlocProvider<AddProductBloc>(
+          create: (BuildContext context) => AddProductBloc(),
         ),
-        BlocProvider<AdminMenuEditBloc>(
-          create: (BuildContext context) => AdminMenuEditBloc(),
+        BlocProvider<EditProductBloc>(
+          create: (BuildContext context) => EditProductBloc(),
         ),
         BlocProvider<ReportCubit>(
           create: (BuildContext context) => ReportCubit(),
@@ -102,12 +100,12 @@ class MyApp extends StatelessWidget {
           Routes.home: (context) => const HomePage(),
           Routes.cashier: (context) => const CashierPage(),
           Routes.editOrderMenu: (context) => const EditOrderPage(),
-          Routes.product: (context) => const AdminPage(),
+          Routes.product: (context) => const ProductPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.paymentMethod: (context) => const PaymentMethod(),
           Routes.receipt: (context) => const ReceiptPage(),
           Routes.selectPrinter: (context) => const SelectPrinterPage(),
-          Routes.addMenu: (context) => const AddMenuPage(),
+          Routes.addProduct: (context) => const AddProductPage(),
           Routes.report: (context) => const ReportPage(),
           Routes.cart: (context) => const CartPage(),
           Routes.orderInfo: (context) => const OrderInfoPage(),
@@ -116,10 +114,10 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
-            case AdminMenuEditPage.routeName:
+            case EditProductPage.routeName:
               final String id = settings.arguments as String;
               return MaterialPageRoute(
-                builder: (_) => AdminMenuEditPage(id: id),
+                builder: (_) => EditProductPage(id: id),
                 settings: settings,
               );
             case EditStockPage.routeName:

@@ -14,23 +14,27 @@ Color secondaryColor = const Color(0xff0CB91E);
 Color backgroundColor = const Color(0xffF5F6F9);
 Color gray2Color = const Color(0xff9D9EA2);
 Color lightGray2Color = const Color(0xffE7E8EC);
-Color yellowColor = const Color(0xFFffcc00);
+Color greenColor = const Color(0xff0CB91E);
+Color yellowColor = const Color(0xFFFDDA0D);
+Color redColor = const Color(0xFFD22B2B);
 
 Color whiteColor = const Color(0xffFFFFFF);
 Color blackColor = const Color(0xff000000);
 Color blueColor = const Color(0xff2864FF);
-Color redColor = const Color(0xFFcc3300);
+// Color redColor = const Color(0xFFcc3300);
 Color grayColor = const Color(0xffA49B9B);
 Color lightGrayColor = const Color(0xffEDEDED);
 Color darkBlueColor = const Color(0xff1244C5);
 Color darkRedColor = const Color(0xff992E17);
-Color greenColor = const Color(0xff339900);
+// Color greenColor = const Color(0xff339900);
 
 // TextStyle
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: primaryColor);
 TextStyle secondaryTextStyle = GoogleFonts.poppins(color: secondaryColor);
 TextStyle gray2TextStyle = GoogleFonts.poppins(color: gray2Color);
 TextStyle white2TextStyle = GoogleFonts.poppins(color: backgroundColor);
+TextStyle greenTextStyle = GoogleFonts.poppins(color: greenColor);
+TextStyle yellowTextStyle = GoogleFonts.poppins(color: yellowColor);
 TextStyle redTextStyle = GoogleFonts.poppins(color: redColor);
 
 TextStyle whiteTextStyle = GoogleFonts.poppins(color: whiteColor);

@@ -2,70 +2,73 @@ import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/models/menu_model.dart';
-import 'package:cashier_app/src/presentation/features/admin_menu_edit/index.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
-class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
-  String _id = '';
-  String _name = '';
+part 'edit_product_event.dart';
+part 'edit_product_state.dart';
 
-  set setId(String newValue) {
-    _id = newValue;
+class EditProductBloc extends Bloc<EditProductEvent, EditProductState> {
+  // String _id = '';
+  // String _name = '';
+
+  // set setId(String newValue) {
+  //   _id = newValue;
+  // }
+
+  EditProductBloc() : super(const EditProductState()) {
+    on<EditNameChanged>(_onNameChanged);
+    on<EditPriceChanged>(_onPriceChanged);
+    on<EditHppChanged>(_onHppChanged);
+    on<EditTypeProductChanged>(_onTypeProductChanged);
+    on<FetchProductById>(_fetchProductById);
+    on<EditClearState>(_onClearState);
+    on<ButtonEditProductPressed>(_buttonEditProductPressed);
   }
 
-  AdminMenuEditBloc() : super(const AdminMenuEditState()) {
-    on<NameChanged>(_onNameChanged);
-    on<PriceChanged>(_onPriceChanged);
-    on<HppChanged>(_onHppChanged);
-    on<TypeMenuChanged>(_onTypeMenuChanged);
-    on<FetchMenuById>(_fetchMenuById);
-    on<ClearState>(_onClearState);
-    on<ButtonEditMenuPressed>(_buttonEditMenuPressed);
-  }
-
-  void _onNameChanged(NameChanged event, Emitter<AdminMenuEditState> emit) {
+  void _onNameChanged(EditNameChanged event, Emitter<EditProductState> emit) {
     emit(
       state.copyWith(
-        status: Status.edit,
+        status: EditStatus.edit,
         name: event.name,
       ),
     );
   }
 
-  void _onPriceChanged(PriceChanged event, Emitter<AdminMenuEditState> emit) {
+  void _onPriceChanged(EditPriceChanged event, Emitter<EditProductState> emit) {
     emit(
       state.copyWith(
-        status: Status.edit,
+        status: EditStatus.edit,
         price: event.price,
       ),
     );
   }
 
-  void _onHppChanged(HppChanged event, Emitter<AdminMenuEditState> emit) {
+  void _onHppChanged(EditHppChanged event, Emitter<EditProductState> emit) {
     emit(
       state.copyWith(
-        status: Status.edit,
+        status: EditStatus.edit,
         hpp: event.hpp,
       ),
     );
   }
 
-  void _onTypeMenuChanged(
-      TypeMenuChanged event, Emitter<AdminMenuEditState> emit) {
+  void _onTypeProductChanged(
+      EditTypeProductChanged event, Emitter<EditProductState> emit) {
     emit(
       state.copyWith(
-        status: Status.edit,
-        typeMenu: event.typeMenu,
+        status: EditStatus.edit,
+        typeMenu: event.typeProduct,
       ),
     );
   }
 
-  _fetchMenuById(event, Emitter<AdminMenuEditState> emit) async {
+  _fetchProductById(event, Emitter<EditProductState> emit) async {
     try {
-      emit(state.copyWith(status: Status.loading));
+      emit(state.copyWith(status: EditStatus.loading));
 
-      MenuModel menu = await MenuService().fetchMenuById(_id);
-      _name = menu.name;
+      MenuModel menu = await MenuService().fetchMenuById(event.id);
+      // _name = menu.name;
 
       emit(
         state.copyWith(
@@ -73,8 +76,8 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
           name: menu.name,
           price: menu.price,
           hpp: menu.hpp,
-          status: Status.success,
-          typeMenu: StringHelper.capitalize(menu.typeMenu),
+          status: EditStatus.successFetch,
+          typeMenu: StringHelper.titleCase(menu.typeMenu),
           createdAt: menu.createdAt,
           updatedAt: menu.updatedAt,
         ),
@@ -83,13 +86,13 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       emit(
         state.copyWith(
           message: e.toString(),
-          status: Status.failed,
+          status: EditStatus.failed,
         ),
       );
     }
   }
 
-  void _onClearState(ClearState event, Emitter<AdminMenuEditState> emit) {
+  void _onClearState(EditClearState event, Emitter<EditProductState> emit) {
     emit(
       state.copyWith(
         id: '',
@@ -97,14 +100,14 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
         typeMenu: '',
         price: 0,
         hpp: 0,
-        status: Status.initial,
+        status: EditStatus.initial,
         message: '',
       ),
     );
   }
 
-  void _buttonEditMenuPressed(
-      ButtonEditMenuPressed event, Emitter<AdminMenuEditState> emit) async {
+  void _buttonEditProductPressed(
+      ButtonEditProductPressed event, Emitter<EditProductState> emit) async {
     try {
       // emit(AddMenuLoading());
 
@@ -116,6 +119,8 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       final DateTime createdAt = state.createdAt!;
       final DateTime updatedAt = DateTime.now();
       int hpp = state.hpp!;
+
+      print('pencet edit');
 
       MenuModel menuModel = MenuModel(
         id: id,
@@ -130,7 +135,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       if (name == '') {
         emit(
           state.copyWith(
-            status: Status.failed,
+            status: EditStatus.failed,
             message: 'Nama Menu Kosong',
           ),
         );
@@ -140,7 +145,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       if (price == 0) {
         emit(
           state.copyWith(
-            status: Status.failed,
+            status: EditStatus.failed,
             message: 'Harga Menu Kosong',
           ),
         );
@@ -150,7 +155,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       MenuService().editMenu(menuModel);
       emit(
         state.copyWith(
-          status: Status.success,
+          status: EditStatus.successEdit,
           message: 'Success Edit Menu',
         ),
       );
@@ -158,7 +163,7 @@ class AdminMenuEditBloc extends Bloc<AdminMenuEditEvent, AdminMenuEditState> {
       debugPrint('error: $error');
       emit(
         state.copyWith(
-          status: Status.failed,
+          status: EditStatus.failed,
           message: error.toString(),
         ),
       );

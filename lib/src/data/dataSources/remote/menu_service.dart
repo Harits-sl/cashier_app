@@ -30,7 +30,6 @@ class MenuService {
     CollectionReference menus = _db.collection(menusCollection);
 
     QuerySnapshot querySnapshot = await menus.get();
-    debugPrint('querySnapshot: ${querySnapshot.docs}');
 
     // Get data from docs and convert map to List
     List<MenuModel> listData = querySnapshot.docs.map((doc) {

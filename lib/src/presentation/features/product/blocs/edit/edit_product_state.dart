@@ -1,15 +1,16 @@
-import 'package:equatable/equatable.dart';
+part of 'edit_product_bloc.dart';
 
-enum Status {
+enum EditStatus {
   initial,
-  success,
+  successFetch,
+  successEdit,
   failed,
   loading,
   edit,
 }
 
-class AdminMenuEditState extends Equatable {
-  const AdminMenuEditState({
+class EditProductState extends Equatable {
+  const EditProductState({
     this.id,
     this.name,
     this.typeMenu,
@@ -25,24 +26,24 @@ class AdminMenuEditState extends Equatable {
   final String? name;
   final String? typeMenu;
   final int? price;
-  final Status? status;
+  final EditStatus? status;
   final String? message;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? hpp;
 
-  AdminMenuEditState copyWith({
+  EditProductState copyWith({
     String? id,
     String? name,
     String? typeMenu,
     int? price,
-    Status? status,
+    EditStatus? status,
     String? message,
     DateTime? createdAt,
     DateTime? updatedAt,
     int? hpp,
   }) {
-    return AdminMenuEditState(
+    return EditProductState(
       id: id ?? this.id,
       name: name ?? this.name,
       typeMenu: typeMenu ?? this.typeMenu,

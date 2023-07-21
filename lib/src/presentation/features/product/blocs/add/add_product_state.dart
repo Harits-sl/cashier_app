@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'add_product_bloc.dart';
 
 enum Status {
   initial,
@@ -6,10 +6,10 @@ enum Status {
   failed,
 }
 
-class AddMenuState extends Equatable {
-  const AddMenuState({
+class AddProductState extends Equatable {
+  const AddProductState({
     this.name = '',
-    this.typeMenu = '',
+    this.typeProduct = '',
     this.price = 0,
     this.status = Status.initial,
     this.message = '',
@@ -17,23 +17,23 @@ class AddMenuState extends Equatable {
   });
 
   final String name;
-  final String typeMenu;
+  final String typeProduct;
   final int price;
   final Status status;
   final String message;
   final int hpp;
 
-  AddMenuState copyWith({
+  AddProductState copyWith({
     String? name,
-    String? typeMenu,
+    String? typeProduct,
     int? price,
     Status? status,
     String? message,
     int? hpp,
   }) {
-    return AddMenuState(
+    return AddProductState(
       name: name ?? this.name,
-      typeMenu: typeMenu ?? this.typeMenu,
+      typeProduct: typeProduct ?? this.typeProduct,
       price: price ?? this.price,
       status: status ?? this.status,
       message: message ?? this.message,
@@ -45,7 +45,7 @@ class AddMenuState extends Equatable {
   List<Object> get props {
     return [
       name,
-      typeMenu,
+      typeProduct,
       price,
       status,
       message,
@@ -54,23 +54,23 @@ class AddMenuState extends Equatable {
   }
 }
 
-// class AddMenuInitial extends AddMenuState {}
+// class AddProductInitial extends AddProductState {}
 
-// class AddMenuLoading extends AddMenuState {}
+// class AddProductLoading extends AddProductState {}
 
-// class AddMenuSuccess extends AddMenuState {
+// class AddProductSuccess extends AddProductState {
 //   final MenuModel menus;
 
-//   const AddMenuSuccess(this.menus);
+//   const AddProductSuccess(this.menus);
 
 //   @override
 //   List<Object> get props => [menus];
 // }
 
-// class AddMenuFailed extends AddMenuState {
+// class AddProductFailed extends AddProductState {
 //   final String error;
 
-//   const AddMenuFailed(this.error);
+//   const AddProductFailed(this.error);
 
 //   @override
 //   List<Object> get props => [error];
