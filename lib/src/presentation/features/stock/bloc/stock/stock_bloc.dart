@@ -13,10 +13,6 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     on<DeleteStock>(_deleteStock);
   }
 
-  String _id = '';
-  String get getId => _id;
-  set setId(String id) => _id = id;
-
   _fetchStock(FetchStock event, Emitter<StockState> emit) async {
     try {
       emit(StockLoading());
