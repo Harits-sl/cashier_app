@@ -42,14 +42,14 @@ class _ItemMenuState extends State<ItemMenu> {
 
     /// jika [_totalBuy] lebih dari 0 masukan data ke orderMenu
     if (_totalBuy > 0) {
-      context.read<MenuOrderCubit>().orderMenu(
+      context.read<MenuOrderBloc>().add(AddOrder(
             id: widget.id,
             menuName: widget.name,
             price: widget.price,
             hpp: widget.hpp,
             totalBuy: _totalBuy,
             typeMenu: widget.typeMenu,
-          );
+          ));
     }
   }
 
@@ -109,14 +109,14 @@ class _ItemMenuState extends State<ItemMenu> {
                         setState(() {
                           _totalBuy--;
                         });
-                        context.read<MenuOrderCubit>().orderMenu(
+                        context.read<MenuOrderBloc>().add(AddOrder(
                               id: widget.id,
                               menuName: widget.name,
                               price: widget.price,
                               hpp: widget.hpp,
                               totalBuy: _totalBuy,
                               typeMenu: widget.typeMenu,
-                            );
+                            ));
                       }
                     }
                   },
@@ -142,14 +142,14 @@ class _ItemMenuState extends State<ItemMenu> {
                       setState(() {
                         _totalBuy++;
                       });
-                      context.read<MenuOrderCubit>().orderMenu(
+                      context.read<MenuOrderBloc>().add(AddOrder(
                             id: widget.id,
                             menuName: widget.name,
                             price: widget.price,
                             hpp: widget.hpp,
                             totalBuy: _totalBuy,
                             typeMenu: widget.typeMenu,
-                          );
+                          ));
                     }
                   },
                   child: Image.asset(

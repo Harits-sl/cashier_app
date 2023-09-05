@@ -3,7 +3,6 @@ import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/presentation/features/stock/data_row/stock_data_source.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';
-import 'package:cashier_app/src/presentation/features/stock/screens/item_stock_screen.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_table.dart';

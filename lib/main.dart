@@ -1,8 +1,8 @@
+import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/features/product/index.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';
 import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
-import 'package:cashier_app/src/presentation/pages/edit_order_page.dart';
 import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,8 +17,6 @@ import 'src/presentation/pages/payment_amount_page.dart';
 import 'src/presentation/pages/receipt_page.dart';
 import 'src/presentation/pages/payment_method_page.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'src/presentation/cubit/menu_order/menu_order_cubit.dart';
 
 import 'src/config/theme/app_theme.dart';
 
@@ -44,7 +42,7 @@ void main() async {
     );
   }
   // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
+  //   options: DefaultFirebaseOptionsDev.currentPlatform,
   // );
   runApp(const MyApp());
 }
@@ -62,8 +60,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProductCubit>(
           create: (BuildContext context) => ProductCubit(),
         ),
-        BlocProvider<MenuOrderCubit>(
-          create: (BuildContext context) => MenuOrderCubit(),
+        BlocProvider<MenuOrderBloc>(
+          create: (BuildContext context) => MenuOrderBloc(),
         ),
         BlocProvider<MenuCubit>(
           create: (BuildContext context) => MenuCubit(),
@@ -99,7 +97,7 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.cashier: (context) => const CashierPage(),
-          Routes.editOrderMenu: (context) => const EditOrderPage(),
+          // Routes.editOrderMenu: (context) => const EditOrderPage(),
           Routes.product: (context) => const ProductPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.paymentMethod: (context) => const PaymentMethod(),

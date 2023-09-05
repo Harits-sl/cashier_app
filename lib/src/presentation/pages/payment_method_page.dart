@@ -1,6 +1,5 @@
 import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
-import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 import 'package:cashier_app/src/presentation/widgets/order_information.dart';
@@ -17,11 +16,11 @@ class PaymentMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final menuOrderCubit = context.read<MenuOrderCubit>();
-    CartModel cart = menuOrderCubit.cart;
-    if (cart.id != null) {
-      menuOrderCubit.getDataFromCart();
-    }
+    final menuOrderBloc = context.read<MenuOrderBloc>();
+    // CartModel cart = menuOrderBloc.cart;
+    // if (cart.id != null) {
+    //   menuOrderBloc.getDataFromCart();
+    // }
 
     List<Map<String, String>> listPaymentOption = [
       {
@@ -43,9 +42,12 @@ class PaymentMethod extends StatelessWidget {
         children: listPaymentOption
             .map((paymentOption) => GestureDetector(
                   onTap: () {
-                    context
-                        .read<MenuOrderCubit>()
-                        .orderTypePaymentPressed(paymentOption['title']!);
+                    menuOrderBloc.add(
+                      OrderTypePaymentPressed(
+                        typePayment: paymentOption['title']!,
+                      ),
+                    );
+
                     Go.routeWithPath(
                         context: context, path: Routes.paymentAmount);
                   },
@@ -86,29 +88,24 @@ class PaymentMethod extends StatelessWidget {
     Widget _buildBody() {
       return SafeArea(
         child: SingleChildScrollView(
-          child: BlocBuilder<MenuOrderCubit, MenuOrderState>(
+          child: BlocBuilder<MenuOrderBloc, MenuOrderState>(
             builder: (context, state) {
-              if (state is MenuOrderSuccess) {
-                return Column(
-                  children: [
-                    const CustomAppBar(title: 'Payment Method'),
-                    OrderInformation(
-                      orderId: state.menuOrder.id!,
-                      total: state.menuOrder.total,
+              return Column(
+                children: [
+                  const CustomAppBar(title: 'Payment Method'),
+                  OrderInformation(
+                    orderId: state.id!,
+                    total: state.total!,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: defaultMargin,
+                      vertical: 12,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: defaultMargin,
-                        vertical: 12,
-                      ),
-                      child: const CustomDivider(),
-                    ),
-                    _buildPaymentOption(state.menuOrder.total),
-                  ],
-                );
-              }
-              return const SizedBox(
-                child: Text('kosong'),
+                    child: const CustomDivider(),
+                  ),
+                  _buildPaymentOption(state.total!),
+                ],
               );
             },
           ),

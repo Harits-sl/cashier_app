@@ -13,7 +13,7 @@ class MenuCubit extends Cubit<MenuState> {
   void getAllMenu() async {
     try {
       emit(MenuLoading());
-      List<MenuModel>? coffees = [], nonCoffees = [], foods = [];
+      List<MenuModel?> coffees = [], nonCoffees = [], foods = [];
 
       _listMenu ??= await MenuService().fetchMenu();
 
@@ -55,7 +55,7 @@ class MenuCubit extends Cubit<MenuState> {
   }
 
   void searchMenu(String query) {
-    List _listMenuSearch = [];
+    List<MenuModel?> _listMenuSearch = [];
 
     for (MenuModel menu in _listMenu!) {
       if (menu.name.toLowerCase().contains(query.toLowerCase())) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/data/dataSources/remote/cart_service.dart';
 import 'package:cashier_app/src/data/models/cart_model.dart';
@@ -11,8 +13,15 @@ import '../../../data/models/menu_order_model.dart';
 part 'menu_order_event.dart';
 part 'menu_order_state.dart';
 
-class MenuOrderCubit extends Cubit<MenuOrderState> {
-  MenuOrderCubit() : super(MenuOrderInitial());
+class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
+  MenuOrderBloc() : super(const MenuOrderState()) {
+    on<AddOrder>(_addorder);
+    on<OrderCheckoutPressed>(_orderCheckoutPressed);
+    on<OrderTypePaymentPressed>(_orderTypePaymentPressed);
+    on<AddCashAndChangePayment>(_addCashAndChangePayment);
+    // on<AddCashAndChangePayment>(_addCashAndChangePayment);
+    on<AddBuyerName>(_addBuyerName);
+  }
 
   /// variabel untuk keseluruhan harga menu
   num _totalPrice = 0;
@@ -28,7 +37,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
   ///  variabel [listMenu] dan [totalPrice]
   Map<String, dynamic> _data = {};
 
-  String? _id;
+  // String? _id;
 
   DateTime? _dateTime;
 
@@ -64,13 +73,13 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     _listMenu.clear();
     _mapMenu = {};
     _data = {};
-    _id = null;
+    // _id = null;
     _dateTime = null;
     _cart = const CartModel();
 
     debugPrint('_menuOrderModel: $_menuOrderModel');
 
-    emit(MenuOrderInitial());
+    // emit(MenuOrderInitial());
   }
 
   void _addTotalPrice() {
@@ -81,21 +90,14 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     }
   }
 
-  void orderMenu({
-    String? id,
-    int price = 0,
-    String? menuName,
-    int totalBuy = 0,
-    int hpp = 0,
-    required String typeMenu,
-  }) {
+  void _addorder(AddOrder event, Emitter<MenuOrderState> emit) {
     _mapMenu = {
-      'id': id,
-      'price': price,
-      'menuName': menuName,
-      'totalBuy': totalBuy,
-      'hpp': hpp,
-      'typeMenu': typeMenu,
+      'id': event.id,
+      'price': event.price,
+      'menuName': event.menuName,
+      'totalBuy': event.totalBuy,
+      'hpp': event.hpp,
+      'typeMenu': event.typeMenu,
     };
 
     /// variabel berupa integer dari indexWhere
@@ -104,7 +106,7 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
     if (_listMenu.isEmpty || index == -1) {
       _listMenu.add(_mapMenu);
     } else {
-      _listMenu[index]['totalBuy'] = totalBuy;
+      _listMenu[index]['totalBuy'] = event.totalBuy;
 
       if (_listMenu[index]['totalBuy'] == 0) {
         _listMenu.remove(_listMenu[index]);
@@ -123,71 +125,90 @@ class MenuOrderCubit extends Cubit<MenuOrderState> {
       listMenus: _data['listMenu'],
     );
 
-    emit(MenuOrderSuccess(_menuOrderModel));
+    // emit(MenuOrderSuccess(_menuOrderModel));
+    emit(state.copyWith(
+      total: _menuOrderModel.total,
+      menuOrders: _menuOrderModel.listMenus,
+    ));
   }
 
-  void orderCheckoutPressed() {
+  void _orderCheckoutPressed(
+      OrderCheckoutPressed event, Emitter<MenuOrderState> emit) {
     _dateTime = DateTime.now();
 
     /// format: year month day HOUR24_MINUTE_SECOND
     String dateFormat = DateFormat('yyyMdHms').format(_dateTime!);
-
-    _id = 'oid$dateFormat';
+    String id = 'oid$dateFormat';
 
     _menuOrderModel = _menuOrderModel.copyWith(
-      id: _id,
+      id: id,
       dateTimeOrder: _dateTime,
     );
 
-    emit(MenuOrderSuccess(_menuOrderModel));
+    // emit(MenuOrderSuccess(_menuOrderModel));
+    emit(state.copyWith(
+      id: id,
+      dateTimeOrder: _dateTime,
+    ));
   }
 
-  void orderTypePaymentPressed(
-    String typePayment,
-  ) {
+  void _orderTypePaymentPressed(
+      OrderTypePaymentPressed event, Emitter<MenuOrderState> emit) {
     _menuOrderModel = _menuOrderModel.copyWith(
-      typePayment: typePayment,
+      typePayment: event.typePayment,
     );
 
-    emit(MenuOrderSuccess(_menuOrderModel));
+    // emit(MenuOrderSuccess(_menuOrderModel));
+    emit(state.copyWith(
+      typePayment: event.typePayment,
+    ));
   }
 
-  void orderAddCashAndChangePayment({required int cash, required int change}) {
-    _menuOrderModel = _menuOrderModel.copyWith(
-      cash: cash,
-      change: change,
-    );
+  void _addCashAndChangePayment(
+      AddCashAndChangePayment event, Emitter<MenuOrderState> emit) {
+    // _menuOrderModel = _menuOrderModel.copyWith(
+    //   cash: cash,
+    //   change: change,
+    // );
+    emit(state.copyWith(
+      cash: event.cash,
+      change: event.change,
+    ));
 
-    emit(MenuOrderSuccess(_menuOrderModel));
+    // emit(MenuOrderSuccess(_menuOrderModel));
   }
 
   void addOrderToFirestore(MenuOrderModel menuOrder) async {
+    log('menuOrder: ${menuOrder}');
     OrderService().addOrder(menuOrder);
-    CartService().deleteCart(menuOrder.id!);
+    // CartService().deleteCart(menuOrder.id!);
   }
 
-  void addBuyerName(String buyer) {
-    _menuOrderModel = _menuOrderModel.copyWith(
-      buyer: buyer,
-    );
-    emit(MenuOrderSuccess(_menuOrderModel));
+  void _addBuyerName(AddBuyerName event, Emitter<MenuOrderState> emit) {
+    // _menuOrderModel = _menuOrderModel.copyWith(
+    //   buyer: event.buyer,
+    // );
+    // emit(MenuOrderSuccess(_menuOrderModel));
+    emit(state.copyWith(
+      buyer: event.buyer,
+    ));
   }
 
-  void checkoutFromCart(MenuOrderModel menuOrder) {
-    emit(MenuOrderSuccess(menuOrder));
-  }
+  // void checkoutFromCart(MenuOrderModel menuOrder) {
+  //   emit(MenuOrderSuccess(menuOrder));
+  // }
 
-  void getDataFromCart() {
-    // final cartData = CartService().fetchCartById(cart.id!);
-    final menuOrder = MenuOrderModel.fromCartModel(_cart);
-    _menuOrderModel = _menuOrderModel.copyWith(
-      id: menuOrder.id,
-      buyer: menuOrder.buyer,
-      dateTimeOrder: menuOrder.dateTimeOrder,
-      listMenus: menuOrder.listMenus,
-      total: menuOrder.total,
-    );
+  // void getDataFromCart() {
+  //   // final cartData = CartService().fetchCartById(cart.id!);
+  //   final menuOrder = MenuOrderModel.fromCartModel(_cart);
+  //   _menuOrderModel = _menuOrderModel.copyWith(
+  //     id: menuOrder.id,
+  //     buyer: menuOrder.buyer,
+  //     dateTimeOrder: menuOrder.dateTimeOrder,
+  //     listMenus: menuOrder.listMenus,
+  //     total: menuOrder.total,
+  //   );
 
-    emit(MenuOrderSuccess(_menuOrderModel));
-  }
+  //   emit(MenuOrderSuccess(_menuOrderModel));
+  // }
 }

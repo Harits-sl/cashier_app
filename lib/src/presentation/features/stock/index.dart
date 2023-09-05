@@ -7,5 +7,6 @@ export 'pages/add_stock_page.dart';
 export 'pages/edit_stock_page.dart';
 
 export 'screens/stock_screen.dart';
+export 'screens/item_stock_screen.dart';
 export 'screens/add_stock_screen.dart';
 export 'screens/edit_stock_screen.dart';

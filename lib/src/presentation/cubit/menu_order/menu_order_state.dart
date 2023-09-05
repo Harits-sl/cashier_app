@@ -1,30 +1,59 @@
 part of 'menu_order_cubit.dart';
 
-abstract class MenuOrderState extends Equatable {
-  const MenuOrderState();
+class MenuOrderState extends Equatable {
+  final String? id;
+  final List? menuOrders;
+  final int? total;
+  final DateTime? dateTimeOrder;
+  final String? typePayment;
+  final String? buyer;
+  final int? cash;
+  final int? change;
+
+  const MenuOrderState({
+    this.id,
+    this.menuOrders,
+    this.total,
+    this.dateTimeOrder,
+    this.typePayment,
+    this.buyer,
+    this.cash,
+    this.change,
+  });
 
   @override
-  List<Object> get props => [];
-}
+  List<Object?> get props {
+    return [
+      id,
+      menuOrders,
+      total,
+      dateTimeOrder,
+      buyer,
+      typePayment,
+      cash,
+      change,
+    ];
+  }
 
-class MenuOrderInitial extends MenuOrderState {}
-
-class MenuOrderLoading extends MenuOrderState {}
-
-class MenuOrderSuccess extends MenuOrderState {
-  const MenuOrderSuccess(this.menuOrder);
-
-  final MenuOrderModel menuOrder;
-
-  @override
-  List<Object> get props => [menuOrder];
-}
-
-class MenuOrderError extends MenuOrderState {
-  const MenuOrderError(this.error);
-
-  final MenuOrderModel error;
-
-  @override
-  List<Object> get props => [error];
+  MenuOrderState copyWith({
+    String? id,
+    List? menuOrders,
+    int? total,
+    DateTime? dateTimeOrder,
+    String? buyer,
+    String? typePayment,
+    int? cash,
+    int? change,
+  }) {
+    return MenuOrderState(
+      id: id ?? this.id,
+      menuOrders: menuOrders ?? this.menuOrders,
+      total: total ?? this.total,
+      dateTimeOrder: dateTimeOrder ?? this.dateTimeOrder,
+      buyer: buyer ?? this.buyer,
+      typePayment: typePayment ?? this.typePayment,
+      cash: cash ?? this.cash,
+      change: change ?? this.change,
+    );
+  }
 }

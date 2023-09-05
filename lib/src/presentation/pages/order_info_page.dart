@@ -2,9 +2,6 @@ import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
-import 'package:cashier_app/src/data/models/cart_model.dart';
-import 'package:cashier_app/src/data/models/menu_order_model.dart';
-import 'package:cashier_app/src/presentation/cubit/buyer/buyer_cubit.dart';
 import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
@@ -25,28 +22,35 @@ class OrderInfoPage extends StatefulWidget {
 class _OrderInfoPageState extends State<OrderInfoPage> {
   TextEditingController buyerController = TextEditingController();
   bool isBuyerEmpty = false;
+  late final MenuOrderBloc menuOrderBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    menuOrderBloc = context.read<MenuOrderBloc>();
+  }
 
   void checkOutPressed() {
     // context.read<MenuOrderCubit>().orderCheckoutPressed();
     Go.routeWithPath(context: context, path: Routes.paymentMethod);
   }
 
-  void saveToCart() {
-    var menuOrder = context.read<MenuOrderCubit>().state;
-    if (buyerController.text.isEmpty) {
-      setState(() {
-        isBuyerEmpty = true;
-      });
-      return;
-    }
+  // void saveToCart() {
+  //   var menuOrder = context.read<MenuOrderBloc>().state;
+  //   if (buyerController.text.isEmpty) {
+  //     setState(() {
+  //       isBuyerEmpty = true;
+  //     });
+  //     return;
+  //   }
 
-    if (menuOrder is MenuOrderSuccess) {
-      CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
-      BuyerCubit().addToCart(cart);
-      context.read<MenuOrderCubit>().initState();
-      Go.routeWithPath(context: context, path: Routes.cashier);
-    }
-  }
+  //   if (menuOrder is MenuOrderSuccess) {
+  //     CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
+  //     BuyerCubit().addToCart(cart);
+  //     context.read<MenuOrderCubit>().initState();
+  //     Go.routeWithPath(context: context, path: Routes.cashier);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +80,9 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                           isBuyerEmpty = false;
                         });
                       }
-                      context.read<MenuOrderCubit>().addBuyerName(
-                            buyerController.text,
-                          );
+                      menuOrderBloc.add(
+                        AddBuyerName(buyer: buyerController.text),
+                      );
                     },
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
@@ -111,7 +115,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       );
     }
 
-    Widget _buildListMenu(MenuOrderModel menuOrder) {
+    Widget _buildListMenu(List menuOrders) {
       int i = 0;
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -123,7 +127,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
               style: primaryTextStyle.copyWith(),
             ),
             Column(
-              children: menuOrder.listMenus!.map((menu) {
+              children: menuOrders.map((menu) {
                 i++;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,10 +140,10 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       totalOrder: menu['totalBuy'],
                       typeMenu: menu['typeMenu'],
                     ),
-                    i != menuOrder.listMenus!.length
+                    i != menuOrders.length
                         ? const SizedBox(height: 12)
                         : const SizedBox(),
-                    i != menuOrder.listMenus!.length
+                    i != menuOrders.length
                         ? const CustomDivider()
                         : const SizedBox(),
                   ],
@@ -151,7 +155,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       );
     }
 
-    Widget _buildOrderSummary(MenuOrderModel menuOrder) {
+    Widget _buildOrderSummary(int total) {
       return Container(
         margin: const EdgeInsets.only(top: defaultMargin),
         padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
@@ -181,7 +185,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     ),
                   ),
                   Text(
-                    'Rp. ${StringHelper.addComma(menuOrder.total)}',
+                    'Rp. ${StringHelper.addComma(total)}',
                     style: primaryTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 12,
@@ -215,7 +219,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       return Expanded(
         child: CustomButton(
           color: primaryColor,
-          onPressed: saveToCart,
+          onPressed: () {},
           text: '+ Cart',
           margin: const EdgeInsets.only(right: defaultMargin, left: 12),
         ),
@@ -223,26 +227,26 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     }
 
     Widget body() {
-      MenuOrderModel? menuOrder;
       return SafeArea(
         child: Stack(
           children: [
-            BlocBuilder<MenuOrderCubit, MenuOrderState>(
+            BlocBuilder<MenuOrderBloc, MenuOrderState>(
               builder: (context, state) {
-                if (state is MenuOrderSuccess) {
-                  menuOrder = state.menuOrder;
+                if (state.menuOrders != null) {
+                  return ListView(
+                    children: [
+                      const CustomAppBar(title: 'Order'),
+                      _buildCustomerInformation(),
+                      _buildListMenu(state.menuOrders!),
+                      _buildOrderSummary(state.total!),
+                      const SizedBox(
+                        height: (defaultMargin * 2) + 55,
+                      )
+                    ],
+                  );
+                } else {
+                  return const Text('error please come back again');
                 }
-                return ListView(
-                  children: [
-                    const CustomAppBar(title: 'Order'),
-                    _buildCustomerInformation(),
-                    _buildListMenu(menuOrder ?? MenuOrderModel()),
-                    _buildOrderSummary(menuOrder!),
-                    const SizedBox(
-                      height: (defaultMargin * 2) + 55,
-                    )
-                  ],
-                );
               },
             ),
             Padding(

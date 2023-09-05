@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
@@ -88,210 +90,215 @@ class ReceiptPage extends StatelessWidget {
     }
 
     void _onTapSaveOrder() {
-      context.read<MenuOrderCubit>().addOrderToFirestore(_menuOrder);
+      context.read<MenuOrderBloc>().addOrderToFirestore(_menuOrder);
       Go.routeWithPathAndRemove(context: context, path: Routes.home);
 
-      context.read<MenuOrderCubit>().initState();
+      context.read<MenuOrderBloc>().initState();
     }
 
     Widget _buildReceipt() {
-      return BlocBuilder<MenuOrderCubit, MenuOrderState>(
+      return BlocBuilder<MenuOrderBloc, MenuOrderState>(
         builder: (context, state) {
-          if (state is MenuOrderSuccess) {
-            _menuOrder = state.menuOrder;
+          _menuOrder = MenuOrderModel(
+            id: state.id,
+            buyer: state.buyer,
+            cash: state.cash!,
+            change: state.change!,
+            dateTimeOrder: state.dateTimeOrder,
+            listMenus: state.menuOrders,
+            total: state.total!,
+            typePayment: state.typePayment,
+          );
 
-            String dateFormat = state.menuOrder.dateTimeOrder != null
-                ? DateFormat('M.d.yy-H:mm')
-                    .format(state.menuOrder.dateTimeOrder!)
-                : 'hari kosong';
+          String dateFormat = state.dateTimeOrder != null
+              ? DateFormat('M.d.yy-H:mm').format(state.dateTimeOrder!)
+              : 'hari kosong';
 
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 80,
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 80,
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: 240,
+                  child: Text(
+                    'Jl. Warakas Gg. 8 No.98, RW.3, Warakas, Kec. Tj. Priok, Jkt Utara, Daerah Khusus Ibukota Jakarta 14370',
+                    style: primaryTextStyle.copyWith(fontSize: 12),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: 240,
-                    child: Text(
-                      'Jl. Warakas Gg. 8 No.98, RW.3, Warakas, Kec. Tj. Priok, Jkt Utara, Daerah Khusus Ibukota Jakarta 14370',
-                      style: primaryTextStyle.copyWith(fontSize: 12),
-                      textAlign: TextAlign.center,
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: CustomDivider(),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Order ID',
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: CustomDivider(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Order ID',
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    Text(
+                      state.id!,
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                      Text(
-                        state.menuOrder.id!,
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Date Order',
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Date Order',
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                    Text(
+                      dateFormat,
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                      Text(
-                        dateFormat,
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Payment Method',
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Payment Method',
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                    Text(
+                      state.typePayment!,
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                      Text(
-                        state.menuOrder.typePayment!,
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: CustomDivider(),
-                  ),
-                  Column(
-                    children: state.menuOrder.listMenus!
-                        .map(
-                          (menu) => Container(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    menu['menuName'],
-                                    style: primaryTextStyle.copyWith(
-                                      fontWeight: medium,
-                                      fontSize: 12,
-                                    ),
+                    ),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: CustomDivider(),
+                ),
+                Column(
+                  children: state.menuOrders!
+                      .map(
+                        (menu) => Container(
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Text(
+                                  menu['menuName'],
+                                  style: primaryTextStyle.copyWith(
+                                    fontWeight: medium,
+                                    fontSize: 12,
                                   ),
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    menu['totalBuy'].toString(),
-                                    style: primaryTextStyle.copyWith(
-                                      fontWeight: medium,
-                                      fontSize: 12,
-                                    ),
-                                    textAlign: TextAlign.center,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  menu['totalBuy'].toString(),
+                                  style: primaryTextStyle.copyWith(
+                                    fontWeight: medium,
+                                    fontSize: 12,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    StringHelper.addComma(menu['price']),
-                                    style: primaryTextStyle.copyWith(
-                                      fontWeight: medium,
-                                      fontSize: 12,
-                                    ),
-                                    textAlign: TextAlign.right,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  StringHelper.addComma(menu['price']),
+                                  style: primaryTextStyle.copyWith(
+                                    fontWeight: medium,
+                                    fontSize: 12,
                                   ),
+                                  textAlign: TextAlign.right,
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    StringHelper.addComma(
-                                        menu['totalBuy'] * menu['price']),
-                                    style: primaryTextStyle.copyWith(
-                                      fontWeight: medium,
-                                      fontSize: 12,
-                                    ),
-                                    textAlign: TextAlign.right,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  StringHelper.addComma(
+                                      menu['totalBuy'] * menu['price']),
+                                  style: primaryTextStyle.copyWith(
+                                    fontWeight: medium,
+                                    fontSize: 12,
                                   ),
+                                  textAlign: TextAlign.right,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        )
-                        .toList(),
-                  ),
-                  const CustomDivider(),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Total Price'),
-                      Text(
-                        StringHelper.addComma(state.menuOrder.total),
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
                         ),
+                      )
+                      .toList(),
+                ),
+                const CustomDivider(),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Total Price'),
+                    Text(
+                      StringHelper.addComma(state.total!),
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Cash'),
-                      Text(
-                        StringHelper.addComma(state.menuOrder.cash),
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Cash'),
+                    Text(
+                      StringHelper.addComma(state.cash!),
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Change'),
-                      Text(
-                        StringHelper.addComma(state.menuOrder.change),
-                        style: primaryTextStyle.copyWith(
-                          fontWeight: medium,
-                          fontSize: 12,
-                        ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Change'),
+                    Text(
+                      StringHelper.addComma(state.change!),
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: medium,
+                        fontSize: 12,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }
-          return const SizedBox();
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
       );
     }

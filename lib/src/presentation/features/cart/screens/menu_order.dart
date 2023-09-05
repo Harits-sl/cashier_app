@@ -19,14 +19,14 @@ class MenuOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onTapEdit(CartModel cart) {
-      context.read<MenuOrderCubit>().setCart = cart;
+      context.read<MenuOrderBloc>().setCart = cart;
 
       Go.routeWithPathAndRemove(context: context, path: Routes.editOrderMenu);
     }
 
     void onTapCheckout(CartModel cart) {
       // final menuOrder = MenuOrderModel.fromCartModel(cart);
-      context.read<MenuOrderCubit>().setCart = cart;
+      context.read<MenuOrderBloc>().setCart = cart;
 
       Go.routeWithPath(context: context, path: Routes.paymentMethod);
     }

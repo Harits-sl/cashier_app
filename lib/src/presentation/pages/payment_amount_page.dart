@@ -58,10 +58,10 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
   // }
 
   void onTapPay() {
-    context.read<MenuOrderCubit>().orderAddCashAndChangePayment(
+    context.read<MenuOrderBloc>().add(AddCashAndChangePayment(
           cash: int.parse(StringHelper.removeComma(_payAmountController.text)),
           change: _change,
-        );
+        ));
     Go.routeWithPath(context: context, path: Routes.receipt);
   }
 
@@ -209,34 +209,31 @@ class _PaymentAmountPageState extends State<PaymentAmountPage> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              child: BlocBuilder<MenuOrderCubit, MenuOrderState>(
+              child: BlocBuilder<MenuOrderBloc, MenuOrderState>(
                 builder: (context, state) {
-                  if (state is MenuOrderSuccess) {
-                    return Column(
-                      children: [
-                        const CustomAppBar(title: 'Payment Amount'),
-                        OrderInformation(
-                          orderId: state.menuOrder.id!,
-                          total: state.menuOrder.total,
-                          paymentMethod: state.menuOrder.typePayment,
-                        ),
-                        const SizedBox(height: 12),
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: defaultMargin),
-                          child: CustomDivider(),
-                        ),
-                        _buildListRadioPayment(state.menuOrder.total),
-                        const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: defaultMargin),
-                          child: CustomDivider(),
-                        ),
-                        _buildFieldPayAndChange(state.menuOrder.total),
-                      ],
-                    );
-                  }
-                  return const SizedBox();
+                  return Column(
+                    children: [
+                      const CustomAppBar(title: 'Payment Amount'),
+                      OrderInformation(
+                        orderId: state.id!,
+                        total: state.total!,
+                        paymentMethod: state.typePayment,
+                      ),
+                      const SizedBox(height: 12),
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: defaultMargin),
+                        child: CustomDivider(),
+                      ),
+                      _buildListRadioPayment(state.total!),
+                      const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: defaultMargin),
+                        child: CustomDivider(),
+                      ),
+                      _buildFieldPayAndChange(state.total!),
+                    ],
+                  );
                 },
               ),
             ),

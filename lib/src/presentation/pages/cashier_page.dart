@@ -1,5 +1,6 @@
-import 'package:cashier_app/src/data/models/cart_model.dart';
+// import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cashier_app/src/data/models/menu_model.dart';
+import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 
 import '../../config/route/routes.dart';
@@ -30,13 +31,13 @@ class CashierPage extends StatefulWidget {
 }
 
 class _CashierPageState extends State<CashierPage> {
-  // final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<Map<String, dynamic>>? menus;
   List<Map<String, dynamic>>? searchMenus;
   MenuOrderModel? menuOrder;
-  late MenuOrderCubit menuOrderCubit;
-  late CartModel carts;
+  late final menuOrderBloc;
+  // late CartModel carts;
   bool isSearch = false;
   int totalOrder = 0;
   int totalOrderFromCart = 0;
@@ -48,8 +49,8 @@ class _CashierPageState extends State<CashierPage> {
     // menjalankan fungsi cubit json menu
     context.read<MenuCubit>().getAllMenu();
 
-    menuOrderCubit = context.read<MenuOrderCubit>();
-    carts = menuOrderCubit.cart;
+    menuOrderBloc = context.read<MenuOrderBloc>();
+    // carts = menuOrderCubit.cart;
     // if (carts.id != null) {
     //   menuOrderCubit.getDataFromCart();
     //   debugPrint('cart: ${cart}');
@@ -64,7 +65,7 @@ class _CashierPageState extends State<CashierPage> {
 
   @override
   void dispose() {
-    // _searchController.dispose();
+    _searchController.dispose();
     totalOrder = 0;
     super.dispose();
   }
@@ -84,7 +85,7 @@ class _CashierPageState extends State<CashierPage> {
 
   void checkOutPressed() {
     if (menuOrder!.listMenus!.isNotEmpty) {
-      context.read<MenuOrderCubit>().orderCheckoutPressed();
+      menuOrderBloc.add(OrderCheckoutPressed());
       Go.routeWithPath(context: context, path: Routes.orderInfo);
     }
   }
@@ -135,9 +136,9 @@ class _CashierPageState extends State<CashierPage> {
         margin: const EdgeInsets.only(bottom: defaultMargin),
         padding: const EdgeInsets.symmetric(horizontal: defaultMargin),
         child: TextField(
-          // controller: _searchController,
+          controller: _searchController,
           onSubmitted: (String query) {
-            // _search(query);
+            _search(query);
             // TODO: CAN SEARCH MENU
           },
           // enabled: false,
@@ -175,28 +176,28 @@ class _CashierPageState extends State<CashierPage> {
         );
       }
 
-      Widget _menu(List<MenuModel> listMenu) {
+      Widget _menu(List<MenuModel?> listMenu) {
         return Column(
           children: (listMenu).map((menu) {
             int totalOrderFromCart = 0;
 
             /// jika data cart tidak kosong
             /// maka lakukan perulangan data [carts.listMenus]
-            if (carts.id != null) {
-              for (var cart in carts.listMenus!) {
-                /// jika menu id sama dengan cart id
-                /// maka ubah [totalOrderFromCart]
-                /// menjadi datanya [cart]
-                if (menu.id == cart['id']) {
-                  totalOrderFromCart = cart['totalBuy'];
-                }
-                // setState(() {});
-              }
-            }
+            // if (carts.id != null) {
+            //   for (var cart in carts.listMenus!) {
+            //     /// jika menu id sama dengan cart id
+            //     /// maka ubah [totalOrderFromCart]
+            //     /// menjadi datanya [cart]
+            //     if (menu.id == cart['id']) {
+            //       totalOrderFromCart = cart['totalBuy'];
+            //     }
+            //     // setState(() {});
+            //   }
+            // }
             return Column(
               children: [
                 ItemMenu(
-                  id: menu.id,
+                  id: menu!.id,
                   name: menu.name,
                   price: menu.price,
                   hpp: menu.hpp,
@@ -216,12 +217,6 @@ class _CashierPageState extends State<CashierPage> {
           right: defaultMargin,
         ),
         child: BlocBuilder<MenuCubit, MenuState>(
-          buildWhen: (previousState, state) {
-            debugPrint('state: $state');
-            debugPrint('previousState: $previousState');
-            setState(() {});
-            return true;
-          },
           builder: (context, state) {
             if (state is MenuLoading) {
               return const Center(
@@ -263,12 +258,15 @@ class _CashierPageState extends State<CashierPage> {
     }
 
     Widget _buttonCheckout() {
-      return BlocBuilder<MenuOrderCubit, MenuOrderState>(
+      return BlocBuilder<MenuOrderBloc, MenuOrderState>(
         builder: (context, state) {
           num totalBuy = 0;
           // MenuOrderModel menuOrder = const MenuOrderModel();
-          if (state is MenuOrderSuccess) {
-            menuOrder = state.menuOrder;
+          if (state.menuOrders != null) {
+            menuOrder = menuOrder = MenuOrderModel(
+              listMenus: state.menuOrders,
+              total: state.total!,
+            );
             for (var item in menuOrder!.listMenus!) {
               totalBuy += item['totalBuy'];
             }
@@ -281,58 +279,21 @@ class _CashierPageState extends State<CashierPage> {
             );
           }
 
-          return GestureDetector(
-            onTap: checkOutPressed,
-            child: Container(
-              height: 55,
-              margin: const EdgeInsets.all(defaultMargin),
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              decoration: BoxDecoration(
-                color: totalBuy > 0 ? primaryColor : gray2Color,
-                borderRadius: BorderRadius.circular(28),
-                boxShadow: [
-                  BoxShadow(
-                    color: primaryColor.withOpacity(.25),
-                    offset: const Offset(0, 12),
-                    blurRadius: 27,
-                    spreadRadius: 4,
+          return CustomButtonWithIcon(
+            color: totalBuy > 0 ? primaryColor : gray2Color,
+            onPressed: checkOutPressed,
+            isShadowed: true,
+            text: 'Your added $totalBuy items',
+            iconUrl: 'assets/images/ic_bag.png',
+            iconColor: totalBuy > 0 ? backgroundColor : primaryColor,
+            iconText: 'Rp. ${StringHelper.addComma(menuOrder!.total)}',
+            textStyle: totalBuy > 0
+                ? white2TextStyle.copyWith(
+                    fontSize: 12,
+                  )
+                : primaryTextStyle.copyWith(
+                    fontSize: 12,
                   ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Your added $totalBuy items',
-                    style: totalBuy > 0
-                        ? white2TextStyle.copyWith(
-                            fontSize: 12,
-                          )
-                        : primaryTextStyle.copyWith(
-                            fontSize: 12,
-                          ),
-                  ),
-                  Row(
-                    children: [
-                      Image.asset('assets/images/ic_bag.png',
-                          width: 18,
-                          color: totalBuy > 0 ? backgroundColor : primaryColor),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Rp. ${StringHelper.addComma(menuOrder!.total)}',
-                        style: totalBuy > 0
-                            ? white2TextStyle.copyWith(
-                                fontSize: 12,
-                              )
-                            : primaryTextStyle.copyWith(
-                                fontSize: 12,
-                              ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
           );
         },
       );
@@ -362,7 +323,7 @@ class _CashierPageState extends State<CashierPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        context.read<MenuOrderCubit>().initState();
+        // context.read<MenuOrderCubit>().initState();
         totalOrder = 0;
         totalOrderFromCart = 0;
         return true;
