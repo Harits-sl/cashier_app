@@ -1,4 +1,4 @@
-part of 'menu_order_cubit.dart';
+part of 'menu_order_bloc.dart';
 
 abstract class MenuOrderEvent extends Equatable {
   const MenuOrderEvent();
@@ -7,11 +7,7 @@ abstract class MenuOrderEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class OrderIncrementPressed extends MenuOrderEvent {}
-
-class OrderDecrementPressed extends MenuOrderEvent {}
-
-class AddOrder extends MenuOrderEvent {
+class AddMenus extends MenuOrderEvent {
   final String id;
   final int price;
   final String menuName;
@@ -19,7 +15,7 @@ class AddOrder extends MenuOrderEvent {
   final int hpp;
   final String typeMenu;
 
-  const AddOrder({
+  const AddMenus({
     required this.id,
     required this.price,
     required this.menuName,
@@ -29,7 +25,34 @@ class AddOrder extends MenuOrderEvent {
   });
 
   @override
-  List<Object> get props => [id, price, menuName, totalBuy, hpp, typeMenu];
+  List<Object?> get props => [id, price, menuName, totalBuy, hpp, typeMenu];
+}
+
+class OrderIncrementPressed extends MenuOrderEvent {
+  final String id;
+
+  const OrderIncrementPressed({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}
+
+class SearchMenu extends MenuOrderEvent {
+  final String query;
+
+  const SearchMenu({required this.query});
+
+  @override
+  List<Object> get props => [query];
+}
+
+class OrderDecrementPressed extends MenuOrderEvent {
+  final String id;
+
+  const OrderDecrementPressed({required this.id});
+
+  @override
+  List<Object> get props => [id];
 }
 
 class OrderCheckoutPressed extends MenuOrderEvent {}
@@ -65,3 +88,7 @@ class AddBuyerName extends MenuOrderEvent {
   @override
   List<Object?> get props => [buyer];
 }
+
+class AddOrderToFirestore extends MenuOrderEvent {}
+
+class ResetState extends MenuOrderEvent {}

@@ -2,7 +2,7 @@ import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
-import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
+import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_bloc.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
@@ -75,7 +75,6 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                     controller: buyerController,
                     onChanged: (value) {
                       if (isBuyerEmpty == true) {
-                        print('true');
                         setState(() {
                           isBuyerEmpty = false;
                         });
@@ -117,6 +116,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
 
     Widget _buildListMenu(List menuOrders) {
       int i = 0;
+      List orders = menuOrders.where((order) => order.totalBuy != 0).toList();
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: defaultMargin),
         child: Column(
@@ -127,23 +127,24 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
               style: primaryTextStyle.copyWith(),
             ),
             Column(
-              children: menuOrders.map((menu) {
+              children: orders.map((menu) {
                 i++;
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ItemMenu(
-                      id: menu['id'],
-                      name: menu['menuName'],
-                      price: menu['price'],
-                      hpp: menu['hpp'],
-                      totalOrder: menu['totalBuy'],
-                      typeMenu: menu['typeMenu'],
+                      id: menu.id,
+                      name: menu.menuName,
+                      price: menu.price,
+                      hpp: menu.hpp,
+                      totalOrder: menu.totalBuy,
+                      typeMenu: menu.typeMenu,
+                      isDisabled: true,
                     ),
-                    i != menuOrders.length
+                    i != orders.length
                         ? const SizedBox(height: 12)
                         : const SizedBox(),
-                    i != menuOrders.length
+                    i != orders.length
                         ? const CustomDivider()
                         : const SizedBox(),
                   ],

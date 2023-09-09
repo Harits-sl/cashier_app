@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';
-import '../cubit/menu_order/menu_order_cubit.dart';
+import '../cubit/menu_order/menu_order_bloc.dart';
 
 class PaymentMethod extends StatelessWidget {
   static const String routeName = '/payment-method';

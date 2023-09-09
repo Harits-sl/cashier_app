@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../cubit/menu_order/menu_order_cubit.dart';
+import '../cubit/menu_order/menu_order_bloc.dart';
 
 class ItemMenu extends StatefulWidget {
-  // final MenuModel menu;
   final String id;
   final String name;
   final int price;
@@ -16,7 +15,6 @@ class ItemMenu extends StatefulWidget {
   final bool isDisabled;
 
   const ItemMenu({
-    // required this.menu,
     Key? key,
     required this.id,
     required this.name,
@@ -41,16 +39,20 @@ class _ItemMenuState extends State<ItemMenu> {
     _totalBuy = widget.totalOrder;
 
     /// jika [_totalBuy] lebih dari 0 masukan data ke orderMenu
-    if (_totalBuy > 0) {
-      context.read<MenuOrderBloc>().add(AddOrder(
-            id: widget.id,
-            menuName: widget.name,
-            price: widget.price,
-            hpp: widget.hpp,
-            totalBuy: _totalBuy,
-            typeMenu: widget.typeMenu,
-          ));
-    }
+    // if (_totalBuy > 0) {
+    //   context.read<MenuOrderBloc>().add(
+    //         AddOrder(
+    //           menu: Menu(
+    //             id: widget.id,
+    //             price: widget.price,
+    //             menuName: widget.name,
+    //             totalBuy: _totalBuy,
+    //             hpp: widget.hpp,
+    //             typeMenu: widget.typeMenu,
+    //           ),
+    //         ),
+    //       );
+    // }
   }
 
   @override
@@ -109,14 +111,9 @@ class _ItemMenuState extends State<ItemMenu> {
                         setState(() {
                           _totalBuy--;
                         });
-                        context.read<MenuOrderBloc>().add(AddOrder(
-                              id: widget.id,
-                              menuName: widget.name,
-                              price: widget.price,
-                              hpp: widget.hpp,
-                              totalBuy: _totalBuy,
-                              typeMenu: widget.typeMenu,
-                            ));
+                        context
+                            .read<MenuOrderBloc>()
+                            .add(OrderDecrementPressed(id: widget.id));
                       }
                     }
                   },
@@ -129,10 +126,15 @@ class _ItemMenuState extends State<ItemMenu> {
                   width: 24,
                   child: Text(
                     _totalBuy.toString(),
-                    style: primaryTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 12,
-                    ),
+                    style: widget.isDisabled
+                        ? gray2TextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          )
+                        : primaryTextStyle.copyWith(
+                            fontWeight: medium,
+                            fontSize: 12,
+                          ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -142,14 +144,9 @@ class _ItemMenuState extends State<ItemMenu> {
                       setState(() {
                         _totalBuy++;
                       });
-                      context.read<MenuOrderBloc>().add(AddOrder(
-                            id: widget.id,
-                            menuName: widget.name,
-                            price: widget.price,
-                            hpp: widget.hpp,
-                            totalBuy: _totalBuy,
-                            typeMenu: widget.typeMenu,
-                          ));
+                      context
+                          .read<MenuOrderBloc>()
+                          .add(OrderIncrementPressed(id: widget.id));
                     }
                   },
                   child: Image.asset(

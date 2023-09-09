@@ -7,7 +7,7 @@ import '../../config/route/routes.dart';
 import '../cubit/Menu/menu_cubit.dart';
 
 import '../../data/models/menu_order_model.dart';
-import '../cubit/menu_order/menu_order_cubit.dart';
+import '../cubit/menu_order/menu_order_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,10 +33,11 @@ class CashierPage extends StatefulWidget {
 class _CashierPageState extends State<CashierPage> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<Map<String, dynamic>>? menus;
-  List<Map<String, dynamic>>? searchMenus;
+  List<MenuModel>? menus;
+  // List<Map<String, dynamic>>? searchMenus;
   MenuOrderModel? menuOrder;
-  late final menuOrderBloc;
+  late final MenuCubit menuCubit;
+  late final MenuOrderBloc menuOrderBloc;
   // late CartModel carts;
   bool isSearch = false;
   int totalOrder = 0;
@@ -45,11 +46,17 @@ class _CashierPageState extends State<CashierPage> {
   @override
   void initState() {
     super.initState();
+    menuOrderBloc = context.read<MenuOrderBloc>();
 
     // menjalankan fungsi cubit json menu
-    context.read<MenuCubit>().getAllMenu();
+    menuCubit = context.read<MenuCubit>();
+    menuCubit.getAllMenu();
+    // if (menuCubit.state is MenuSuccess) {
+    //   menuCubit.state.props.map((e) => debugPrint(e.toString()));
+    //   // log(' menuCubit.state: ${state}');
 
-    menuOrderBloc = context.read<MenuOrderBloc>();
+    // }
+
     // carts = menuOrderCubit.cart;
     // if (carts.id != null) {
     //   menuOrderCubit.getDataFromCart();
@@ -74,7 +81,8 @@ class _CashierPageState extends State<CashierPage> {
     if (query.isNotEmpty) {
       isSearch = true;
 
-      context.read<MenuCubit>().searchMenu(query);
+      menuOrderBloc.add(SearchMenu(query: query));
+      setState(() {});
     } else {
       isSearch = false;
       setState(() {});
@@ -139,9 +147,7 @@ class _CashierPageState extends State<CashierPage> {
           controller: _searchController,
           onSubmitted: (String query) {
             _search(query);
-            // TODO: CAN SEARCH MENU
           },
-          // enabled: false,
           style: primaryTextStyle.copyWith(
             fontWeight: medium,
             fontSize: 12,
@@ -167,20 +173,22 @@ class _CashierPageState extends State<CashierPage> {
 
     Widget _buildMenu() {
       Widget _title(String title) {
-        return Text(
-          title,
-          style: primaryTextStyle.copyWith(
-            fontWeight: semiBold,
-            fontSize: 16,
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Text(
+            title,
+            style: primaryTextStyle.copyWith(
+              fontWeight: semiBold,
+              fontSize: 16,
+            ),
           ),
         );
       }
 
-      Widget _menu(List<MenuModel?> listMenu) {
+      Widget _menu(List menus) {
         return Column(
-          children: (listMenu).map((menu) {
-            int totalOrderFromCart = 0;
-
+          children: (menus).map((menu) {
+            // int totalOrderFromCart = 0;
             /// jika data cart tidak kosong
             /// maka lakukan perulangan data [carts.listMenus]
             // if (carts.id != null) {
@@ -197,12 +205,12 @@ class _CashierPageState extends State<CashierPage> {
             return Column(
               children: [
                 ItemMenu(
-                  id: menu!.id,
-                  name: menu.name,
+                  key: Key(menu.id),
+                  id: menu.id,
+                  name: menu.menuName,
                   price: menu.price,
                   hpp: menu.hpp,
-                  totalOrder:
-                      totalOrderFromCart > 0 ? totalOrderFromCart : totalOrder,
+                  totalOrder: menu.totalBuy,
                   typeMenu: menu.typeMenu,
                 ),
               ],
@@ -216,43 +224,68 @@ class _CashierPageState extends State<CashierPage> {
           left: defaultMargin,
           right: defaultMargin,
         ),
-        child: BlocBuilder<MenuCubit, MenuState>(
-          builder: (context, state) {
-            if (state is MenuLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
+        child: BlocListener<MenuCubit, MenuState>(
+          listener: (context, state) {
             if (state is MenuSuccess) {
+              // if (!isSearch) {
+              //   menus ??= state.menu;
+              // } else {
+              //   searchMenus = state.menu;
+              // }
+              for (var menu in state.menu) {
+                menuOrderBloc.add(
+                  AddMenus(
+                    id: menu.id,
+                    price: menu.price,
+                    menuName: menu.name,
+                    totalBuy: 0,
+                    hpp: menu.hpp,
+                    typeMenu: menu.typeMenu,
+                  ),
+                );
+              }
+            }
+          },
+          child: BlocBuilder<MenuOrderBloc, MenuOrderState>(
+            builder: (context, state) {
+              List? menuOrders;
               if (!isSearch) {
-                menus ??= state.menu;
+                menuOrders = state.menuOrders;
               } else {
-                searchMenus = state.menu;
+                menuOrders = state.listMenuSearch;
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: (!isSearch ? menus : searchMenus)!.map((item) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _title(item['typeMenu']),
-                      const SizedBox(height: 12),
-                      const CustomDivider(),
-                      _menu(item['menu']),
-                      const SizedBox(height: 16),
-                    ],
-                  );
-                }).toList(),
-              );
-            }
-            if (state is MenuFailed) {
-              print(state.error);
-              return Text(state.error);
-            }
-            return const SizedBox();
-          },
+              if (state.menuOrders == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state.menuOrders != null) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _title('Coffees'),
+                    const CustomDivider(),
+                    _menu(menuOrders!),
+                    // const SizedBox(height: 16),
+                    // _title('Non-Coffees'),
+                    // const CustomDivider(),
+                    // _menu(menuOrders
+                    //     .where((menu) => menu.typeMenu == 'non-coffee')
+                    //     .toList()),
+                    // const SizedBox(height: 16),
+                    // _title('Foods'),
+                    // const CustomDivider(),
+                    // _menu(menuOrders
+                    //     .where((menu) => menu.typeMenu == 'food')
+                    //     .toList()),
+                    const SizedBox(height: 16),
+                  ],
+                );
+              } else {
+                return const Text('Please Try Again');
+              }
+            },
+          ),
         ),
       );
     }
@@ -265,10 +298,10 @@ class _CashierPageState extends State<CashierPage> {
           if (state.menuOrders != null) {
             menuOrder = menuOrder = MenuOrderModel(
               listMenus: state.menuOrders,
-              total: state.total!,
+              total: state.total ?? 0,
             );
             for (var item in menuOrder!.listMenus!) {
-              totalBuy += item['totalBuy'];
+              totalBuy += item.totalBuy;
             }
           } else {
             menuOrder = const MenuOrderModel(

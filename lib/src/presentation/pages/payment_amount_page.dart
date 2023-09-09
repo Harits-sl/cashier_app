@@ -7,7 +7,7 @@ import '../../config/route/routes.dart';
 
 import '../../config/route/go.dart';
 import '../../core/utils/string_helper.dart';
-import '../cubit/menu_order/menu_order_cubit.dart';
+import '../cubit/menu_order/menu_order_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';

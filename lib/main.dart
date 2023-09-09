@@ -1,4 +1,4 @@
-import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
+import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_bloc.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/features/product/index.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';

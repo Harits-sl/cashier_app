@@ -21,7 +21,8 @@ class Go {
     required String path,
     Map? arguments,
   }) {
-    Navigator.of(context).pushReplacementNamed(path, arguments: arguments);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(path, (route) => false, arguments: arguments);
   }
 
   static void back(BuildContext context) {

@@ -3,7 +3,6 @@ import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
 import 'package:cashier_app/src/data/models/cart_model.dart';
-import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_cubit.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
@@ -19,14 +18,14 @@ class MenuOrder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onTapEdit(CartModel cart) {
-      context.read<MenuOrderBloc>().setCart = cart;
+      // context.read<MenuOrderBloc>().setCart = cart;
 
       Go.routeWithPathAndRemove(context: context, path: Routes.editOrderMenu);
     }
 
     void onTapCheckout(CartModel cart) {
       // final menuOrder = MenuOrderModel.fromCartModel(cart);
-      context.read<MenuOrderBloc>().setCart = cart;
+      // context.read<MenuOrderBloc>().setCart = cart;
 
       Go.routeWithPath(context: context, path: Routes.paymentMethod);
     }
