@@ -3,18 +3,18 @@ import 'package:cashier_app/src/data/models/menu_model.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
 
-import '../../config/route/routes.dart';
-import '../cubit/Menu/menu_cubit.dart';
+import '../../../../config/route/routes.dart';
+import '../../../cubit/Menu/menu_cubit.dart';
 
-import '../../data/models/menu_order_model.dart';
-import '../cubit/menu_order/menu_order_bloc.dart';
+import '../../../../data/models/menu_order_model.dart';
+import '../index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../config/route/go.dart';
-import '../../core/shared/theme.dart';
-import '../../core/utils/string_helper.dart';
-import '../widgets/item_menu.dart';
+import '../../../../config/route/go.dart';
+import '../../../../core/shared/theme.dart';
+import '../../../../core/utils/string_helper.dart';
+import '../../../widgets/item_menu.dart';
 
 class CashierPage extends StatefulWidget {
   static const String routeName = '/cashier';
@@ -54,7 +54,6 @@ class _CashierPageState extends State<CashierPage> {
     // if (menuCubit.state is MenuSuccess) {
     //   menuCubit.state.props.map((e) => debugPrint(e.toString()));
     //   // log(' menuCubit.state: ${state}');
-
     // }
 
     // carts = menuOrderCubit.cart;
@@ -92,7 +91,7 @@ class _CashierPageState extends State<CashierPage> {
   }
 
   void checkOutPressed() {
-    if (menuOrder!.listMenus!.isNotEmpty) {
+    if (menuOrder!.total != 0) {
       menuOrderBloc.add(OrderCheckoutPressed());
       Go.routeWithPath(context: context, path: Routes.orderInfo);
     }
@@ -103,7 +102,7 @@ class _CashierPageState extends State<CashierPage> {
   }
 
   void cartPressed() {
-    Go.routeWithPathAndRemove(context: context, path: Routes.cart);
+    Go.routeWithPath(context: context, path: Routes.cart);
   }
 
   @override
@@ -172,51 +171,73 @@ class _CashierPageState extends State<CashierPage> {
     }
 
     Widget _buildMenu() {
-      Widget _title(String title) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(
-            title,
-            style: primaryTextStyle.copyWith(
-              fontWeight: semiBold,
-              fontSize: 16,
-            ),
-          ),
-        );
-      }
+      // Widget _title(String title) {
+      //   return Padding(
+      //     padding: const EdgeInsets.only(bottom: 12),
+      //     child: Text(
+      //       title,
+      //       style: primaryTextStyle.copyWith(
+      //         fontWeight: semiBold,
+      //         fontSize: 16,
+      //       ),
+      //     ),
+      //   );
+      // }
 
-      Widget _menu(List menus) {
-        return Column(
-          children: (menus).map((menu) {
-            // int totalOrderFromCart = 0;
-            /// jika data cart tidak kosong
-            /// maka lakukan perulangan data [carts.listMenus]
-            // if (carts.id != null) {
-            //   for (var cart in carts.listMenus!) {
-            //     /// jika menu id sama dengan cart id
-            //     /// maka ubah [totalOrderFromCart]
-            //     /// menjadi datanya [cart]
-            //     if (menu.id == cart['id']) {
-            //       totalOrderFromCart = cart['totalBuy'];
-            //     }
-            //     // setState(() {});
-            //   }
-            // }
-            return Column(
-              children: [
-                ItemMenu(
-                  key: Key(menu.id),
-                  id: menu.id,
-                  name: menu.menuName,
-                  price: menu.price,
-                  hpp: menu.hpp,
-                  totalOrder: menu.totalBuy,
-                  typeMenu: menu.typeMenu,
-                ),
-              ],
-            );
-          }).toList(),
-        );
+      Widget _menu(String title, List menus) {
+        final List? menusAccordingType =
+            menus.where((menu) => menu.typeMenu == title).toList();
+
+        return menusAccordingType!.isEmpty
+            ? const SizedBox()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Text(
+                      title,
+                      style: primaryTextStyle.copyWith(
+                        fontWeight: semiBold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const CustomDivider(),
+                  Column(
+                    children: (menusAccordingType).map((menu) {
+                      // int totalOrderFromCart = 0;
+                      /// jika data cart tidak kosong
+                      /// maka lakukan perulangan data [carts.listMenus]
+                      // if (carts.id != null) {
+                      //   for (var cart in carts.listMenus!) {
+                      //     /// jika menu id sama dengan cart id
+                      //     /// maka ubah [totalOrderFromCart]
+                      //     /// menjadi datanya [cart]
+                      //     if (menu.id == cart['id']) {
+                      //       totalOrderFromCart = cart['totalBuy'];
+                      //     }
+                      //     // setState(() {});
+                      //   }
+                      // }
+                      return Column(
+                        children: [
+                          ItemMenu(
+                            key: Key(menu.id),
+                            id: menu.id,
+                            name: menu.menuName,
+                            price: menu.price,
+                            hpp: menu.hpp,
+                            totalOrder: menu.totalBuy,
+                            typeMenu: menu.typeMenu,
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              );
       }
 
       return Container(
@@ -263,22 +284,9 @@ class _CashierPageState extends State<CashierPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _title('Coffees'),
-                    const CustomDivider(),
-                    _menu(menuOrders!),
-                    // const SizedBox(height: 16),
-                    // _title('Non-Coffees'),
-                    // const CustomDivider(),
-                    // _menu(menuOrders
-                    //     .where((menu) => menu.typeMenu == 'non-coffee')
-                    //     .toList()),
-                    // const SizedBox(height: 16),
-                    // _title('Foods'),
-                    // const CustomDivider(),
-                    // _menu(menuOrders
-                    //     .where((menu) => menu.typeMenu == 'food')
-                    //     .toList()),
-                    const SizedBox(height: 16),
+                    _menu('coffee', menuOrders!),
+                    _menu('non-coffee', menuOrders),
+                    _menu('food', menuOrders),
                   ],
                 );
               } else {

@@ -1,5 +1,5 @@
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import '../cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import 'package:cashier_app/src/presentation/features/cashier/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

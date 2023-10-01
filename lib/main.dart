@@ -1,26 +1,20 @@
-import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_bloc.dart';
 import 'package:cashier_app/src/presentation/features/cart/index.dart';
+import 'package:cashier_app/src/presentation/features/cashier/bloc/editOrderFromCart/edit_order_from_cart_bloc.dart';
+import 'package:cashier_app/src/presentation/features/cashier/index.dart';
 import 'package:cashier_app/src/presentation/features/product/index.dart';
 import 'package:cashier_app/src/presentation/features/stock/index.dart';
-import 'package:cashier_app/src/presentation/pages/order_info_page.dart';
-import 'package:cashier_app/src/presentation/pages/select_printer_page.dart';
 import 'package:flutter/foundation.dart';
 
 import 'firebase_options_dev.dart';
 import 'firebase_options_prod.dart';
 import 'src/config/route/routes.dart';
 import 'src/presentation/cubit/Menu/menu_cubit.dart';
-import 'src/presentation/cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
 import 'src/presentation/features/home/index.dart';
 import 'src/presentation/features/report/index.dart';
-import 'src/presentation/pages/payment_amount_page.dart';
-import 'src/presentation/pages/receipt_page.dart';
-import 'src/presentation/pages/payment_method_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'src/config/theme/app_theme.dart';
 
-import 'src/presentation/pages/cashier_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,6 +57,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<MenuOrderBloc>(
           create: (BuildContext context) => MenuOrderBloc(),
         ),
+        BlocProvider<EditOrderFromCartBloc>(
+          create: (BuildContext context) => EditOrderFromCartBloc(),
+        ),
         BlocProvider<MenuCubit>(
           create: (BuildContext context) => MenuCubit(),
         ),
@@ -97,7 +94,6 @@ class MyApp extends StatelessWidget {
         routes: {
           Routes.home: (context) => const HomePage(),
           Routes.cashier: (context) => const CashierPage(),
-          // Routes.editOrderMenu: (context) => const EditOrderPage(),
           Routes.product: (context) => const ProductPage(),
           Routes.paymentAmount: (context) => const PaymentAmountPage(),
           Routes.paymentMethod: (context) => const PaymentMethod(),
@@ -112,6 +108,12 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (RouteSettings settings) {
           switch (settings.name) {
+            case EditOrderFromCartPage.routeName:
+              final String id = settings.arguments as String;
+              return MaterialPageRoute(
+                builder: (_) => EditOrderFromCartPage(id: id),
+                settings: settings,
+              );
             case EditProductPage.routeName:
               final String id = settings.arguments as String;
               return MaterialPageRoute(

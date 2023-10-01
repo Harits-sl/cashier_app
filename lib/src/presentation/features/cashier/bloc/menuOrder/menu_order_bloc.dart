@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
-import '../../../data/dataSources/remote/order_service.dart';
+import 'package:cashier_app/src/data/dataSources/remote/cart_service.dart';
+import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
+import 'package:cashier_app/src/data/models/cart_model.dart';
+import 'package:cashier_app/src/data/models/menu_order_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-
-import '../../../data/models/menu_order_model.dart';
 
 part 'menu_order_event.dart';
 part 'menu_order_state.dart';
@@ -18,6 +19,8 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
     on<OrderTypePaymentPressed>(_orderTypePaymentPressed);
     on<AddCashAndChangePayment>(_addCashAndChangePayment);
     on<AddBuyerName>(_addBuyerName);
+    on<AddOrderToCart>(_addOrderToCart);
+    on<AddOrderFromCart>(_addOrderFromCart);
     on<AddOrderToFirestore>(_addOrderToFirestore);
     on<ResetState>(_resetState);
   }
@@ -155,6 +158,27 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
     ));
   }
 
+  void _addOrderFromCart(AddOrderFromCart event, Emitter<MenuOrderState> emit) {
+    List<_Menu> menuOrders = event.menuOrders
+        .map((order) => _Menu(
+              id: order.id,
+              price: order.price,
+              menuName: order.menuName,
+              totalBuy: order.totalBuy,
+              hpp: order.hpp,
+              typeMenu: order.typeMenu,
+            ))
+        .toList();
+
+    emit(state.copyWith(
+      id: event.id,
+      buyer: event.buyer,
+      menuOrders: menuOrders,
+      dateTimeOrder: event.dateTimeOrder,
+      total: event.total,
+    ));
+  }
+
   void _addOrderToFirestore(
       AddOrderToFirestore event, Emitter<MenuOrderState> emit) async {
     // find total buy more than 0,
@@ -176,7 +200,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
     );
 
     OrderService().addOrder(menuOrder);
-    // CartService().deleteCart(menuOrder.id!);
+    CartService().deleteCart(menuOrder.id!);
   }
 
   void _addBuyerName(AddBuyerName event, Emitter<MenuOrderState> emit) {
@@ -185,21 +209,22 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
     ));
   }
 
-  // void checkoutFromCart(MenuOrderModel menuOrder) {
-  //   emit(MenuOrderSuccess(menuOrder));
-  // }
+  void _addOrderToCart(AddOrderToCart event, Emitter<MenuOrderState> emit) {
+    // find total buy more than 0,
+    // and change menuOrders from [_Menu] to map
+    List listMenus = state.menuOrders!
+        .where((order) => order.totalBuy != 0)
+        .map((o) => o.toMap())
+        .toList();
 
-  // void getDataFromCart() {
-  //   // final cartData = CartService().fetchCartById(cart.id!);
-  //   final menuOrder = MenuOrderModel.fromCartModel(_cart);
-  //   _menuOrderModel = _menuOrderModel.copyWith(
-  //     id: menuOrder.id,
-  //     buyer: menuOrder.buyer,
-  //     dateTimeOrder: menuOrder.dateTimeOrder,
-  //     listMenus: menuOrder.listMenus,
-  //     total: menuOrder.total,
-  //   );
+    CartModel cartOrder = CartModel(
+      id: state.id,
+      buyer: state.buyer,
+      dateTimeOrder: state.dateTimeOrder,
+      listMenus: listMenus,
+      total: state.total!,
+    );
 
-  //   emit(MenuOrderSuccess(_menuOrderModel));
-  // }
+    CartService().insertCart(cartOrder);
+  }
 }

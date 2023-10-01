@@ -2,7 +2,7 @@ import 'package:cashier_app/src/config/route/go.dart';
 import 'package:cashier_app/src/config/route/routes.dart';
 import 'package:cashier_app/src/core/shared/theme.dart';
 import 'package:cashier_app/src/core/utils/string_helper.dart';
-import 'package:cashier_app/src/presentation/cubit/menu_order/menu_order_bloc.dart';
+import '../index.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
@@ -28,6 +28,10 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
   void initState() {
     super.initState();
     menuOrderBloc = context.read<MenuOrderBloc>();
+
+    if (menuOrderBloc.state.buyer != null) {
+      buyerController.text = menuOrderBloc.state.buyer!;
+    }
   }
 
   void checkOutPressed() {
@@ -35,22 +39,26 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
     Go.routeWithPath(context: context, path: Routes.paymentMethod);
   }
 
-  // void saveToCart() {
-  //   var menuOrder = context.read<MenuOrderBloc>().state;
-  //   if (buyerController.text.isEmpty) {
-  //     setState(() {
-  //       isBuyerEmpty = true;
-  //     });
-  //     return;
-  //   }
+  void saveToCart() {
+    // var menuOrder = context.read<MenuOrderBloc>().state;
+    if (buyerController.text.isEmpty) {
+      setState(() {
+        isBuyerEmpty = true;
+      });
 
-  //   if (menuOrder is MenuOrderSuccess) {
-  //     CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
-  //     BuyerCubit().addToCart(cart);
-  //     context.read<MenuOrderCubit>().initState();
-  //     Go.routeWithPath(context: context, path: Routes.cashier);
-  //   }
-  // }
+      return;
+    }
+
+    menuOrderBloc.add(AddOrderToCart());
+    menuOrderBloc.add(ResetState());
+    Go.routeWithPath(context: context, path: Routes.cashier);
+
+    // if (menuOrder is MenuOrderSuccess) {
+    //   CartModel cart = CartModel.fromMenuOrderModel(menuOrder.menuOrder);
+    //   BuyerCubit().addToCart(cart);
+    //   context.read<MenuOrderCubit>().initState();
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,7 +228,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
       return Expanded(
         child: CustomButton(
           color: primaryColor,
-          onPressed: () {},
+          onPressed: saveToCart,
           text: '+ Cart',
           margin: const EdgeInsets.only(right: defaultMargin, left: 12),
         ),

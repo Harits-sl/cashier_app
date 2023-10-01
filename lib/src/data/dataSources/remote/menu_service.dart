@@ -29,7 +29,7 @@ class MenuService {
   Future<List<MenuModel>> fetchMenu() async {
     CollectionReference menus = _db.collection(menusCollection);
 
-    QuerySnapshot querySnapshot = await menus.get();
+    QuerySnapshot querySnapshot = await menus.where('id', isNull: false).get();
 
     // Get data from docs and convert map to List
     List<MenuModel> listData = querySnapshot.docs.map((doc) {

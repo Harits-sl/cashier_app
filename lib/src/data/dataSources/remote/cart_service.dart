@@ -29,8 +29,8 @@ class CartService {
     CollectionReference carts = _db.collection(cartsCollection);
     QuerySnapshot querySnapshot = await carts.where('id', isEqualTo: id).get();
 
-    CartModel cart =
-        CartModel.fromFirestore(querySnapshot.docs[0] as Map<String, dynamic>);
+    CartModel cart = CartModel.fromFirestore(
+        querySnapshot.docs[0].data() as Map<String, dynamic>);
     return cart;
   }
 

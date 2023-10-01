@@ -20,7 +20,9 @@ class MenuOrder extends StatelessWidget {
     void onTapEdit(CartModel cart) {
       // context.read<MenuOrderBloc>().setCart = cart;
 
-      Go.routeWithPathAndRemove(context: context, path: Routes.editOrderMenu);
+      // Go.back(context);
+      Go.routeWithPathAndArgument(
+          context: context, path: Routes.editOrderFromCart, arguments: cart.id);
     }
 
     void onTapCheckout(CartModel cart) {

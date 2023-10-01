@@ -33,10 +33,10 @@ class _CartPageState extends State<CartPage> {
                 ),
               );
             } else if (state is CartSuccess) {
-              return SingleChildScrollView(
+              return const SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     CustomAppBar(title: 'Cart'),
                     MenuOrder(),
                   ],

@@ -2,16 +2,15 @@ import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_app_bar.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
-import '../../config/route/go.dart';
-import '../../config/route/routes.dart';
-import '../cubit/thermalPrinterCubit/thermal_printer_cubit.dart';
+import '../../../../config/route/go.dart';
+import '../../../../config/route/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../core/shared/theme.dart';
-import '../../core/utils/string_helper.dart';
-import '../cubit/menu_order/menu_order_bloc.dart';
+import '../../../../core/shared/theme.dart';
+import '../../../../core/utils/string_helper.dart';
+import '../index.dart';
 
 class ReceiptPage extends StatelessWidget {
   static const String routeName = '/receipt';
@@ -87,7 +86,7 @@ class ReceiptPage extends StatelessWidget {
     void _onTapSaveOrder(MenuOrderState order) {
       context.read<MenuOrderBloc>().add(AddOrderToFirestore());
       context.read<MenuOrderBloc>().add(ResetState());
-      Go.routeWithPathAndRemove(context: context, path: Routes.home);
+      Go.routeWithPathAndRemoveUntil(context: context, path: Routes.home);
     }
 
     Widget _buildReceiptInfo(MenuOrderState order) {

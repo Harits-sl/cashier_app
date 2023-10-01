@@ -89,6 +89,33 @@ class AddBuyerName extends MenuOrderEvent {
   List<Object?> get props => [buyer];
 }
 
+class AddOrderFromCart extends MenuOrderEvent {
+  final String id;
+  final List menuOrders;
+  final int total;
+  final DateTime dateTimeOrder;
+  final String buyer;
+
+  const AddOrderFromCart({
+    required this.id,
+    required this.menuOrders,
+    required this.total,
+    required this.dateTimeOrder,
+    required this.buyer,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        menuOrders,
+        total,
+        dateTimeOrder,
+        buyer,
+      ];
+}
+
 class AddOrderToFirestore extends MenuOrderEvent {}
+
+class AddOrderToCart extends MenuOrderEvent {}
 
 class ResetState extends MenuOrderEvent {}

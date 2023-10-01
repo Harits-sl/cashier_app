@@ -1,9 +1,9 @@
+import 'package:cashier_app/src/presentation/features/cashier/bloc/menuOrder/menu_order_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/shared/theme.dart';
 import '../../core/utils/string_helper.dart';
-import '../cubit/menu_order/menu_order_bloc.dart';
 
 class ItemMenu extends StatefulWidget {
   final String id;
@@ -31,12 +31,22 @@ class ItemMenu extends StatefulWidget {
 
 class _ItemMenuState extends State<ItemMenu> {
   late int _totalBuy;
+  late String codeName;
 
   @override
   void initState() {
     super.initState();
 
     _totalBuy = widget.totalOrder;
+
+    // jika nama menu lebih dari satu kata
+    // maka lakukan split nama menu
+    if (widget.name.split(' ').length > 1) {
+      final split = widget.name.split(' ');
+      codeName = split.map((str) => str[0]).join();
+    } else {
+      codeName = widget.name[0];
+    }
 
     /// jika [_totalBuy] lebih dari 0 masukan data ke orderMenu
     // if (_totalBuy > 0) {
@@ -72,6 +82,12 @@ class _ItemMenuState extends State<ItemMenu> {
                 decoration: BoxDecoration(
                   color: lightGray2Color,
                   borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Text(
+                    codeName.toUpperCase(),
+                    style: blackTextStyle.copyWith(fontWeight: semiBold),
+                  ),
                 ),
               ),
               Column(
