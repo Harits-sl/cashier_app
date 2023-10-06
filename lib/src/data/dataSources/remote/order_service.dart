@@ -1,12 +1,15 @@
-import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cashier_app/src/data/models/menu_order_model.dart';
+import 'package:flutter/material.dart';
 
-import '../../models/menu_order_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OrderService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String ordersCollection = 'orders';
+
+  final int yearNow = DateTime.now().year;
+  final int monthNow = DateTime.now().month;
+  final int dateNow = DateTime.now().day;
 
   void addOrder(MenuOrderModel menuOrder) async {
     Map<String, dynamic> order = menuOrder.toFirestore();
@@ -33,18 +36,34 @@ class OrderService {
   }
 
   Future<List<MenuOrderModel>> getFilterOrder(
-      Timestamp firstDate, Timestamp secondDate) async {
+      DateTime firstDate, DateTime secondDate) async {
     CollectionReference orders = _db.collection(ordersCollection);
+    DateTime fromDate = DateTime(
+      firstDate.year,
+      firstDate.month,
+      firstDate.day,
+    );
+    DateTime toDate = DateTime(
+      secondDate.year,
+      secondDate.month,
+      secondDate.day,
+      23,
+      59,
+      59,
+    );
+
+    Timestamp fromTimestamp = Timestamp.fromDate(fromDate);
+    Timestamp toTimestamp = Timestamp.fromDate(toDate);
 
     QuerySnapshot snapshotOrders = await orders
-        .where('dateTimeOrder',
-            isGreaterThanOrEqualTo: firstDate, isLessThanOrEqualTo: secondDate)
-        // .where('dateTimeOrder', isLessThanOrEqualTo: secondDate)
+        .where(
+          'dateTimeOrder',
+          isGreaterThanOrEqualTo: fromTimestamp,
+          isLessThanOrEqualTo: toTimestamp,
+        )
         .get();
 
-    debugPrint('snapshotOrders: ${snapshotOrders.docs}');
     List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
-      debugPrint('doc: ${doc.data()}');
       MenuOrderModel orders =
           MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
 
@@ -52,5 +71,87 @@ class OrderService {
     }).toList();
 
     return listData;
+  }
+
+  Future<List<MenuOrderModel>> getTodayOrder() async {
+    CollectionReference orders = _db.collection(ordersCollection);
+
+    DateTime date = DateTime(yearNow, monthNow, dateNow);
+
+    QuerySnapshot snapshotOrders =
+        await orders.where('dateTimeOrder', isGreaterThan: date).get();
+
+    List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
+    }).toList();
+
+    return listData;
+  }
+
+  Future<List<MenuOrderModel>> getYesterdayOrder() async {
+    CollectionReference orders = _db.collection(ordersCollection);
+    DateTime today = DateTime(yearNow, monthNow, dateNow);
+    DateTime yesterday = DateTime(yearNow, monthNow, dateNow - 1);
+
+    QuerySnapshot snapshotOrders = await orders
+        .where('dateTimeOrder', isGreaterThan: yesterday, isLessThan: today)
+        .get();
+
+    List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
+    }).toList();
+
+    return listData;
+  }
+
+  Future<List<MenuOrderModel>> getThisWeekOrder() async {
+    /// from https://stackoverflow.com/questions/58287278/how-to-get-start-of-or-end-of-week-in-dart
+    /// The [weekday] may be 0 for Sunday, 1 for Monday, etc. up to 7 for Sunday.
+    DateTime getDateMonday(DateTime date) =>
+        DateTime(date.year, date.month, date.day - (date.weekday - 1) % 7);
+
+    CollectionReference orders = _db.collection(ordersCollection);
+    DateTime thisWeek = getDateMonday(DateTime.now());
+
+    QuerySnapshot snapshotOrders =
+        await orders.where('dateTimeOrder', isGreaterThan: thisWeek).get();
+
+    List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
+    }).toList();
+
+    return listData;
+  }
+
+  Future<List<MenuOrderModel>> getThisMonthOrder() async {
+    CollectionReference orders = _db.collection(ordersCollection);
+    DateTime thisMonth = DateTime(yearNow, monthNow, 1);
+
+    QuerySnapshot snapshotOrders =
+        await orders.where('dateTimeOrder', isGreaterThan: thisMonth).get();
+
+    List<MenuOrderModel> listData = snapshotOrders.docs.map((doc) {
+      MenuOrderModel orders =
+          MenuOrderModel.fromFirestore(doc.data() as Map<String, dynamic>);
+
+      return orders;
+    }).toList();
+
+    return listData;
+  }
+}
+
+extension DateUtils on DateTime {
+  DateTime getDay({required int dayOfWeek}) {
+    return subtract(Duration(days: weekday - dayOfWeek));
   }
 }

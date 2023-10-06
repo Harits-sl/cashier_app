@@ -11,7 +11,27 @@ class AppTheme {
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: blueColor,
       ),
-      scaffoldBackgroundColor: whiteColor,
+      scaffoldBackgroundColor: backgroundColor,
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: primaryColor),
+      inputDecorationTheme: InputDecorationTheme(
+        isDense: true,
+        hintStyle: gray2TextStyle.copyWith(
+          fontWeight: medium,
+          fontSize: 12,
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor, width: 1.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: lightGray2Color, width: 1.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: primaryColor, width: 1.5),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
     );
   }
 }

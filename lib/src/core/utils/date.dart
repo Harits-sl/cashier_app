@@ -11,6 +11,14 @@ class Date {
         .format(date)
         .compareTo(format.format(today.subtract(Duration(days: subtractDay))));
 
+    // debugPrint(
+    //     'today.subtract(Duration(days: subtractDay)): ${today.subtract(Duration(days: subtractDay))}');
+    // debugPrint('dateCompare: ${dateCompare}');
     return dateCompare;
+  }
+
+  static String format(DateTime date) {
+    DateFormat format = DateFormat('dd/MM/yyyy');
+    return format.format(date);
   }
 }

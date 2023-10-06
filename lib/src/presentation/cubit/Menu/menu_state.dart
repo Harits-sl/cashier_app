@@ -12,7 +12,7 @@ class MenuInitial extends MenuState {}
 class MenuLoading extends MenuState {}
 
 class MenuSuccess extends MenuState {
-  final List<Map<String, dynamic>> menu;
+  final List<MenuModel> menu;
 
   const MenuSuccess(this.menu);
 

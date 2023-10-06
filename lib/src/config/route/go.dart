@@ -24,7 +24,16 @@ class Go {
     Navigator.of(context).pushReplacementNamed(path, arguments: arguments);
   }
 
-  static void back(BuildContext context, Widget widget) {
+  static void routeWithPathAndRemoveUntil({
+    required BuildContext context,
+    required String path,
+    Map? arguments,
+  }) {
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(path, (route) => false, arguments: arguments);
+  }
+
+  static void back(BuildContext context) {
     Navigator.pop(context);
   }
 
