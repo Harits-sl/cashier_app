@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import 'firebase_options_dev.dart';
 import 'firebase_options_prod.dart';
+import 'firebase_options.dart';
 import 'src/config/route/routes.dart';
 import 'src/presentation/cubit/Menu/menu_cubit.dart';
 import 'src/presentation/features/home/index.dart';
@@ -26,18 +27,18 @@ void main() async {
   // await dbHelper.init();
 
   // menentukan firebase yang dipakai
-  if (kDebugMode) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptionsDev.currentPlatform,
-    );
-  } else {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptionsDev.currentPlatform,
-  // );
+  // if (kDebugMode) {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptionsDev.currentPlatform,
+  //   );
+  // } else {
+  //   await Firebase.initializeApp(
+  //     options: DefaultFirebaseOptions.currentPlatform,
+  //   );
+  // }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptionsDev.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

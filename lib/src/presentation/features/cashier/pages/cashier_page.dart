@@ -185,10 +185,15 @@ class _CashierPageState extends State<CashierPage> {
       // }
 
       Widget _menu(String title, List menus) {
-        final List? menusAccordingType =
-            menus.where((menu) => menu.typeMenu == title).toList();
+        final List? listDrinks = menus
+            .where((menu) =>
+                menu.typeMenu == 'coffee' || menu.typeMenu == 'non-coffee')
+            .toList();
 
-        return menusAccordingType!.isEmpty
+        final List? listFoods =
+            menus.where((menu) => menu.typeMenu == 'food').toList();
+
+        return listDrinks!.isEmpty || listFoods!.isEmpty
             ? const SizedBox()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +210,8 @@ class _CashierPageState extends State<CashierPage> {
                   ),
                   const CustomDivider(),
                   Column(
-                    children: (menusAccordingType).map((menu) {
+                    children: (title == 'drinks' ? listDrinks : listFoods!)
+                        .map((menu) {
                       // int totalOrderFromCart = 0;
                       /// jika data cart tidak kosong
                       /// maka lakukan perulangan data [carts.listMenus]
@@ -284,8 +290,8 @@ class _CashierPageState extends State<CashierPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _menu('coffee', menuOrders!),
-                    _menu('non-coffee', menuOrders),
+                    _menu('drinks', menuOrders!),
+                    // _menu('non-coffee', menuOrders),
                     _menu('food', menuOrders),
                   ],
                 );

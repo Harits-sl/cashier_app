@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OrderService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final String ordersCollection = 'orders';
+  final String menusCollection = 'menus';
 
   final int yearNow = DateTime.now().year;
   final int monthNow = DateTime.now().month;
@@ -38,6 +39,8 @@ class OrderService {
   Future<List<MenuOrderModel>> getFilterOrder(
       DateTime firstDate, DateTime secondDate) async {
     CollectionReference orders = _db.collection(ordersCollection);
+    CollectionReference menus = _db.collection(menusCollection);
+
     DateTime fromDate = DateTime(
       firstDate.year,
       firstDate.month,
@@ -70,11 +73,27 @@ class OrderService {
       return orders;
     }).toList();
 
+    for (var data in listData) {
+      for (Map<String, dynamic> menu in data.listMenus!) {
+        QuerySnapshot snapshotMenus =
+            await menus.where('id', isEqualTo: menu['id']).get();
+        print(snapshotMenus.docs);
+        if (snapshotMenus.docs.isNotEmpty) {
+          Map dataMenu = snapshotMenus.docs[0].data() as Map;
+
+          menu.addAll({'typeMenu': dataMenu['typeMenu']});
+          menu.addAll({'hpp': dataMenu['hpp']});
+        }
+      }
+    }
+
+    debugPrint('listData: ${listData}');
     return listData;
   }
 
   Future<List<MenuOrderModel>> getTodayOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
+    // CollectionReference menus = _db.collection(menusCollection);
 
     DateTime date = DateTime(yearNow, monthNow, dateNow);
 
@@ -88,6 +107,18 @@ class OrderService {
       return orders;
     }).toList();
 
+    // for (var data in listData) {
+    //   for (Map<String, dynamic> menu in data.listMenus!) {
+    //     QuerySnapshot snapshotMenus =
+    //         await menus.where('id', isEqualTo: menu['id']).get();
+    //     if (snapshotMenus.docs.isNotEmpty) {
+    //       Map dataMenu = snapshotMenus.docs[0].data() as Map;
+
+    //       menu.addAll({'typeMenu': dataMenu['typeMenu']});
+    //       menu.addAll({'hpp': dataMenu['hpp']});
+    //     }
+    //   }
+    // }
     return listData;
   }
 
@@ -134,6 +165,8 @@ class OrderService {
 
   Future<List<MenuOrderModel>> getThisMonthOrder() async {
     CollectionReference orders = _db.collection(ordersCollection);
+    // CollectionReference menus = _db.collection(menusCollection);
+
     DateTime thisMonth = DateTime(yearNow, monthNow, 1);
 
     QuerySnapshot snapshotOrders =
@@ -145,6 +178,19 @@ class OrderService {
 
       return orders;
     }).toList();
+
+    // for (var data in listData) {
+    //   for (Map<String, dynamic> menu in data.listMenus!) {
+    //     QuerySnapshot snapshotMenus =
+    //         await menus.where('id', isEqualTo: menu['id']).get();
+    //     if (snapshotMenus.docs.isNotEmpty) {
+    //       Map dataMenu = snapshotMenus.docs[0].data() as Map;
+
+    //       menu.addAll({'typeMenu': dataMenu['typeMenu']});
+    //       menu.addAll({'hpp': dataMenu['hpp']});
+    //     }
+    //   }
+    // }
 
     return listData;
   }

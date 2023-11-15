@@ -94,7 +94,7 @@ class _ItemMenuState extends State<ItemMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
+                    StringHelper.titleCase(widget.name),
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                       fontSize: 12,
