@@ -3,6 +3,9 @@ part of 'edit_stock_bloc.dart';
 class EditStockState extends Equatable {
   final String id;
   final String stockName;
+  final String? typeMenu;
+  final int? price;
+  final int? hpp;
   final int quantity;
   final int minimumQuantity;
   final String unit;
@@ -15,6 +18,9 @@ class EditStockState extends Equatable {
   const EditStockState({
     this.id = '',
     this.stockName = '',
+    this.typeMenu,
+    this.price,
+    this.hpp,
     this.quantity = 0,
     this.minimumQuantity = 0,
     this.unit = '',
@@ -43,6 +49,9 @@ class EditStockState extends Equatable {
   EditStockState copyWith({
     String? id,
     String? stockName,
+    String? typeMenu,
+    int? price,
+    int? hpp,
     int? quantity,
     int? minimumQuantity,
     String? unit,
@@ -55,6 +64,9 @@ class EditStockState extends Equatable {
     return EditStockState(
       id: id ?? this.id,
       stockName: stockName ?? this.stockName,
+      typeMenu: typeMenu ?? this.typeMenu,
+      price: price ?? this.price,
+      hpp: hpp ?? this.hpp,
       quantity: quantity ?? this.quantity,
       minimumQuantity: minimumQuantity ?? this.minimumQuantity,
       unit: unit ?? this.unit,

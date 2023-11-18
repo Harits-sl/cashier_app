@@ -95,10 +95,10 @@ class ItemStockScreen extends StatelessWidget {
             'textStyle': white2TextStyle.copyWith(fontSize: 12),
           };
           break;
-        default:
+        case null:
           dataStatus = {
             'text': 'Belom Ditambahkan',
-            'color': redColor,
+            'color': blackColor,
             'textStyle': white2TextStyle.copyWith(fontSize: 12),
           };
       }

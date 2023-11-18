@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/core/utils/status_inventory.dart';
+import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/dataSources/remote/stock_service.dart';
+import 'package:cashier_app/src/data/models/menu_model.dart';
 import 'package:cashier_app/src/data/models/stock_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +27,13 @@ class EditStockBloc extends Bloc<EditStockEvent, EditStockState> {
     try {
       emit(state.copyWith(isLoading: true));
 
-      final StockModel stock = await StockService().fetchStockById(event.id);
+      final MenuModel stock = await MenuService().fetchMenuById(event.id);
       emit(state.copyWith(
         id: stock.id,
         stockName: stock.name,
+        price: stock.price,
+        hpp: stock.hpp,
+        typeMenu: stock.typeMenu,
         quantity: stock.quantity,
         minimumQuantity: stock.minimumQuantity,
         unit: stock.unit,
@@ -74,9 +79,12 @@ class EditStockBloc extends Bloc<EditStockEvent, EditStockState> {
     try {
       final String id = state.id;
       final String name = state.stockName;
+      final int hpp = state.hpp!;
+      final int price = state.price!;
       final int quantity = state.quantity;
       final int minimumQuantity = state.minimumQuantity;
       final String unit = state.unit;
+      final String typeMenu = state.typeMenu!;
       StatusInventory status;
       final DateTime createdAt = state.createdAt!;
       final DateTime updatedAt = DateTime.now();
@@ -88,11 +96,15 @@ class EditStockBloc extends Bloc<EditStockEvent, EditStockState> {
       } else {
         status = StatusInventory.lowStock;
       }
+      print(status);
 
-      StockModel stockModel = StockModel(
+      MenuModel menuModel = MenuModel(
         id: id,
         name: name,
+        hpp: hpp,
+        price: price,
         quantity: quantity,
+        typeMenu: typeMenu,
         minimumQuantity: minimumQuantity,
         unit: unit,
         status: status,
@@ -100,7 +112,7 @@ class EditStockBloc extends Bloc<EditStockEvent, EditStockState> {
         updatedAt: updatedAt,
       );
 
-      await StockService().editStock(stockModel);
+      MenuService().editMenu(menuModel);
       emit(state.copyWith(
         isError: false,
         message: 'Success edit data',

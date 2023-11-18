@@ -115,7 +115,7 @@ class _EditStockScreenState extends State<EditStockScreen> {
               dropdownColor: lightGray2Color,
               borderRadius: BorderRadius.circular(16),
               iconEnabledColor: primaryColor,
-              value: value,
+              value: value == '' ? null : value,
               items: listUnits.map((unit) {
                 return DropdownMenuItem(
                   child: Text(

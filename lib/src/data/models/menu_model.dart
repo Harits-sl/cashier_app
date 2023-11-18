@@ -1,6 +1,7 @@
-import 'package:cashier_app/src/core/utils/status_inventory.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+
+import 'package:cashier_app/src/core/utils/status_inventory.dart';
 
 class MenuModel extends Equatable {
   final String id;
@@ -43,7 +44,7 @@ class MenuModel extends Equatable {
     result.addAll({'minimumQuantity': minimumQuantity});
     result.addAll({'unit': unit});
     result.addAll(
-        {'status': status == null ? StatusInventory.getValue(status!) : null});
+        {'status': status != null ? StatusInventory.getValue(status!) : null});
 
     return result;
   }
@@ -82,4 +83,32 @@ class MenuModel extends Equatable {
         unit,
         status,
       ];
+
+  MenuModel copyWith({
+    String? id,
+    String? name,
+    String? typeMenu,
+    int? price,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? hpp,
+    int? quantity,
+    int? minimumQuantity,
+    String? unit,
+    StatusInventory? status,
+  }) {
+    return MenuModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      typeMenu: typeMenu ?? this.typeMenu,
+      price: price ?? this.price,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      hpp: hpp ?? this.hpp,
+      quantity: quantity ?? this.quantity,
+      minimumQuantity: minimumQuantity ?? this.minimumQuantity,
+      unit: unit ?? this.unit,
+      status: status ?? this.status,
+    );
+  }
 }
