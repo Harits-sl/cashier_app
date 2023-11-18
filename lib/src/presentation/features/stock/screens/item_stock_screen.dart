@@ -24,7 +24,7 @@ class ItemStockScreen extends StatelessWidget {
   final int quantity;
   final int minimumQuantity;
   final String unit;
-  final StatusInventory status;
+  final StatusInventory? status;
   final double marginTop;
 
   @override
@@ -76,25 +76,31 @@ class ItemStockScreen extends StatelessWidget {
       switch (status) {
         case StatusInventory.inStock:
           dataStatus = {
-            'text': StatusInventory.getValue(status),
+            'text': StatusInventory.getValue(status!),
             'color': greenColor,
             'textStyle': white2TextStyle.copyWith(fontSize: 12),
           };
           break;
         case StatusInventory.lowStock:
           dataStatus = {
-            'text': StatusInventory.getValue(status),
+            'text': StatusInventory.getValue(status!),
             'color': yellowColor,
             'textStyle': primaryTextStyle.copyWith(fontSize: 12),
           };
           break;
         case StatusInventory.outOfStock:
           dataStatus = {
-            'text': StatusInventory.getValue(status),
+            'text': StatusInventory.getValue(status!),
             'color': redColor,
             'textStyle': white2TextStyle.copyWith(fontSize: 12),
           };
           break;
+        default:
+          dataStatus = {
+            'text': 'Belom Ditambahkan',
+            'color': redColor,
+            'textStyle': white2TextStyle.copyWith(fontSize: 12),
+          };
       }
 
       return Center(

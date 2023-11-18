@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/dataSources/remote/stock_service.dart';
-import 'package:cashier_app/src/data/models/stock_model.dart';
+import 'package:cashier_app/src/data/models/menu_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,10 +18,10 @@ class StockBloc extends Bloc<StockEvent, StockState> {
     try {
       emit(StockLoading());
 
-      final List<StockModel> stocks = await StockService().fetchStocks();
-      emit(StockSuccess(stocks));
+      final List<MenuModel> menus = await MenuService().fetchMenu();
+      emit(StockSuccess(menus));
     } catch (e) {
-      debugPrint('error in fetch stock $e');
+      debugPrint('error in fetch menus $e');
       emit(StockFailed(e.toString()));
     }
   }

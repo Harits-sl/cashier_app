@@ -12,7 +12,7 @@ class StockInitial extends StockState {}
 class StockLoading extends StockState {}
 
 class StockSuccess extends StockState {
-  final List<StockModel> stocks;
+  final List<MenuModel> stocks;
 
   const StockSuccess(this.stocks);
 

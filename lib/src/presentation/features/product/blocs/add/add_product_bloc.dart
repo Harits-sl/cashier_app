@@ -73,6 +73,10 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         createdAt: createdAt,
         updatedAt: updatedAt,
         hpp: hpp,
+        quantity: 0,
+        minimumQuantity: 0,
+        unit: '',
+        status: null,
       );
 
       if (name == '') {

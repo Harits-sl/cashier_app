@@ -1,3 +1,4 @@
+import 'package:cashier_app/src/core/utils/status_inventory.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
@@ -9,6 +10,10 @@ class MenuModel extends Equatable {
   final DateTime createdAt;
   final DateTime updatedAt;
   final int hpp;
+  final int? quantity;
+  final int? minimumQuantity;
+  final String? unit;
+  final StatusInventory? status;
 
   const MenuModel({
     required this.id,
@@ -18,6 +23,10 @@ class MenuModel extends Equatable {
     required this.createdAt,
     required this.updatedAt,
     required this.hpp,
+    this.quantity,
+    this.minimumQuantity,
+    this.unit,
+    this.status,
   });
 
   Map<String, dynamic> toFirestore() {
@@ -30,11 +39,20 @@ class MenuModel extends Equatable {
     result.addAll({'createdAt': createdAt});
     result.addAll({'updatedAt': updatedAt});
     result.addAll({'hpp': hpp});
+    result.addAll({'quantity': quantity});
+    result.addAll({'minimumQuantity': minimumQuantity});
+    result.addAll({'unit': unit});
+    result.addAll(
+        {'status': status == null ? StatusInventory.getValue(status!) : null});
 
     return result;
   }
 
   factory MenuModel.fromFirestore(Map<String, dynamic> firestore) {
+    StatusInventory? status = firestore['status'] != null
+        ? StatusInventory.getTypeByTitle(firestore['status'])
+        : null;
+
     return MenuModel(
       id: firestore['id'] ?? '',
       name: firestore['name'] ?? '',
@@ -43,6 +61,10 @@ class MenuModel extends Equatable {
       createdAt: (firestore['createdAt'] as Timestamp).toDate(),
       updatedAt: (firestore['updatedAt'] as Timestamp).toDate(),
       hpp: firestore['hpp']?.toInt() ?? 0,
+      quantity: firestore['quantity']?.toInt() ?? 0,
+      minimumQuantity: firestore['minimumQuantity']?.toInt() ?? 0,
+      unit: firestore['unit'] ?? '',
+      status: status,
     );
   }
 
@@ -55,5 +77,9 @@ class MenuModel extends Equatable {
         createdAt,
         updatedAt,
         hpp,
+        quantity,
+        minimumQuantity,
+        unit,
+        status,
       ];
 }

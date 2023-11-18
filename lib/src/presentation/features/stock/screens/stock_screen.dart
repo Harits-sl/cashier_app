@@ -59,58 +59,6 @@ class _StockScreenState extends State<StockScreen> {
       );
     }
 
-    Widget _buildTable() {
-      return BlocConsumer<StockBloc, StockState>(
-        listener: (context, state) {
-          if (state is StockDeleteSuccess) {
-            context.read<StockBloc>().add(FetchStock());
-
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
-          } else if (state is StockDeleteLoading) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Processing Data'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is StockSuccess) {
-            return Expanded(
-              child: CustomTable(
-                source: StockDataSource(stock: state.stocks),
-                isAddAction: false,
-                columns: [
-                  columnItem('no', 'No.'),
-                  columnItem('name', 'Nama'),
-                  columnItem('quantity', 'Quantity'),
-                  columnItem('minimumQuantity', 'Minimum Quantity'),
-                  columnItem('unit', 'Unit'),
-                  columnItem('status', 'Status'),
-                  columnItem('action', 'Action'),
-                ],
-              ),
-            );
-          } else if (state is StockLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is StockDeleteLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is StockFailed) {
-            return Text('Failed Fetch ${state.error}');
-          } else {
-            return const SizedBox();
-          }
-        },
-      );
-    }
-
     _buildListStocks() {
       return BlocConsumer<StockBloc, StockState>(
         listener: (context, state) {
@@ -137,9 +85,9 @@ class _StockScreenState extends State<StockScreen> {
                 return ItemStockScreen(
                   id: stock.id,
                   name: stock.name,
-                  quantity: stock.quantity,
-                  minimumQuantity: stock.minimumQuantity,
-                  unit: stock.unit,
+                  quantity: stock.quantity ?? 0,
+                  minimumQuantity: stock.minimumQuantity ?? 0,
+                  unit: stock.unit ?? '',
                   status: stock.status,
                   marginTop: i != 1 ? 12 : 0,
                 );
@@ -167,9 +115,7 @@ class _StockScreenState extends State<StockScreen> {
         child: ListView(
           children: [
             const CustomAppBar(title: 'Stock'),
-            _buildButtonAddStock(),
             _buildTextDataStocks(),
-            // _buildTable(),
             _buildListStocks(),
             const SizedBox(height: defaultMargin),
           ],
