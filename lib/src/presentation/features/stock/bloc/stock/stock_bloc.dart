@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
-import 'package:cashier_app/src/data/dataSources/remote/stock_service.dart';
+// import 'package:cashier_app/src/data/dataSources/remote/stock_service.dart';
 import 'package:cashier_app/src/data/models/menu_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
@@ -29,7 +29,7 @@ class StockBloc extends Bloc<StockEvent, StockState> {
   _deleteStock(DeleteStock event, Emitter<StockState> emit) async {
     try {
       emit(StockDeleteLoading());
-      await StockService().deleteStock(event.id);
+      MenuService().deleteMenu(event.id);
       emit(const StockDeleteSuccess('Success Delete'));
     } catch (e) {
       debugPrint('error in delete stock $e');
