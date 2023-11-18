@@ -73,4 +73,15 @@ class MenuService {
     // just get 1 data because id is unique
     return listData[0];
   }
+
+  void updateQuantityFromOrder(String id, int newQuantity) async {
+    print(id);
+    print(newQuantity);
+    CollectionReference menus = _db.collection(menusCollection);
+    menus
+        .doc(id)
+        .update({'quantity': newQuantity})
+        .then((value) => debugPrint('successfully updated!'))
+        .onError((error, stackTrace) => debugPrint('update error: $error'));
+  }
 }

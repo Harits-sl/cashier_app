@@ -148,6 +148,7 @@ class _OrderInfoPageState extends State<OrderInfoPage> {
                       totalOrder: menu.totalBuy,
                       typeMenu: menu.typeMenu,
                       isDisabled: true,
+                      quantityStock: menu.quantityStock,
                     ),
                     i != orders.length
                         ? const SizedBox(height: 12)

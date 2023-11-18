@@ -1,4 +1,6 @@
 // import 'package:cashier_app/src/data/models/cart_model.dart';
+import 'dart:developer';
+
 import 'package:cashier_app/src/data/models/menu_model.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_button.dart';
 import 'package:cashier_app/src/presentation/widgets/custom_divider.dart';
@@ -61,12 +63,6 @@ class _CashierPageState extends State<CashierPage> {
     //   menuOrderCubit.getDataFromCart();
     //   debugPrint('cart: ${cart}');
     // }
-  }
-
-  @override
-  void didUpdateWidget(covariant CashierPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    debugPrint('oldWidget: $oldWidget');
   }
 
   @override
@@ -236,6 +232,7 @@ class _CashierPageState extends State<CashierPage> {
                             hpp: menu.hpp,
                             totalOrder: menu.totalBuy,
                             typeMenu: menu.typeMenu,
+                            quantityStock: menu.quantityStock,
                           ),
                         ],
                       );
@@ -268,6 +265,7 @@ class _CashierPageState extends State<CashierPage> {
                     totalBuy: 0,
                     hpp: menu.hpp,
                     typeMenu: menu.typeMenu,
+                    quantityStock: menu.quantity!,
                   ),
                 );
               }

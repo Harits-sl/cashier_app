@@ -70,6 +70,8 @@ class _Menu {
   int totalBuy;
   int hpp;
   String typeMenu;
+  int? quantityStock;
+
   _Menu({
     required this.id,
     required this.price,
@@ -77,6 +79,7 @@ class _Menu {
     required this.totalBuy,
     required this.hpp,
     required this.typeMenu,
+    required this.quantityStock,
   });
 
   factory _Menu.fromMap(Map<String, dynamic> map) {
@@ -87,6 +90,7 @@ class _Menu {
       totalBuy: map['totalBuy']?.toInt() ?? 0,
       hpp: map['hpp']?.toInt() ?? 0,
       typeMenu: map['typeMenu'] ?? '',
+      quantityStock: map['quantityStock'] ?? 0,
     );
   }
 
@@ -99,6 +103,7 @@ class _Menu {
     result.addAll({'totalBuy': totalBuy});
     result.addAll({'hpp': hpp});
     result.addAll({'typeMenu': typeMenu});
+    result.addAll({'quantityStock': quantityStock});
 
     return result;
   }

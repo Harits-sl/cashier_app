@@ -14,6 +14,7 @@ class AddMenus extends MenuOrderEvent {
   final int totalBuy;
   final int hpp;
   final String typeMenu;
+  final int quantityStock;
 
   const AddMenus({
     required this.id,
@@ -22,10 +23,19 @@ class AddMenus extends MenuOrderEvent {
     required this.totalBuy,
     required this.hpp,
     required this.typeMenu,
+    required this.quantityStock,
   });
 
   @override
-  List<Object?> get props => [id, price, menuName, totalBuy, hpp, typeMenu];
+  List<Object?> get props => [
+        id,
+        price,
+        menuName,
+        totalBuy,
+        hpp,
+        typeMenu,
+        quantityStock,
+      ];
 }
 
 class OrderIncrementPressed extends MenuOrderEvent {

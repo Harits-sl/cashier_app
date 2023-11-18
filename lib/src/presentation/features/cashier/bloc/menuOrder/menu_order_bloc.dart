@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:cashier_app/src/data/dataSources/remote/cart_service.dart';
+import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
 import 'package:cashier_app/src/data/models/cart_model.dart';
 import 'package:cashier_app/src/data/models/menu_order_model.dart';
@@ -84,6 +87,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
           totalBuy: event.totalBuy,
           hpp: event.hpp,
           typeMenu: event.typeMenu,
+          quantityStock: event.quantityStock,
         ),
       );
     }
@@ -159,16 +163,17 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
   }
 
   void _addOrderFromCart(AddOrderFromCart event, Emitter<MenuOrderState> emit) {
-    List<_Menu> menuOrders = event.menuOrders
-        .map((order) => _Menu(
-              id: order.id,
-              price: order.price,
-              menuName: order.menuName,
-              totalBuy: order.totalBuy,
-              hpp: order.hpp,
-              typeMenu: order.typeMenu,
-            ))
-        .toList();
+    List<_Menu> menuOrders = event.menuOrders.map((order) {
+      return _Menu(
+        id: order.id,
+        price: order.price,
+        menuName: order.menuName,
+        totalBuy: order.totalBuy,
+        hpp: order.hpp,
+        typeMenu: order.typeMenu,
+        quantityStock: order.quantityStock,
+      );
+    }).toList();
 
     emit(state.copyWith(
       id: event.id,
@@ -181,8 +186,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
 
   void _addOrderToFirestore(
       AddOrderToFirestore event, Emitter<MenuOrderState> emit) async {
-    // find total buy more than 0,
-    // and change menuOrders from [_Menu] to map
+    // hanya memasukan data yang total buy lebih dari 0
     List listMenus = state.menuOrders!
         .where((order) => order.totalBuy != 0)
         .map((o) => o.toMap())
@@ -201,6 +205,12 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
 
     OrderService().addOrder(menuOrder);
     CartService().deleteCart(menuOrder.id!);
+
+    // perulangan dari list menu untuk update quantity di database menu
+    for (var menu in listMenus) {
+      MenuService().updateQuantityFromOrder(
+          menu['id'], menu['quantityStock'] - menu['totalBuy']);
+    }
   }
 
   void _addBuyerName(AddBuyerName event, Emitter<MenuOrderState> emit) {
