@@ -1,4 +1,5 @@
 // import 'package:cashier_app/src/data/models/cart_model.dart';
+
 import 'dart:developer';
 
 import 'package:cashier_app/src/data/models/menu_model.dart';
@@ -94,6 +95,7 @@ class _CashierPageState extends State<CashierPage> {
   }
 
   void backPressed() {
+    menuOrderBloc.add(ResetState());
     Go.back(context);
   }
 
@@ -103,6 +105,7 @@ class _CashierPageState extends State<CashierPage> {
 
   @override
   Widget build(BuildContext context) {
+    menuCubit.getAllMenu();
     Widget _buildAppBar() {
       return Container(
         padding: const EdgeInsets.all(defaultMargin),
@@ -181,15 +184,7 @@ class _CashierPageState extends State<CashierPage> {
       // }
 
       Widget _menu(String title, List menus) {
-        final List? listDrinks = menus
-            .where((menu) =>
-                menu.typeMenu == 'coffee' || menu.typeMenu == 'non-coffee')
-            .toList();
-
-        final List? listFoods =
-            menus.where((menu) => menu.typeMenu == 'food').toList();
-
-        return listDrinks!.isEmpty || listFoods!.isEmpty
+        return menus.isEmpty
             ? const SizedBox()
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,8 +201,8 @@ class _CashierPageState extends State<CashierPage> {
                   ),
                   const CustomDivider(),
                   Column(
-                    children: (title == 'drinks' ? listDrinks : listFoods!)
-                        .map((menu) {
+                    children: menus.map((menu) {
+                      debugPrint('${menu.id}');
                       // int totalOrderFromCart = 0;
                       /// jika data cart tidak kosong
                       /// maka lakukan perulangan data [carts.listMenus]
@@ -266,6 +261,7 @@ class _CashierPageState extends State<CashierPage> {
                     hpp: menu.hpp,
                     typeMenu: menu.typeMenu,
                     quantityStock: menu.quantity!,
+                    minimumQuantityStock: menu.minimumQuantity!,
                   ),
                 );
               }
@@ -285,12 +281,24 @@ class _CashierPageState extends State<CashierPage> {
                   child: CircularProgressIndicator(),
                 );
               } else if (state.menuOrders != null) {
+                // list menu untuk minuman
+                final List? listDrinks = menuOrders!
+                    .where((menu) =>
+                        menu.typeMenu == 'coffee' ||
+                        menu.typeMenu == 'non-coffee')
+                    .toList();
+
+                // list menu untuk makanan
+                final List? listFoods = menuOrders
+                    .where((menu) => menu.typeMenu == 'food')
+                    .toList();
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _menu('drinks', menuOrders!),
+                    _menu('drinks', listDrinks!),
                     // _menu('non-coffee', menuOrders),
-                    _menu('food', menuOrders),
+                    _menu('food', listFoods!),
                   ],
                 );
               } else {
@@ -368,7 +376,7 @@ class _CashierPageState extends State<CashierPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        // context.read<MenuOrderCubit>().initState();
+        menuOrderBloc.add(ResetState());
         totalOrder = 0;
         totalOrderFromCart = 0;
         return true;

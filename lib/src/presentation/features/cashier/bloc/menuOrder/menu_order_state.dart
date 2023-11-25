@@ -71,6 +71,7 @@ class _Menu {
   int hpp;
   String typeMenu;
   int? quantityStock;
+  int? minimumQuantityStock;
 
   _Menu({
     required this.id,
@@ -80,6 +81,7 @@ class _Menu {
     required this.hpp,
     required this.typeMenu,
     required this.quantityStock,
+    required this.minimumQuantityStock,
   });
 
   factory _Menu.fromMap(Map<String, dynamic> map) {
@@ -91,6 +93,7 @@ class _Menu {
       hpp: map['hpp']?.toInt() ?? 0,
       typeMenu: map['typeMenu'] ?? '',
       quantityStock: map['quantityStock'] ?? 0,
+      minimumQuantityStock: map['minimumQuantityStock'] ?? 0,
     );
   }
 
@@ -104,6 +107,7 @@ class _Menu {
     result.addAll({'hpp': hpp});
     result.addAll({'typeMenu': typeMenu});
     result.addAll({'quantityStock': quantityStock});
+    result.addAll({'minimumQuantityStock': minimumQuantityStock});
 
     return result;
   }

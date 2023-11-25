@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:cashier_app/src/core/utils/status_inventory.dart';
 import 'package:cashier_app/src/data/dataSources/remote/cart_service.dart';
 import 'package:cashier_app/src/data/dataSources/remote/menu_service.dart';
 import 'package:cashier_app/src/data/dataSources/remote/order_service.dart';
@@ -88,6 +89,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
           hpp: event.hpp,
           typeMenu: event.typeMenu,
           quantityStock: event.quantityStock,
+          minimumQuantityStock: event.minimumQuantityStock,
         ),
       );
     }
@@ -103,7 +105,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
         return menu.menuName.toLowerCase().contains(event.query.toLowerCase());
       },
     ).toList();
-
+    log('${menuSearch}');
     emit(state.copyWith(listMenuSearch: menuSearch));
   }
 
@@ -172,6 +174,7 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
         hpp: order.hpp,
         typeMenu: order.typeMenu,
         quantityStock: order.quantityStock,
+        minimumQuantityStock: order.minimumQuantityStock,
       );
     }).toList();
 
@@ -208,8 +211,18 @@ class MenuOrderBloc extends Bloc<MenuOrderEvent, MenuOrderState> {
 
     // perulangan dari list menu untuk update quantity di database menu
     for (var menu in listMenus) {
-      MenuService().updateQuantityFromOrder(
-          menu['id'], menu['quantityStock'] - menu['totalBuy']);
+      StatusInventory status;
+      int quantity = menu['quantityStock'] - menu['totalBuy'];
+
+      if (quantity <= 0) {
+        status = StatusInventory.outOfStock;
+      } else if (quantity > menu['minimumQuantityStock']) {
+        status = StatusInventory.inStock;
+      } else {
+        status = StatusInventory.lowStock;
+      }
+      MenuService().updateQuantityAndStatus(
+          menu['id'], quantity, StatusInventory.getValue(status));
     }
   }
 

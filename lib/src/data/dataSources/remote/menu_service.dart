@@ -74,13 +74,15 @@ class MenuService {
     return listData[0];
   }
 
-  void updateQuantityFromOrder(String id, int newQuantity) async {
-    print(id);
-    print(newQuantity);
+  void updateQuantityAndStatus(
+    String id,
+    int newQuantity,
+    String status,
+  ) async {
     CollectionReference menus = _db.collection(menusCollection);
     menus
         .doc(id)
-        .update({'quantity': newQuantity})
+        .update({'quantity': newQuantity, 'status': status})
         .then((value) => debugPrint('successfully updated!'))
         .onError((error, stackTrace) => debugPrint('update error: $error'));
   }

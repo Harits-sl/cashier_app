@@ -15,6 +15,7 @@ class AddMenus extends MenuOrderEvent {
   final int hpp;
   final String typeMenu;
   final int quantityStock;
+  final int minimumQuantityStock;
 
   const AddMenus({
     required this.id,
@@ -24,6 +25,7 @@ class AddMenus extends MenuOrderEvent {
     required this.hpp,
     required this.typeMenu,
     required this.quantityStock,
+    required this.minimumQuantityStock,
   });
 
   @override
@@ -35,6 +37,7 @@ class AddMenus extends MenuOrderEvent {
         hpp,
         typeMenu,
         quantityStock,
+        minimumQuantityStock,
       ];
 }
 
