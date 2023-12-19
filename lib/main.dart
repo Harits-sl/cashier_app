@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 
 import 'firebase_options_dev.dart';
 import 'firebase_options_prod.dart';
-import 'firebase_options.dart';
+import 'harapan_bundo_firebase_options.dart';
 import 'src/config/route/routes.dart';
 import 'src/presentation/cubit/Menu/menu_cubit.dart';
 import 'src/presentation/features/home/index.dart';
@@ -37,7 +37,7 @@ void main() async {
   //   );
   // }
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptionsDev.currentPlatform,
+    options: HarapanBundoFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }

@@ -237,6 +237,7 @@ class _EditOrderFromCartPageState extends State<EditOrderFromCartPage> {
                             hpp: menu.hpp,
                             totalOrder: menu.totalBuy,
                             typeMenu: menu.typeMenu,
+                            quantityStock: 0,
                           ),
                         ],
                       );
@@ -391,6 +392,7 @@ class EditItemMenu extends StatefulWidget {
   final int hpp;
   final int totalOrder;
   final String typeMenu;
+  final int quantityStock;
   final bool isDisabled;
 
   const EditItemMenu({
@@ -401,6 +403,7 @@ class EditItemMenu extends StatefulWidget {
     required this.hpp,
     required this.totalOrder,
     required this.typeMenu,
+    required this.quantityStock,
     this.isDisabled = false,
   }) : super(key: key);
 
@@ -521,27 +524,31 @@ class _EditItemMenuState extends State<EditItemMenu> {
                   width: 24,
                   child: Text(
                     _totalBuy.toString(),
-                    style: widget.isDisabled
-                        ? gray2TextStyle.copyWith(
-                            fontWeight: medium,
-                            fontSize: 12,
-                          )
-                        : primaryTextStyle.copyWith(
-                            fontWeight: medium,
-                            fontSize: 12,
-                          ),
+                    style: // jika quantity stock dengan totalbuy sudah sama, tidak bisa dibeli lagi
+                        widget.quantityStock == _totalBuy || widget.isDisabled
+                            ? gray2TextStyle.copyWith(
+                                fontWeight: medium,
+                                fontSize: 12,
+                              )
+                            : primaryTextStyle.copyWith(
+                                fontWeight: medium,
+                                fontSize: 12,
+                              ),
                     textAlign: TextAlign.center,
                   ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (!widget.isDisabled) {
-                      setState(() {
-                        _totalBuy++;
-                      });
-                      context
-                          .read<EditOrderFromCartBloc>()
-                          .add(EditOrderIncrementPressed(id: widget.id));
+                    // jika quantity stock tidak lebih dari total buy
+                    if (widget.quantityStock > _totalBuy) {
+                      if (!widget.isDisabled) {
+                        setState(() {
+                          _totalBuy++;
+                        });
+                        context
+                            .read<MenuOrderBloc>()
+                            .add(OrderIncrementPressed(id: widget.id));
+                      }
                     }
                   },
                   child: Image.asset(

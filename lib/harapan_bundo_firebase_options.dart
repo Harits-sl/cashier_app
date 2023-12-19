@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
-class FirebaseKariBundo {
+class HarapanBundoFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
       throw UnsupportedError(
@@ -53,10 +53,10 @@ class FirebaseKariBundo {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAs1DDMTYcySg949S7urXNADC-wYoSxe2w',
-    appId: '1:771134985038:android:20e9fdc269a5506363441f',
-    messagingSenderId: '771134985038',
-    projectId: 'karibundo-7b498',
-    storageBucket: 'karibundo-7b498.appspot.com',
+    apiKey: 'AIzaSyBs5GvZY5q2i_pok0t_SoMi0hC3IU34cbM',
+    appId: '1:534343337618:android:13ab11ee3ddbb19274084b',
+    messagingSenderId: '534343337618',
+    projectId: 'harapan-bundo',
+    storageBucket: 'harapan-bundo.appspot.com',
   );
 }
